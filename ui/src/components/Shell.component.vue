@@ -11,7 +11,10 @@ export default {
     },
     mounted() {
         const dataLoader = new DataLoader({ $router: this.$router });
-        dataLoader.verifyRepositoryMounted();
+        (async () => {
+            await dataLoader.verifyRepositoryMounted();
+            await dataLoader.verifyServicesAvailable();
+        })();
     }
 };
 </script>
