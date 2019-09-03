@@ -1,22 +1,89 @@
 version: "2"
 
 volumes:
-  ui-modules:
+    ui-modules:
+    api-modules:
 
 services:
-  ui:
-    image: node:12-stretch
-    hostname: ui
-    tty: true
-    environment: &environment
-      TERM: "xterm-256color"
-      NODE_ENV: "development"
-    mem_limit: 512M
-    volumes:
-      - $PWD/ui:/srv/ui:delegated
-      - $PWD/ocfl-repository:/srv/ui/dist/repository:delegated
-      - ui-modules:/srv/ui/node_modules:delegated
-    working_dir: /srv/ui
-    command: ["npm", "run", "develop"]
-    ports:
-      - 9001:9001
+    ui:
+        image: node:12-stretch
+        hostname: ui
+        tty: true
+        environment:
+            TERM: "xterm-256color"
+            NODE_ENV: "development"
+        mem_limit: 512M
+        volumes:
+            - $PWD/ui:/srv/ui:delegated
+            - $PWD/ocfl-repository:/srv/ui/dist/repository:delegated
+            - ui-modules:/srv/ui/node_modules:delegated
+        working_dir: /srv/ui
+        command: ["npm", "run", "develop"]
+        ports:
+            - 9001:9001
+
+    db:
+        image: postgres:11-alpine
+        hostname: db
+        tty: true
+        environment:
+            TERM: "xterm-256color"
+            NODE_ENV: "development"
+            POSTGRES_PASSWORD: "modpdsc"
+            POSTGRES_USER: "modpdsc"
+            POSTGRES_DB: "modpdsc"
+            PGDATA: /postgresql/data
+        mem_limit: 64M
+        ports:
+            - 5432:5432
+
+    api:
+        image: node:12-stretch
+        hostname: api
+        tty: true
+        environment: &environment
+            TERM: "xterm-256color"
+            NODE_ENV: "development"
+            DEBUG: "modpdsc:*"
+            LANG: "C.UTF-8"
+            MODPDSC_DB_HOST: "db"
+            MODPDSC_DB_PORT: "5432"
+            MODPDSC_DB_USER: "modpdsc"
+            MODPDSC_DB_PASSWORD: "modpdsc"
+            MODPDSC_DB_DATABASE: "modpdsc"
+            MODPDSC_JWT_SECRET: "xxxx"
+            MODPDSC_JWT_EXPIRY: 86400
+            MODPDSC_PASSWORD_SALT: "xxxx"
+            MODPDSC_PASSWORD_ITERATIONS: "10"
+            MODPDSC_SUPER_ADMIN_PASSWORD: "1234"
+            MODPDSC_SEARCH: "search:9200"
+        mem_limit: 512M
+        volumes:
+            - $PWD/api:/srv/api:delegated
+            - $PWD/ocfl-repository:/srv/api/repository:delegated
+            - api-modules:/srv/api/node_modules:delegated
+        working_dir: /srv/api
+        command: ["./start-api"]
+        ports:
+            - 8080:8080
+
+    search:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+        hostname: search
+        environment:
+            - cluster.name="search"
+            - bootstrap.memory_lock=true
+            - http.host=0.0.0.0
+            - xpack.security.enabled=false
+            - "discovery.zen.minimum_master_nodes=1"
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        mem_limit: 1024m
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536
+                hard: 65536
+        cap_add:
+            - IPC_LOCK
