@@ -1,6 +1,6 @@
-# Modern PDSC
+# Modern PARADISEC Catalog
 
-- [Modern PDSC](#modern-pdsc)
+- [Modern PARADISEC Catalog](#modern-paradisec-catalog)
   - [Getting setup](#getting-setup)
   - [Starting the development environment](#starting-the-development-environment)
   - [Stopping the development environment](#stopping-the-development-environment)
@@ -43,6 +43,6 @@ This is the User Interface (UI) code. The core technologies used to build the UI
 -   ElementUI: https://element.eleme.io/#/en-US/component/installation
     -   UI controls - things like buttons and cards and accordions and such
 -   TailwindCSS: https://tailwindcss.com/docs/installation
-    -   responsive CSS utilities - nice addition to the UI controls provided by ElementUIi
+    -   responsive CSS utilities - nice addition to the UI controls provided by ElementUI
 
 `Webpack` is used to build the application and `webpack-development-server` provides the auto-reload capability in development.
