@@ -1,5 +1,9 @@
 <template>
     <div class="container mx-auto flex flex-col items-center text-2xl">
+        <div class="flex-1 p-5 text-center" v-if="showRepositoryErrorMessage">
+            <p class="mt-10">Unfortunately, the respository is unavailable at this time.</p>
+            <p class="mt-10">Please notify the maintainers of this service.</p>
+        </div>
         <div class="flex-1 p-5 text-center" v-if="!showRepositoryErrorMessage">
             <p class="mt-10">Everything looks to be A'OK</p>
         </div>
@@ -12,7 +16,7 @@
                         <i class="far fa-check-square"></i>
                     </span>
                     <span v-show="status.api === false" class="style-negative-check">
-                        <i class="far fa-times-square"></i>
+                        <i class="far fa-times-circle"></i>
                     </span>
                 </div>
                 <div class="text-left">
@@ -22,7 +26,7 @@
                         <i class="far fa-check-square"></i>
                     </span>
                     <span v-show="status.ocfl === false" class="style-negative-check">
-                        <i class="far fa-times-square"></i>
+                        <i class="far fa-times-circle"></i>
                     </span>
                 </div>
                 <div class="text-left">
@@ -32,7 +36,7 @@
                         <i class="far fa-check-square"></i>
                     </span>
                     <span v-show="status.search === false" class="style-negative-check">
-                        <i class="far fa-times-square"></i>
+                        <i class="far fa-times-circle"></i>
                     </span>
                 </div>
             </div>
