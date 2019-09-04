@@ -9,27 +9,42 @@ import { DataLoader } from "src/data-loader.service";
 const configuration = {
     strict: process.env.NODE_ENV !== "production",
     state: {
-        configuration: {}
+        configuration: {},
+        status: {
+            api: undefined,
+            search: undefined,
+            ocfl: undefined
+        }
     },
     mutations: {
         saveApplicationConfiguration(state, configuration) {
             state.configuration = { ...configuration };
+        },
+        saveStatus(state, status) {
+            state.status = { ...status };
         }
     },
     actions: {
         async initialise({ commit }, { $router }) {
             const dataLoader = new DataLoader({ $router: this.$router });
             const configuration = await dataLoader.getConfiguration();
+            commit("saveApplicationConfiguration", configuration);
+            let status = {
+                api: undefined,
+                search: undefined,
+                ocfl: undefined
+            };
             if (configuration.service.api) {
-                await dataLoader.verifyApiServiceAvailable({
+                status.api = await dataLoader.verifyApiServiceAvailable({
                     service: configuration.service.api
                 });
             } else {
-                await dataLoader.verifyRepositoryMounted();
-                await dataLoader.verifySearchServiceAvailable({
+                status.ocfl = await dataLoader.verifyRepositoryMounted();
+                status.search = await dataLoader.verifySearchServiceAvailable({
                     service: configuration.service.search
                 });
             }
+            commit("saveStatus", status);
         }
     },
     getters: {}

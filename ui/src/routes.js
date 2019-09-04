@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 
 import ShellComponent from "components/Shell.component.vue";
 import BadRequestComponent from "components/BadRequest.component.vue";
-import RepositoryNotAvailableComponent from "components/RepositoryNotAvailable.component.vue";
+import HealthCheckComponent from "components/HealthCheck.component.vue";
 
 export const router = new VueRouter({
     mode: "history",
@@ -14,9 +14,9 @@ export const router = new VueRouter({
     routes: [
         { path: "*", name: "404", component: BadRequestComponent },
         {
-            name: "RepositoryNotAvailable",
-            path: "/repository-not-available",
-            component: RepositoryNotAvailableComponent
+            name: "HealthCheck",
+            path: "/health-check",
+            component: HealthCheckComponent
         },
         {
             path: "/",
