@@ -6,6 +6,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
+const WriteFilePlugin = require("write-file-webpack-plugin");
 
 module.exports = {
     target: "web",
@@ -41,6 +43,7 @@ module.exports = {
         watchContentBase: true
     },
     plugins: [
+        new WriteFilePlugin(),
         new webpack.DefinePlugin({
             "process.env.NODE_ENV": JSON.stringify("development")
         }),
@@ -55,7 +58,13 @@ module.exports = {
             title: "PARADISEC Collection Viewer",
             template: "./src/index.html"
         }),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new CopyPlugin([
+            {
+                from: "./src/configuration.json",
+                to: "configuration.json"
+            }
+        ])
     ],
     module: {
         rules: [
