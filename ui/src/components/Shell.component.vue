@@ -9,12 +9,6 @@ export default {
     data() {
         return {};
     },
-    mounted() {
-        const dataLoader = new DataLoader({ $router: this.$router });
-        (async () => {
-            await dataLoader.verifyRepositoryMounted();
-            await dataLoader.verifyServicesAvailable();
-        })();
-    }
+    mounted() {}
 };
 </script>
