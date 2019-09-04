@@ -4,54 +4,34 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { flattenDeep } from "lodash";
 Vue.use(Vuex);
+import { DataLoader } from "src/data-loader.service";
 
 const configuration = {
     strict: process.env.NODE_ENV !== "production",
     state: {
-        items: [],
-        filters: [],
-        selectedFilter: undefined
+        configuration: {}
     },
     mutations: {
-        reset(state) {
-            state = {
-                items: [],
-                filters: [],
-                selectedFilter: []
-            };
-        },
-        setItems(state, items) {
-            state.items = [...items];
-        },
-        setFilters(state, filters) {
-            state.filters = [...filters];
-        },
-        setSelectedFilter(state, selectedFilter) {
-            state.selectedFilter = selectedFilter;
+        saveApplicationConfiguration(state, configuration) {
+            state.configuration = { ...configuration };
         }
     },
-    getters: {
-        itemsFlattened: state => {
-            return flattenDeep(
-                state.items.map(item => {
-                    let components = [];
-                    if (item.images.length) {
-                        components.push({
-                            ...item.images[0],
-                            images: item.images
-                        });
-                    }
-                    return [...components, ...item.audio, ...item.video];
-                })
-            );
-        },
-        item: state => ({ collectionId, itemId }) => {
-            return state.items.filter(item => {
-                return (
-                    item.collectionId === collectionId && item.itemId === itemId
-                );
-            })[0];
+    actions: {
+        async initialise({ commit }, { $router }) {
+            const dataLoader = new DataLoader({ $router: this.$router });
+            const configuration = await dataLoader.getConfiguration();
+            if (configuration.service.api) {
+                await dataLoader.verifyApiServiceAvailable({
+                    service: configuration.service.api
+                });
+            } else {
+                await dataLoader.verifyRepositoryMounted();
+                await dataLoader.verifySearchServiceAvailable({
+                    service: configuration.service.search
+                });
+            }
         }
-    }
+    },
+    getters: {}
 };
 export const store = new Vuex.Store(configuration);

@@ -7,6 +7,23 @@ export class DataLoader {
         this.repository = "/repository";
         this.ocflRootDescriptor = "0=ocfl_1.0";
         this.$router = $router;
+        this.configuration = {
+            domain: "",
+            service: {
+                search: "http://localhost:8000/search",
+                api: "http://localhost:8000"
+            }
+        };
+    }
+
+    async getConfiguration() {
+        let response = await fetch(`/configuration.json`);
+        let configuration = { ...this.configuration };
+        if (response.status === 200) {
+            configuration = await response.json();
+            configuration = { ...this.configuration, ...configuration };
+        }
+        return configuration;
     }
 
     async verifyRepositoryMounted() {
@@ -17,36 +34,37 @@ export class DataLoader {
             console.log(
                 "Error: the OCFL filesystem does not seem to be mounted."
             );
-            this.$router.push({ name: "RepositoryNotAvailable" });
+            // this.$router.push({ name: "RepositoryNotAvailable" });
         }
     }
 
-    async verifyServicesAvailable() {
+    async verifyApiServiceAvailable(service) {
         try {
-            let response = await fetch(`${this.api}/health-check`);
+            let response = await fetch(`${service}/health-check`);
             if (response.status !== 200) {
                 console.log("Error: the API does not seem to be available.");
-                this.$router.push({ name: "RepositoryNotAvailable" });
+                // this.$router.push({ name: "RepositoryNotAvailable" });
             }
         } catch (error) {
             console.log("Error: the API does not seem to be available.");
-            this.$router.push({ name: "RepositoryNotAvailable" });
-            return;
+            // this.$router.push({ name: "RepositoryNotAvailable" });
         }
+    }
 
+    async verifySearchServiceAvailable({ service }) {
         try {
-            response = await fetch(`${this.api}/search`);
+            let response = await fetch(service);
             if (response.status !== 200) {
                 console.log(
                     "Error: the Search endpoint does not seem to be available."
                 );
-                this.$router.push({ name: "RepositoryNotAvailable" });
+                // this.$router.push({ name: "RepositoryNotAvailable" });
             }
         } catch (error) {
             console.log(
                 "Error: the Search endpoint does not seem to be available."
             );
-            this.$router.push({ name: "RepositoryNotAvailable" });
+            // this.$router.push({ name: "RepositoryNotAvailable" });
         }
     }
 }

@@ -6,7 +6,10 @@
 
 <script>
 export default {
-    el: "#app"
+    el: "#app",
+    async mounted() {
+        this.$store.dispatch("initialise", { $router: this.$router });
+    }
 };
 </script>
 

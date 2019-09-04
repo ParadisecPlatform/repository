@@ -1,0 +1,7 @@
+{
+    "domain": "paradisec.org.au",
+    "service": {
+        "search": "http://localhost:9200",
+        "api": ""
+    }
+}
