@@ -26,7 +26,7 @@ const configuration = {
     },
     actions: {
         async initialise({ commit }, { $router }) {
-            const dataLoader = new DataLoader({ $router: this.$router });
+            const dataLoader = new DataLoader({ $router });
             const configuration = await dataLoader.getConfiguration();
             commit("saveApplicationConfiguration", configuration);
             let status = {
