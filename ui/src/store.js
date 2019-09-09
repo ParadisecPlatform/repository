@@ -26,7 +26,7 @@ const configuration = {
     },
     actions: {
         async initialise({ commit }) {
-            const dataLoader = new DataLoader({});
+            const dataLoader = new DataLoader();
             const configuration = await dataLoader.getConfiguration();
             commit("saveApplicationConfiguration", configuration);
             let status = {
