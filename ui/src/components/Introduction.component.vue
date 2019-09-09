@@ -26,13 +26,13 @@
             </p>
             <p class="my-4">
                 You can navigate to the collection and item directly viz:
-                <router-link to="/paradisec.org.au/NT1">/paradisec.org.au/NT1</router-link>&nbsp;and
-                <router-link to="/paradisec.org.au/NT1/001">/paradisec.org.au/NT1/001</router-link>
+                <router-link to="/paradisec.org.au/NT11">/paradisec.org.au/NT11</router-link>&nbsp;and
+                <router-link to="/paradisec.org.au/NT11/001">/paradisec.org.au/NT11/001</router-link>
             </p>
             <p>
                 Likewise, to see the version from uts.edu.au:
-                <router-link to="/uts.edu.au/NT1">/uts.edu.au/NT1</router-link>&nbsp;and
-                <router-link to="/uts.edu.au/NT1/001">/uts.edu.au/NT1/001</router-link>
+                <router-link to="/uts.edu.au/NT11">/uts.edu.au/NT11</router-link>&nbsp;and
+                <router-link to="/uts.edu.au/NT11/001">/uts.edu.au/NT11/001</router-link>
             </p>
         </div>
     </div>
