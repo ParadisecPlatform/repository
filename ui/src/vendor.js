@@ -1,7 +1,7 @@
 "use strict";
 
 import "element-ui/lib/theme-chalk/index.css";
-import "assets/global-styles.scss";
+import "assets/tailwind.scss";
 import "iv-viewer/dist/iv-viewer.css";
 
 import ImageViewer from "iv-viewer";

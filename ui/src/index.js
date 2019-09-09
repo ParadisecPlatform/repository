@@ -2,6 +2,7 @@
 
 import "core-js/stable";
 import "regenerator-runtime/runtime";
+import "assets/global-styles.scss";
 
 import Vue from "vue";
 import ElementUI from "element-ui";
