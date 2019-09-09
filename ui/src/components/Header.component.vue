@@ -6,6 +6,7 @@
         <router-link to="/explore" class="px-5">
             <i class="fas fa-search"></i> Explore
         </router-link>
+        <div class="float-right">OCFL Digital Repository</div>
     </div>
 </template>
 
