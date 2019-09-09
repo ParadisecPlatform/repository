@@ -1,10 +1,9 @@
 "use strict";
 
 export class DataLoader {
-    constructor({ $router }) {
+    constructor({}) {
         this.repository = "/repository";
         this.ocflRootDescriptor = "0=ocfl_1.0";
-        this.$router = $router;
         this.configuration = {
             domain: "",
             service: {
@@ -32,7 +31,6 @@ export class DataLoader {
             console.log(
                 "Error: the OCFL filesystem does not seem to be mounted."
             );
-            this.$router.push({ name: "HealthCheck" });
             return false;
         }
         return true;
@@ -43,13 +41,11 @@ export class DataLoader {
             let response = await fetch(`${service}/health-check`);
             if (response.status !== 200) {
                 console.log("Error: the API does not seem to be available.");
-                this.$router.push({ name: "HealthCheck" });
                 return false;
             }
             return true;
         } catch (error) {
             console.log("Error: the API does not seem to be available.");
-            this.$router.push({ name: "HealthCheck" });
             return false;
         }
     }
@@ -61,7 +57,6 @@ export class DataLoader {
                 console.log(
                     "Error: the Search endpoint does not seem to be available."
                 );
-                this.$router.push({ name: "HealthCheck" });
                 return false;
             }
             return true;
@@ -69,7 +64,6 @@ export class DataLoader {
             console.log(
                 "Error: the Search endpoint does not seem to be available."
             );
-            this.$router.push({ name: "HealthCheck" });
             return false;
         }
     }
