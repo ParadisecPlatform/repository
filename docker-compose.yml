@@ -37,35 +37,35 @@ services:
         ports:
             - 5432:5432
 
-    api:
-        image: node:12-stretch
-        hostname: api
-        tty: true
-        environment: &environment
-            TERM: "xterm-256color"
-            NODE_ENV: "development"
-            DEBUG: "modpdsc:*"
-            LANG: "C.UTF-8"
-            MODPDSC_DB_HOST: "db"
-            MODPDSC_DB_PORT: "5432"
-            MODPDSC_DB_USER: "modpdsc"
-            MODPDSC_DB_PASSWORD: "modpdsc"
-            MODPDSC_DB_DATABASE: "modpdsc"
-            MODPDSC_JWT_SECRET: "xxxx"
-            MODPDSC_JWT_EXPIRY: 86400
-            MODPDSC_PASSWORD_SALT: "xxxx"
-            MODPDSC_PASSWORD_ITERATIONS: "10"
-            MODPDSC_SUPER_ADMIN_PASSWORD: "1234"
-            MODPDSC_SEARCH: "search:9200"
-        mem_limit: 512M
-        volumes:
-            - $PWD/api:/srv/api:delegated
-            - $PWD/ocfl-repository:/srv/api/repository:delegated
-            - api-modules:/srv/api/node_modules:delegated
-        working_dir: /srv/api
-        command: ["./start-api"]
-        ports:
-            - 8080:8080
+    # api:
+    #     image: node:12-stretch
+    #     hostname: api
+    #     tty: true
+    #     environment: &environment
+    #         TERM: "xterm-256color"
+    #         NODE_ENV: "development"
+    #         DEBUG: "modpdsc:*"
+    #         LANG: "C.UTF-8"
+    #         MODPDSC_DB_HOST: "db"
+    #         MODPDSC_DB_PORT: "5432"
+    #         MODPDSC_DB_USER: "modpdsc"
+    #         MODPDSC_DB_PASSWORD: "modpdsc"
+    #         MODPDSC_DB_DATABASE: "modpdsc"
+    #         MODPDSC_JWT_SECRET: "xxxx"
+    #         MODPDSC_JWT_EXPIRY: 86400
+    #         MODPDSC_PASSWORD_SALT: "xxxx"
+    #         MODPDSC_PASSWORD_ITERATIONS: "10"
+    #         MODPDSC_SUPER_ADMIN_PASSWORD: "1234"
+    #         MODPDSC_SEARCH: "search:9200"
+    #     mem_limit: 512M
+    #     volumes:
+    #         - $PWD/api:/srv/api:delegated
+    #         - $PWD/ocfl-repository:/srv/api/repository:delegated
+    #         - api-modules:/srv/api/node_modules:delegated
+    #     working_dir: /srv/api
+    #     command: ["./start-api"]
+    #     ports:
+    #         - 8080:8080
 
     search:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
