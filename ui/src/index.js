@@ -17,7 +17,10 @@ Vue.use(VueMasonryPlugin);
 import App from "components/app.vue";
 import { router } from "./routes";
 import { store } from "store";
-
-App.router = router;
-App.store = store;
-const app = new Vue(App);
+(async () => {
+    await store.dispatch("initialise");
+    const configuration = store.state.configuration;
+    App.router = router({ configuration });
+    App.store = store;
+    new Vue(App);
+})();

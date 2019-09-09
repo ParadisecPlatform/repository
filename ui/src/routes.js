@@ -8,11 +8,11 @@ import ShellComponent from "components/Shell.component.vue";
 import BadRequestComponent from "components/BadRequest.component.vue";
 import HealthCheckComponent from "components/HealthCheck.component.vue";
 import ExploreComponent from "components/Explore.component.vue";
+import CollectionViewerComponent from "components/CollectionViewer.component.vue";
+import ItemViewerComponent from "components/ItemViewer.component.vue";
 
-export const router = new VueRouter({
-    mode: "history",
-    base: "/",
-    routes: [
+export function router({ configuration }) {
+    const routes = [
         { path: "*", name: "404", component: BadRequestComponent },
         {
             name: "HealthCheck",
@@ -24,11 +24,46 @@ export const router = new VueRouter({
             component: ShellComponent,
             children: [
                 {
-                    name: "Explore",
                     path: "explore",
                     component: ExploreComponent
                 }
             ]
         }
-    ]
-});
+    ];
+
+    // if the app has been configured to serve a single domain
+    if (configuration.domain) {
+        routes[2].children.push(
+            ...[
+                {
+                    path: ":collectionId",
+                    component: CollectionViewerComponent
+                },
+                {
+                    path: ":collectionId/:itemId",
+                    component: ItemViewerComponent
+                }
+            ]
+        );
+    } else {
+        // configured to server multiple domains
+        routes[2].children.push(
+            ...[
+                {
+                    path: ":domain/:collectionId",
+                    component: CollectionViewerComponent
+                },
+                {
+                    path: ":domain/:collectionId/:itemId",
+                    component: ItemViewerComponent
+                }
+            ]
+        );
+    }
+    const router = new VueRouter({
+        mode: "history",
+        base: "/",
+        routes
+    });
+    return router;
+}
