@@ -1,7 +1,10 @@
 "use strict";
 
+import pairtree from "pairtree";
+import shajs from "sha.js";
+
 export class DataLoader {
-    constructor({}) {
+    constructor() {
         this.repository = "/repository";
         this.ocflRootDescriptor = "0=ocfl_1.0";
         this.configuration = {
@@ -67,5 +70,21 @@ export class DataLoader {
             return false;
         }
     }
+
+    async loadCollection({ domain, collectionId }) {
+        const id = this.hash(`${domain}:${collectionId}`);
+        const path = pairtree.path(id);
+        let response = await fetch(`${this.repository}${path}inventory.json`);
+        if (response.status !== 200) {
+            // do nothing for now
+        }
+        response = await response.json();
+        return response;
+    }
+
+    hash(identifier) {
+        return shajs("sha256")
+            .update(identifier)
+            .digest("hex");
+    }
 }
-1;
