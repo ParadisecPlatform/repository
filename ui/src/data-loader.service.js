@@ -56,7 +56,7 @@ export class DataLoader {
 
     async verifySearchServiceAvailable({ service }) {
         try {
-            let response = await fetch(service);
+            let response = await fetch(`${service}/_search?size=0`);
             if (response.status !== 200) {
                 console.log(
                     "Error: the Search endpoint does not seem to be available."
