@@ -22,18 +22,9 @@ export default {
     el: "#app",
     components: {
         HeaderComponent
-    },
-    async mounted() {
-        this.$store.dispatch("initialise", { $router: this.$router });
     }
 };
 </script>
 
 <style lang="scss" scoped>
-// .style-header {
-//     background-color: red;
-// }
-// .style-footer {
-//     background-color: yellow;
-// }
 </style>
