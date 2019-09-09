@@ -1,14 +1,37 @@
 <template>
-    <div>i'm here</div>
+    <div>
+        <div v-if="showIntroduction">
+            <introduction-component></introduction-component>
+        </div>
+        <router-view v-else></router-view>
+    </div>
 </template>
 
 <script>
 import { DataLoader } from "src/data-loader.service";
+import IntroductionComponent from "./Introduction.component.vue";
 
 export default {
-    data() {
-        return {};
+    components: {
+        IntroductionComponent
     },
-    mounted() {}
+    data() {
+        return {
+            watchers: {},
+            showIntroduction: true
+        };
+    },
+    mounted() {
+        this.setup();
+        this.watchers.routeWatcher = this.$watch("$route.path", this.setup);
+    },
+    beforeDestroy() {
+        this.watchers.routeWatcher();
+    },
+    methods: {
+        setup() {
+            this.showIntroduction = this.$route.path === "/" ? true : false;
+        }
+    }
 };
 </script>

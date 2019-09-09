@@ -1,7 +1,10 @@
 <template>
-    <div>
-        <router-link to="/">
+    <div class="py-4">
+        <router-link to="/" class="px-5">
             <i class="fas fa-home"></i> Home
+        </router-link>
+        <router-link to="/explore" class="px-5">
+            <i class="fas fa-search"></i> Explore
         </router-link>
     </div>
 </template>
