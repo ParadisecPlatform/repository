@@ -5,6 +5,11 @@ import shajs from "sha.js";
 import jsonld from "jsonld";
 import { map, isArray, isObject } from "lodash";
 
+const typeMappings = {
+    "audio/x-wav": "audio",
+    "audio/mpeg": "audio"
+};
+
 export class DataLoader {
     constructor() {
         this.repository = "/repository";
@@ -81,7 +86,14 @@ export class DataLoader {
 
     async loadItem({ domain, collectionId, itemId }) {
         const identifier = this.hash(`${domain}:${collectionId}-${itemId}`);
-        return await this.load({ identifier });
+        let data = await this.load({ identifier });
+        data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
+            file["type"] = typeMappings[file.encodingFormat];
+            file["displayName"] = file.name.split(".").slice(0, -1)[0];
+            file.path = `/repository/${data.path}${data.datafiles[file.name]}`;
+            return file;
+        });
+        return data;
     }
 
     async load({ identifier }) {
@@ -101,7 +113,7 @@ export class DataLoader {
         }
         let rocrate = await response.json();
         rocrate = await this.objectify({ rocrate });
-        return { inventory, rocrate };
+        return { inventory, rocrate, datafiles, path };
     }
 
     hash(identifier) {
