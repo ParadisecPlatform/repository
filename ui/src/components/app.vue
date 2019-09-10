@@ -15,7 +15,7 @@
                 </router-link>
                 <div class="float-right">
                     <a
-                        href="http://language-archives.services"
+                        href="https://language-archives.services"
                         target="_blank"
                     >Another fine product from the CoEDL</a>
                 </div>
