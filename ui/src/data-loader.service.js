@@ -80,12 +80,12 @@ export class DataLoader {
     }
 
     async loadCollection({ domain, collectionId }) {
-        const identifier = this.hash(`${domain}:${collectionId}`);
+        const identifier = this.hash(`${domain}/${collectionId}`);
         return await this.load({ identifier });
     }
 
     async loadItem({ domain, collectionId, itemId }) {
-        const identifier = this.hash(`${domain}:${collectionId}-${itemId}`);
+        const identifier = this.hash(`${domain}/${collectionId}/${itemId}`);
         let data = await this.load({ identifier });
         data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
             file["type"] = typeMappings[file.encodingFormat];
