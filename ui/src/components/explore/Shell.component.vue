@@ -1,7 +1,8 @@
 <template>
     <div>
         <div v-if="isOnline">
-            <list-domains-component />
+            <list-domains-component class="mt-6" />
+            <list-authors-component class="mt-6" />
         </div>
         <div v-else>Uh oh. For one reason or another this is not going to work right now.</div>
     </div>
@@ -11,11 +12,13 @@
 import { DataLoader } from "src/data-loader.service";
 const dataLoader = new DataLoader();
 import { SearchService } from "./search.service";
-
 import ListDomainsComponent from "./ListDomains.component.vue";
+import ListAuthorsComponent from "./ListAuthors.component.vue";
+
 export default {
     components: {
-        ListDomainsComponent
+        ListDomainsComponent,
+        ListAuthorsComponent
     },
     data() {
         return {};

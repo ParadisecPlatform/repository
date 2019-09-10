@@ -11,11 +11,6 @@ export class SearchService {
         let query = {
             size: 0,
             aggs: {
-                // type: {
-                //     terms: {
-                //         field: "schema:additionalType"
-                //     }
-                // }
                 domains: {
                     nested: {
                         path: "identifier"
@@ -39,24 +34,33 @@ export class SearchService {
                 }
             }
         };
-        // let query = {
-        //     size: 0,
-        //     aggs: {
-        //         domains: {
-        //             nested: {
-        //                 path: "identifier"
-        //             },
-        //             aggs: {
-        //                 domains: {
-        //                     field: "identifier.value"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // };
         let response = await this.execute({ query });
         let domains = response.aggregations.domains.results.values.buckets;
         return domains;
+    }
+
+    async getAuthors() {
+        let query = {
+            size: 0,
+            aggs: {
+                authors: {
+                    nested: {
+                        path: "author"
+                    },
+                    aggs: {
+                        values: {
+                            terms: {
+                                field: "author.name"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        let response = await this.execute({ query });
+        let authors = response.aggregations.authors.values.buckets;
+        console.log(authors);
+        return authors;
     }
 
     async execute({ query }) {
