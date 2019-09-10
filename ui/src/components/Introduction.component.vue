@@ -21,8 +21,10 @@
         <div class="flex flex-col mt-5">
             <p>
                 In this demonstrator a collection (NT1) and item (NT1-001) have been ingested into the domains "paradisec.org.au"
-                and "uts.edu.au". The URL path is "/{domain}/{collectionId}/{itemId}". The application can also
+                and "uts.edu.au". The URL path is "/{domain}/{collectionId}/{itemId}".
+                <!-- The application can also
                 operate in a mode where it focuses on a single domain such that the URL path becomes "/{collectionId}/{itemId}".
+                -->
             </p>
             <p class="my-4">
                 You can navigate to the collection and item directly viz:
