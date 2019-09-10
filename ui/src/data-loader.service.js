@@ -10,6 +10,11 @@ const typeMappings = {
     "audio/mpeg": "audio"
 };
 
+const maintainIds = [
+    "http://pcdm.org/models#hasMember",
+    "http://schema.org/memberOf"
+];
+
 export class DataLoader {
     constructor() {
         this.repository = "/repository";
@@ -153,7 +158,7 @@ export class DataLoader {
                         let element = content.filter(
                             c => c["@id"] === v["@id"]
                         )[0];
-                        delete v["@id"];
+                        if (!maintainIds.includes(rootElement)) delete v["@id"];
                         if (element) delete element["@id"];
                         v = { ...v, ...element };
                     }
