@@ -129,12 +129,11 @@ export class DataLoader {
             if (isArray(values)) {
                 values = values.map(v => {
                     if (isObject(v) && v["@id"]) {
-                        // console.log(v["@id"]);
                         let element = content.filter(
                             c => c["@id"] === v["@id"]
                         )[0];
-                        // v = { ...v, ...element };
-                        // console.log(element);
+                        delete v["@id"];
+                        if (element) delete element["@id"];
                         v = { ...v, ...element };
                     }
                     return v;
