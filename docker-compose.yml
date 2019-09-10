@@ -22,20 +22,20 @@ services:
         ports:
             - 9001:9001
 
-    db:
-        image: postgres:11-alpine
-        hostname: db
-        tty: true
-        environment:
-            TERM: "xterm-256color"
-            NODE_ENV: "development"
-            POSTGRES_PASSWORD: "modpdsc"
-            POSTGRES_USER: "modpdsc"
-            POSTGRES_DB: "modpdsc"
-            PGDATA: /postgresql/data
-        mem_limit: 64M
-        ports:
-            - 5432:5432
+    # db:
+    #     image: postgres:11-alpine
+    #     hostname: db
+    #     tty: true
+    #     environment:
+    #         TERM: "xterm-256color"
+    #         NODE_ENV: "development"
+    #         POSTGRES_PASSWORD: "modpdsc"
+    #         POSTGRES_USER: "modpdsc"
+    #         POSTGRES_DB: "modpdsc"
+    #         PGDATA: /postgresql/data
+    #     mem_limit: 64M
+    #     ports:
+    #         - 5432:5432
 
     # api:
     #     image: node:12-stretch
