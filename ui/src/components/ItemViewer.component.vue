@@ -3,6 +3,10 @@
         <div class="my-10 text-3xl">{{item.rocrate.name}}</div>
         <div>Item: {{$route.params.domain}}/{{$route.params.collectionId}}/{{$route.params.itemId}}</div>
         <div>Author: {{item.rocrate.author.name}}</div>
+        <div>
+            Collection:
+            <router-link :to="item.rocrate.memberOf.id">{{item.rocrate.memberOf.id}}</router-link>
+        </div>
         <div class="flex flex-row my-4">
             <el-button @click="show.inventory= !show.inventory" size="mini">
                 <span v-if="!show.inventory">Show</span>
