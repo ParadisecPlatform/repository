@@ -90,7 +90,7 @@ export class DataLoader {
         data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
             file["type"] = typeMappings[file.encodingFormat];
             file["displayName"] = file.name.split(".").slice(0, -1)[0];
-            file.path = `/repository/${data.path}${data.datafiles[file.name]}`;
+            file.path = `/repository${data.path}${data.datafiles[file.name]}`;
             return file;
         });
         return data;
