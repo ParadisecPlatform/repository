@@ -75,8 +75,17 @@ export class DataLoader {
     }
 
     async loadCollection({ domain, collectionId }) {
-        const id = this.hash(`${domain}:${collectionId}`);
-        const path = pairtree.path(id);
+        const identifier = this.hash(`${domain}:${collectionId}`);
+        return await this.load({ identifier });
+    }
+
+    async loadItem({ domain, collectionId, itemId }) {
+        const identifier = this.hash(`${domain}:${collectionId}-${itemId}`);
+        return await this.load({ identifier });
+    }
+
+    async load({ identifier }) {
+        const path = pairtree.path(identifier);
         let response = await fetch(`${this.repository}${path}inventory.json`);
         if (response.status !== 200) {
             return {};
