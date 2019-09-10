@@ -59,13 +59,29 @@ export class SearchService {
         };
         let response = await this.execute({ query });
         let authors = response.aggregations.authors.values.buckets;
-        console.log(authors);
         return authors;
     }
 
+    async searchCollections({ text }) {
+        let query = {
+            query: {
+                multi_match: {
+                    query: text,
+                    fields: ["name", "description"]
+                }
+            }
+        };
+        let response = await this.execute({ query });
+        const total = response.hits.total.value;
+        let documents = response.hits.hits.map(hit => {
+            return hit._source.identifier.filter(i => i.name === "id")[0].value;
+        });
+        return { documents, total };
+    }
+
     async execute({ query }) {
-        console.log(`${this.service}/_search`);
-        console.log(JSON.stringify(query, null, 2));
+        // console.log(`${this.service}/_search`);
+        // console.log(JSON.stringify(query, null, 2));
         let response = await fetch(`${this.service}/_search`, {
             method: "POST",
             headers: this.headers,
