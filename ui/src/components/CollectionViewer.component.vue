@@ -1,13 +1,50 @@
 <template>
-    <div class="flex flex-col">
+    <div v-if="collection.rocrate">
+        <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
         <div>collection: {{$route.params.domain}}/{{$route.params.collectionId}}</div>
-        <div>
-            <pre>{{collection}}</pre>
+        <div>Author: {{collection.rocrate.author.name}}</div>
+        <div class="flex flex-row">
+            <div class="w-20">Items:</div>
+            <ul class="flex flex-col">
+                <li v-for="(item, idx) of collectionMembers" :key="idx">
+                    <router-link :to="item.id">{{item.id}}</router-link>
+                </li>
+            </ul>
+        </div>
+        <div class="flex flex-row my-4">
+            <el-button @click="show.inventory= !show.inventory" size="mini">
+                <span v-if="!show.inventory">Show</span>
+                <span v-else>Hide</span>
+                OCFL inventory file
+            </el-button>
+            <el-button @click="show.crate= !show.crate" size="mini">
+                <span v-if="!show.crate">Show</span>
+                <span v-else>Hide</span>
+                RO-Crate metadata
+            </el-button>
+            <el-button @click="show.datafiles= !show.datafiles" size="mini">
+                <span v-if="!show.datafiles">Show</span>
+                <span v-else>Hide</span>
+                data files
+            </el-button>
+        </div>
+        <div v-if="show.inventory" class="bg-white p-8 mx-6 overflow-scroll my-4">
+            <div class="text-lg">Collection Inventory</div>
+            <pre class="text-sm">{{collection.inventory}}</pre>
+        </div>
+        <div v-if="show.crate" class="bg-white p-8 mx-6 overflow-scroll my-4">
+            <div class="text-lg">Collection RO-Crate</div>
+            <pre class="text-sm">{{collection.rocrate}}</pre>
+        </div>
+        <div v-if="show.datafiles" class="bg-white p-8 mx-6 overflow-scroll my-4">
+            <div class="text-lg">Collection datafiles</div>
+            <pre class="text-sm">{{collection.datafiles}}</pre>
         </div>
     </div>
 </template>
 
 <script>
+import { isObject } from "lodash";
 import { DataLoader } from "src/data-loader.service";
 const dataLoader = new DataLoader();
 
@@ -15,7 +52,16 @@ export default {
     data() {
         return {
             watchers: {},
-            collection: {}
+            collection: {
+                inventory: undefined,
+                rocrate: undefined
+            },
+            collectionMembers: [],
+            show: {
+                inventory: false,
+                crate: false,
+                datafiles: false
+            }
         };
     },
     mounted() {
@@ -51,6 +97,11 @@ export default {
                 domain,
                 collectionId
             });
+            this.collectionMembers = this.collection.rocrate[
+                "http://pcdm.org/models#hasMember"
+            ];
+            if (isObject(this.collectionMembers))
+                this.collectionMembers = [this.collectionMembers];
         }
     }
 };
