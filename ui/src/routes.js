@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 import ShellComponent from "components/Shell.component.vue";
 import BadRequestComponent from "components/BadRequest.component.vue";
 import HealthCheckComponent from "components/HealthCheck.component.vue";
-import ExploreComponent from "components/Explore.component.vue";
+import ExploreComponent from "components/explore/Shell.component.vue";
 import CollectionViewerComponent from "components/CollectionViewer.component.vue";
 import ItemViewerComponent from "components/ItemViewer.component.vue";
 
