@@ -1,0 +1,7 @@
+{
+    "domain": null,
+    "service": {
+        "search": "/search",
+        "api": null
+    }
+}
