@@ -12,7 +12,8 @@ const typeMappings = {
 
 const maintainIds = [
     "http://pcdm.org/models#hasMember",
-    "http://schema.org/memberOf"
+    "http://schema.org/memberOf",
+    "http://schema.org/hasPart"
 ];
 
 export class DataLoader {
