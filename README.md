@@ -11,7 +11,7 @@ How might Nabu work if backed by OCFL? Let's find out...
 
 ## Getting setup
 
--   `Docker containers and docker-compose` are used to run the development environment so if you don't have them then install them now.
+-   `Docker containers and docker-compose` are used to run the development environment.
 -   You will need an OCFL filesystem @ `$PWD/ocfl-repository` which will be mounted in to the UI container and available at `/repository`. An OCFL repository is not included with this code.
 
 ## Starting the development environment
@@ -20,7 +20,7 @@ How might Nabu work if backed by OCFL? Let's find out...
 > docker-compose up
 ```
 
-Browse to `http://localhost:9000` to see the UI
+Browse to `http://localhost:9001` to see the UI
 
 ## Stopping the development environment
 
