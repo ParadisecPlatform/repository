@@ -54,6 +54,10 @@ module.exports = {
             {
                 from: "./src/configuration.json",
                 to: "configuration.json"
+            },
+            {
+                from: "./jsonldcontext.jsonld",
+                to: "jsonldcontext.jsonld"
             }
         ])
     ],

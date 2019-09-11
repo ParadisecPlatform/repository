@@ -16,6 +16,9 @@ const maintainIds = [
     "http://schema.org/hasPart"
 ];
 
+const jsonldContext = `${window.location.origin}/jsonldcontext.jsonld`;
+// const jsonldContext = "http://schema.org"
+
 export class DataLoader {
     constructor() {
         this.repository = "/repository";
@@ -169,7 +172,7 @@ export class DataLoader {
             root[rootElement] = values;
         });
         return await jsonld.compact(root, {
-            "@context": "http://schema.org"
+            "@context": jsonldContext
         });
     }
 }
