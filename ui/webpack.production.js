@@ -8,6 +8,7 @@ const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     target: "web",
@@ -45,13 +46,16 @@ module.exports = {
             filename: "[name].[contenthash].css"
         }),
         new HtmlWebpackPlugin({
-            title: "Inteja",
+            title: "OCFL Repository Viewer",
             template: "./src/index.html"
         }),
         new VueLoaderPlugin(),
-        new webpack.ProvidePlugin({
-            introJs: ["intro.js", "introJs"]
-        })
+        new CopyPlugin([
+            {
+                from: "./src/configuration.json",
+                to: "configuration.json"
+            }
+        ])
     ],
     module: {
         rules: [
@@ -68,7 +72,6 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    "css-hot-loader",
                     "vue-style-loader",
                     { loader: "css-loader", options: { importLoaders: 1 } },
                     "postcss-loader"
@@ -77,7 +80,6 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    "css-hot-loader",
                     "vue-style-loader",
                     { loader: "css-loader", options: { importLoaders: 1 } },
                     "postcss-loader",

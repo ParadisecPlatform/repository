@@ -53,7 +53,7 @@ module.exports = {
             filename: "[name].[contenthash].css"
         }),
         new HtmlWebpackPlugin({
-            title: "PARADISEC Collection Viewer",
+            title: "OCFL Repository Viewer",
             template: "./src/index.html"
         }),
         new VueLoaderPlugin(),
