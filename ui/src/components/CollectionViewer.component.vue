@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { isObject } from "lodash";
+import { isPlainObject } from "lodash";
 import { DataLoader } from "src/data-loader.service";
 const dataLoader = new DataLoader();
 
@@ -100,7 +100,7 @@ export default {
             this.collectionMembers = this.collection.rocrate[
                 "http://pcdm.org/models#hasMember"
             ];
-            if (isObject(this.collectionMembers))
+            if (isPlainObject(this.collectionMembers))
                 this.collectionMembers = [this.collectionMembers];
         }
     }
