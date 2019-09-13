@@ -96,6 +96,7 @@ export class DataLoader {
     async loadItem({ domain, collectionId, itemId }) {
         const identifier = this.hash(`${domain}/${collectionId}/${itemId}`);
         let data = await this.load({ identifier });
+        if (!data.rocrate) return data;
         data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
             file["type"] = typeMappings[file.encodingFormat];
             file["displayName"] = file.name.split(".").slice(0, -1)[0];
@@ -108,18 +109,16 @@ export class DataLoader {
     async load({ identifier }) {
         const path = pairtree.path(identifier);
         let response = await fetch(`${this.repository}${path}inventory.json`);
-        if (response.status !== 200) {
-            return {};
-        }
+        if (!response.ok) throw response;
+
         let inventory = await response.json();
         let datafiles = this.extractObjectDataFiles({ inventory });
 
         response = await fetch(
             `${this.repository}${path}${datafiles["ro-crate-metadata.jsonld"]}`
         );
-        if (response.status !== 200) {
-            return {};
-        }
+        if (!response.ok) throw response;
+
         let rocrate = await response.json();
         rocrate = await this.objectify({ rocrate });
         return { inventory, rocrate, datafiles, path };

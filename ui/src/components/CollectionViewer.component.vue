@@ -1,44 +1,50 @@
 <template>
-    <div v-if="collection.rocrate">
-        <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
-        <div>collection: {{$route.params.domain}}/{{$route.params.collectionId}}</div>
-        <div>Author: {{collection.rocrate.author.name}}</div>
-        <div class="flex flex-row">
-            <div class="w-20">Items:</div>
-            <ul class="flex flex-col">
-                <li v-for="(item, idx) of collectionMembers" :key="idx">
-                    <router-link :to="item.id">{{item.id}}</router-link>
-                </li>
-            </ul>
+    <div>
+        <div v-if="error">
+            <loading-error-component :error="error" source="collection" />
         </div>
-        <div class="flex flex-row my-4">
-            <el-button @click="show.inventory= !show.inventory" size="mini">
-                <span v-if="!show.inventory">Show</span>
-                <span v-else>Hide</span>
-                OCFL inventory file
-            </el-button>
-            <el-button @click="show.crate= !show.crate" size="mini">
-                <span v-if="!show.crate">Show</span>
-                <span v-else>Hide</span>
-                RO-Crate metadata
-            </el-button>
-            <el-button @click="show.datafiles= !show.datafiles" size="mini">
-                <span v-if="!show.datafiles">Show</span>
-                <span v-else>Hide</span>
-                data files
-            </el-button>
-        </div>
-        <div v-if="show.inventory" class="bg-white p-8 mx-6 overflow-scroll my-4">
-            <div class="text-lg">Collection Inventory</div>
-            <pre class="text-sm">{{collection.inventory}}</pre>
-        </div>
-        <div v-if="show.crate" class="bg-white p-8 mx-6 overflow-scroll my-4">
-            <div class="text-lg">Collection RO-Crate</div>
-            <pre class="text-sm">{{collection.rocrate}}</pre>
-        </div>
-        <div v-if="show.datafiles" class="bg-white p-8 mx-6 overflow-scroll my-4">
-            <div class="text-lg">Collection datafiles</div>
-            <pre class="text-sm">{{collection.datafiles}}</pre>
+
+        <div v-if="!error && collection.rocrate">
+            <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
+            <div>collection: {{$route.params.domain}}/{{$route.params.collectionId}}</div>
+            <div>Author: {{collection.rocrate.author.name}}</div>
+            <div class="flex flex-row">
+                <div class="w-20">Items:</div>
+                <ul class="flex flex-col">
+                    <li v-for="(item, idx) of collectionMembers" :key="idx">
+                        <router-link :to="item.id">{{item.id}}</router-link>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex flex-row my-4">
+                <el-button @click="show.inventory= !show.inventory" size="mini">
+                    <span v-if="!show.inventory">Show</span>
+                    <span v-else>Hide</span>
+                    OCFL inventory file
+                </el-button>
+                <el-button @click="show.crate= !show.crate" size="mini">
+                    <span v-if="!show.crate">Show</span>
+                    <span v-else>Hide</span>
+                    RO-Crate metadata
+                </el-button>
+                <el-button @click="show.datafiles= !show.datafiles" size="mini">
+                    <span v-if="!show.datafiles">Show</span>
+                    <span v-else>Hide</span>
+                    data files
+                </el-button>
+            </div>
+            <div v-if="show.inventory" class="bg-white p-8 mx-6 overflow-scroll my-4">
+                <div class="text-lg">Collection Inventory</div>
+                <pre class="text-sm">{{collection.inventory}}</pre>
+            </div>
+            <div v-if="show.crate" class="bg-white p-8 mx-6 overflow-scroll my-4">
+                <div class="text-lg">Collection RO-Crate</div>
+                <pre class="text-sm">{{collection.rocrate}}</pre>
+            </div>
+            <div v-if="show.datafiles" class="bg-white p-8 mx-6 overflow-scroll my-4">
+                <div class="text-lg">Collection datafiles</div>
+                <pre class="text-sm">{{collection.datafiles}}</pre>
+            </div>
         </div>
     </div>
 </template>
@@ -47,11 +53,16 @@
 import { isPlainObject } from "lodash";
 import { DataLoader } from "src/data-loader.service";
 const dataLoader = new DataLoader();
+import LoadingErrorComponent from "./LoadingError.component.vue";
 
 export default {
+    components: {
+        LoadingErrorComponent
+    },
     data() {
         return {
             watchers: {},
+            error: undefined,
             collection: {
                 inventory: undefined,
                 rocrate: undefined
@@ -93,15 +104,24 @@ export default {
                 this.$route.params.domain ||
                 this.$store.state.configuration.domain;
             const collectionId = this.$route.params.collectionId;
-            this.collection = await dataLoader.loadCollection({
-                domain,
-                collectionId
-            });
-            this.collectionMembers = this.collection.rocrate[
-                "http://pcdm.org/models#hasMember"
-            ];
-            if (isPlainObject(this.collectionMembers))
-                this.collectionMembers = [this.collectionMembers];
+            try {
+                this.collection = await dataLoader.loadCollection({
+                    domain,
+                    collectionId
+                });
+                this.error = undefined;
+                this.collectionMembers = this.collection.rocrate[
+                    "http://pcdm.org/models#hasMember"
+                ];
+                if (isPlainObject(this.collectionMembers))
+                    this.collectionMembers = [this.collectionMembers];
+            } catch (error) {
+                this.error = {
+                    status: error.status,
+                    statusText: error.statusText,
+                    url: error.url
+                };
+            }
         }
     }
 };
