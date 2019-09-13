@@ -3,7 +3,8 @@
         <div v-if="isOnline">
             <list-domains-component class="mt-6" />
             <list-authors-component class="mt-6" />
-            <list-collections-component class="mt-6" />
+            <list-collections-and-items-component selection="collection" class="mt-6" />
+            <list-collections-and-items-component selection="item" class="mt-6" />
             <search-collections-component class="mt-6" />
         </div>
         <div v-else>Uh oh. For one reason or another this is not going to work right now.</div>
@@ -16,14 +17,14 @@ const dataLoader = new DataLoader();
 import { SearchService } from "./search.service";
 import ListDomainsComponent from "./ListDomains.component.vue";
 import ListAuthorsComponent from "./ListAuthors.component.vue";
-import ListCollectionsComponent from "./ListCollections.component.vue";
+import ListCollectionsAndItemsComponent from "./ListCollectionsAndItems.component.vue";
 import SearchCollectionsComponent from "./SearchCollections.component.vue";
 
 export default {
     components: {
         ListDomainsComponent,
         ListAuthorsComponent,
-        ListCollectionsComponent,
+        ListCollectionsAndItemsComponent,
         SearchCollectionsComponent
     },
     data() {
