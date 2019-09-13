@@ -62,6 +62,22 @@ export class SearchService {
         return authors;
     }
 
+    async getCollections() {
+        let query = {
+            query: {
+                match: {
+                    "schema:additionalType": "collection"
+                }
+            }
+        };
+        let response = await this.execute({ query });
+        const total = response.hits.total.value;
+        let results = response.hits.hits.map(hit => {
+            return hit._source.identifier.filter(i => i.name === "id")[0].value;
+        });
+        return { results, total };
+    }
+
     async searchCollections({ text }) {
         let query = {
             query: {
