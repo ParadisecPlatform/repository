@@ -1,0 +1,285 @@
+{
+    "id": "5390514169b94ccf36c1e2ce1a6b56ea9c5f8a673845d045e5b612c85510168a",
+    "type": "https://ocfl.io/1.0/spec/#inventory",
+    "digestAlgorithm": "sha512",
+    "head": "v1",
+    "versions": {
+        "v1": {
+            "created": "2019-09-16T04:30:25.009Z",
+            "state": {
+                "aba0c521913b7010b59af3a49357694e929bbb7a4378ecb07150f17fb057e25cb4abfa56c784b73d69968d23e1672eed769332835e07dfc815fb7da58c7715a5": [
+                    "NT1-98007-001.jpg"
+                ],
+                "4ce2add7a4c55c9b9b2a609814a79c94fea208f7faf9c3b0e924db6433f51aaba172cc52ab547ccc9d7d262cdf21dffdfe2c5b6b16d772070f02b39ab3c93b9e": [
+                    "NT1-98007-002.jpg"
+                ],
+                "f67e1310c4ea619b797255984eb684711d7c1d424f85c88fd5832a779850042e4198b24d2f62f8edbae6c4569d0f7031a98662af619400343b114b011dee5ca4": [
+                    "NT1-98007-003.jpg"
+                ],
+                "d1d720a9dd640fe3039dbaf8de623167c8f70b0cc3b71fcc640c0dc5fcc703fc2ec5439d5cb059584c3eb9964df52fcfd72c92d2d02c453ce383c697f80ac281": [
+                    "NT1-98007-004.jpg"
+                ],
+                "8ba7b4443c64fb73d0f2aa22d8640f406afdf83fe35835217a03b12f8ec18568101fd3025cacbeb30cdc7a3824c738aa4806f303fa1edb5490b609ddef29a98d": [
+                    "NT1-98007-005.jpg"
+                ],
+                "d5df7dc7618407e0f3d241157acd879b2cbb7cc14773b5126debcc361baad6bb8ddfb2da508976c3404df44989e9bb3c973605eac7b20771e1daed711465585f": [
+                    "NT1-98007-006.jpg"
+                ],
+                "4890314085a746f8b79f9f3db6010e6d3a25066fc86ab86c8c2e730bcd80718c8102d3fdbe22639b6b925544dd2d0af2bc2d81e3ad4c2d7c36c8d89d71825244": [
+                    "NT1-98007-007.jpg"
+                ],
+                "74f2eec7c465e1dbfc550e9f8f0c2a1ba5e963e7b751dfb996ce0b1264aea802b897159ad0b50796fa00bd53a0cdb41b4058883d46e7f0d7e32c0a20327bac03": [
+                    "NT1-98007-008.jpg"
+                ],
+                "ba9492918c0b762504e21cb0f3291239983d0a9ec0f429aa0c678fe35b29451f4fcbf6eff641ed6eb32488112ffdacca6ec382f64792609b1fae5b302b316aab": [
+                    "NT1-98007-009.jpg"
+                ],
+                "2cfe139e970ec97fe6153d9db395eb13f5b4ab11bd3c1a5b17e90ffb9e297d9bbc958291e0827c457b0d97f655815e03b727d0ed1586687a3e6557fd206941e5": [
+                    "NT1-98007-010.jpg"
+                ],
+                "82dab1d2c2c85b6d6a3ce6aeec0c8f380de369441637328f8e796417bc659c6dcc492945e0eb7854993f2b23d1c4ca6a335d837fabbd96edbc8154af00834ab8": [
+                    "NT1-98007-011.jpg"
+                ],
+                "a18b93ef1997496849590ee9ba3b7039a4cbdac0e9f65d40e1bc7ecf7e3b5b5aa98f8858c3866382ef5f844549af687e18a844ceb320b075fd8c0c4c1e08f0e0": [
+                    "NT1-98007-012.jpg"
+                ],
+                "279d638b85807091cd0e3acd635d3f51ba60288058117999ef3858ff3b09bacddbee610236449a6c60e00a16cb991c9b65b9fdf812f75841f567e60b36ae99a1": [
+                    "NT1-98007-013.jpg"
+                ],
+                "f4c79a93ddc328d8ff1d0d3d0a65793db2133dc5095960241dbd8e7d0ade5959bee2cb861d7b5a98c822244bf6ff1476c3d5248d73d15448aa4dcf08a7ffee27": [
+                    "NT1-98007-014.jpg"
+                ],
+                "5a0f79945812640db82b5de0de19dc214e648fae2c35f08e0009bdca70a1820404470afafc50ba81bd67bfaee7f2ae89b191722ecd05cd34a0490dfaebdbaea5": [
+                    "NT1-98007-015.jpg"
+                ],
+                "2bc4ef54dbd4e4779a463d23cfac877213a32050c4d38ca89cdff051ea8319865491df62b6aa0c94d13b6d040ce7c0f110dd773755b4588599b2a5ea22e353b2": [
+                    "NT1-98007-016.jpg"
+                ],
+                "9b75d3902bad040cac4a58583cfeca0406bed7bcce4ba37320feca4c8b5014225d982f8d1eb9bde8ecd49efdf1cf7cc826f769fbd02b519ef1129b59bf04c663": [
+                    "NT1-98007-017.jpg"
+                ],
+                "24f0f6d8826c4c99c9df3f29b715892b6e88dcf1cd3bb7378bab4a727340d0219cea4b5de7e9f6bd335004e8ebdc42350caa61eaa88977541e814f06d4cec9cf": [
+                    "NT1-98007-018.jpg"
+                ],
+                "a0b3bbc618c5a2ed46304bc629411b432c103453d09dd14d840b3c7a55b257d82b064661d8393e8e93228d92e3dc715baee0fafebcb58e190f6c77c7804b1a7f": [
+                    "NT1-98007-019.jpg"
+                ],
+                "ade71de94fde51b8ac42e2e828897e4dd7cf06b89c5c3c48c4a93e0227dcd979ae7638e42eb643f7e1db2161599a29f5e577d2da30786c2fef9734124ccec992": [
+                    "NT1-98007-020.jpg"
+                ],
+                "e0ac3d85ed5b0dd099f8fb00fa9991612004f0818153d8f3f760788b2461be512c5594cf3ff405f90ab746856e3cd3156ff828773392a38c28850b159b6336d4": [
+                    "NT1-98007-021.jpg"
+                ],
+                "b5745e700fdfe0ebede674202ffd1d7f726ebd4e550070f33a3aeed06b1486ed3f2bad33a63133ee6bf820213bafdef709dab78cf0e59947caead9093099eef4": [
+                    "NT1-98007-022.jpg"
+                ],
+                "9368fd1ab14ed2b78da9b34b473d262ebf45c463e685187b7a388af1fbe83ca7d27e7a647c051762cd0b85c8735a59ec869e839b218688e69d68bb127ace1deb": [
+                    "NT1-98007-023.jpg"
+                ],
+                "4d6a81c295c804e112532748d2b1184a6350e0a037db8ca5446839a8cab3359803a81300afc463242d22aaefed95f4381e1c8f6411a34c128edeeda7af64b323": [
+                    "NT1-98007-024.jpg"
+                ],
+                "08f1fb1f909ab1b203bf5700d8e1ea5fe342ac3d19b39a6f9a74eb033c9dfbec5de1ef5612f72efe3f62d5c22c45fd3912d793469beaebe8f486819fb21fe067": [
+                    "NT1-98007-025.jpg"
+                ],
+                "349bb9d44d2caea79859fa46266b7609240186b429642a577c4b78f82dc316793f89a891829a3452a5736e1808be52329588a9fa55888e3aaebf50e207868a3f": [
+                    "NT1-98007-026.jpg"
+                ],
+                "11e6a3ec6dfdb96785fc040b44b3e904d70bc0336ea0e1856d664e3cf7b7f5655ed7cec087971f836b2d8da743624155360cfa2ef4bdcbd6ea17ed4d6d8af62c": [
+                    "NT1-98007-027.jpg"
+                ],
+                "efc75033a93a191891a4207ebaf7da31bc20405189d644ee4363ecd65be9cc74b0de6a4b5ef6fc9835ddac033970ee3c6dde9d99f9a7962e9e2e9ca02b4d9653": [
+                    "NT1-98007-028.jpg"
+                ],
+                "48eaf5ed00c32494b5d4b5181c2b50c57ab2156790fb8218a31b43f933e599322b9247a1f6e0d0018e7e47ad82e4cb215b77dc4a87312e241f712666ed7b179e": [
+                    "NT1-98007-029.jpg"
+                ],
+                "910722fe2d1a33be472b67feee04ff60d0f7277c255838cbd5f05c1ae8e9f44ad2e11a42b3b32c3f834f91583b71e1ad9f11c5e1689c51ff965b39d16c0e7e5c": [
+                    "NT1-98007-030.jpg"
+                ],
+                "c1a4ffc24021c31b2ce74748945cd1baea28ffbdf71c85d894d4bfd12a0895c148e9434928a519b068bae20b1942f21dfbdec38d13d9d997ae8cdcfa7d17a0cc": [
+                    "NT1-98007-031.jpg"
+                ],
+                "50aca0e5873aa8c988da9b29b36e4892ee27ec6c6cba1e08f2c8819ffe528eba697d7e3d351ad31d54db0f657accd6acacb770e250905bfe719fa63bb043928d": [
+                    "NT1-98007-98007A.eaf"
+                ],
+                "6a77d5a64fee1dabf490c940b49a996305d876330954a83bd476db75e5e122826cbe3dc2a0ef0a8554fe77a260d9db863dcbd8e1430844c042e6615e277574fa": [
+                    "NT1-98007-98007A.flextext"
+                ],
+                "0bc2fe872aed12e3357f91be1151c98487f0d722af0f19ec535dd1581c94dd40b0d7b0431516e6070b2c6983ec983b609182920c4a68b20275b4e164547dc9b8": [
+                    "NT1-98007-98007A.ixt"
+                ],
+                "07438bb7c3db75454f5353c00a4749668e973e96fa7d07eed990a31a30bb84032737d1e900bd4e84bbe187c3db410b620d920f076881eb552c178aa0b081ddf5": [
+                    "NT1-98007-98007A.mp3"
+                ],
+                "a2d071904e7952f92a855ed818fd97007c17e595fc38f6bfa85514c4c56c109d8e0629179527de56a68e21f859ab45744a89986b580a330b2b5f205ed02e9dfe": [
+                    "NT1-98007-98007A.trs"
+                ],
+                "b2d8909818c285b844703969d174556c603d488722566187e99a7581cf0802148fe0a5aa10ee5fa56b76b4b985e8f0a8dd217d2cce8f40cb1eefb0232ae3946e": [
+                    "NT1-98007-98007B.eaf"
+                ],
+                "7b620f6b81cdc9028c1b6dfa0e78d733b0e9d062ebd1785b1ce1ceb346cb06c2932032bd6ad557e61386d6c308a8d81e67fef5428d92054e17f052368bad282c": [
+                    "NT1-98007-98007B.mp3"
+                ],
+                "2ce8d2135655ca03bf4b8a28c3990146da17ecb71b63afa85ed65edbfe996c5bedbe138831d78f4c874d0ef3604ddf69e8055dda5554430ce4e229ec1c694a2c": [
+                    "NT1-98007-98007az.xml"
+                ],
+                "2fb31f885eced9e82ca129f7f5c98678a64a73b8ce9b3be7217b28460181bac9bcfa4de9240be725cc55e453d1c24c9961c73c5fe24ec2f7b677d6375eeda79c": [
+                    "NT1-98007-A.tab"
+                ],
+                "ab6768d5225df62a7dee0b0e56ae7fbf2c3ebc3db2a94c2dbe9ddeeba205a89af3cd0cfa6616ef58775a1e6eb45ee06206445d043cfd163121ce78ddd63b0f6f": [
+                    "NT1-98007-A.xml"
+                ],
+                "b3c6bad804af199bd998f432b1905a5921a894dd741f56ad0c2bd6ea3d1c75ddb8be8c18e095cd04462da1a5ae4b21d22c0a83c806ce105d2931952347ec174a": [
+                    "NT1-98007-B.tab"
+                ],
+                "8f1cf2ec514bd5e30c933716a3218107b223bd6536648bcc29db5dbf43695c83413f47bf1b8d9312ef4a185329dc4c6eb101a25bf3d4dd23f41c723284dda4d5": [
+                    "NT1-98007-B.xml"
+                ],
+                "96be010b07e4950ca9b239f13c30f5995cf09888d784e6f77dfdcda44414b7048fd61799073703b32eeff27c1449740f346f0473051e585f49d1ed0a6f3763ba": [
+                    "item.json"
+                ],
+                "af985ef5e1ac2926d10925e5cf58abe17902227d2a58a289995e9e176102b55e67713c29e86bb3d6b49b3b858979668c42298d148b7d3ff3077ef23da201a2ff": [
+                    "ro-crate-metadata.jsonld"
+                ]
+            }
+        }
+    },
+    "manifest": {
+        "aba0c521913b7010b59af3a49357694e929bbb7a4378ecb07150f17fb057e25cb4abfa56c784b73d69968d23e1672eed769332835e07dfc815fb7da58c7715a5": [
+            "v1/content/NT1-98007-001.jpg"
+        ],
+        "4ce2add7a4c55c9b9b2a609814a79c94fea208f7faf9c3b0e924db6433f51aaba172cc52ab547ccc9d7d262cdf21dffdfe2c5b6b16d772070f02b39ab3c93b9e": [
+            "v1/content/NT1-98007-002.jpg"
+        ],
+        "f67e1310c4ea619b797255984eb684711d7c1d424f85c88fd5832a779850042e4198b24d2f62f8edbae6c4569d0f7031a98662af619400343b114b011dee5ca4": [
+            "v1/content/NT1-98007-003.jpg"
+        ],
+        "d1d720a9dd640fe3039dbaf8de623167c8f70b0cc3b71fcc640c0dc5fcc703fc2ec5439d5cb059584c3eb9964df52fcfd72c92d2d02c453ce383c697f80ac281": [
+            "v1/content/NT1-98007-004.jpg"
+        ],
+        "8ba7b4443c64fb73d0f2aa22d8640f406afdf83fe35835217a03b12f8ec18568101fd3025cacbeb30cdc7a3824c738aa4806f303fa1edb5490b609ddef29a98d": [
+            "v1/content/NT1-98007-005.jpg"
+        ],
+        "d5df7dc7618407e0f3d241157acd879b2cbb7cc14773b5126debcc361baad6bb8ddfb2da508976c3404df44989e9bb3c973605eac7b20771e1daed711465585f": [
+            "v1/content/NT1-98007-006.jpg"
+        ],
+        "4890314085a746f8b79f9f3db6010e6d3a25066fc86ab86c8c2e730bcd80718c8102d3fdbe22639b6b925544dd2d0af2bc2d81e3ad4c2d7c36c8d89d71825244": [
+            "v1/content/NT1-98007-007.jpg"
+        ],
+        "74f2eec7c465e1dbfc550e9f8f0c2a1ba5e963e7b751dfb996ce0b1264aea802b897159ad0b50796fa00bd53a0cdb41b4058883d46e7f0d7e32c0a20327bac03": [
+            "v1/content/NT1-98007-008.jpg"
+        ],
+        "ba9492918c0b762504e21cb0f3291239983d0a9ec0f429aa0c678fe35b29451f4fcbf6eff641ed6eb32488112ffdacca6ec382f64792609b1fae5b302b316aab": [
+            "v1/content/NT1-98007-009.jpg"
+        ],
+        "2cfe139e970ec97fe6153d9db395eb13f5b4ab11bd3c1a5b17e90ffb9e297d9bbc958291e0827c457b0d97f655815e03b727d0ed1586687a3e6557fd206941e5": [
+            "v1/content/NT1-98007-010.jpg"
+        ],
+        "82dab1d2c2c85b6d6a3ce6aeec0c8f380de369441637328f8e796417bc659c6dcc492945e0eb7854993f2b23d1c4ca6a335d837fabbd96edbc8154af00834ab8": [
+            "v1/content/NT1-98007-011.jpg"
+        ],
+        "a18b93ef1997496849590ee9ba3b7039a4cbdac0e9f65d40e1bc7ecf7e3b5b5aa98f8858c3866382ef5f844549af687e18a844ceb320b075fd8c0c4c1e08f0e0": [
+            "v1/content/NT1-98007-012.jpg"
+        ],
+        "279d638b85807091cd0e3acd635d3f51ba60288058117999ef3858ff3b09bacddbee610236449a6c60e00a16cb991c9b65b9fdf812f75841f567e60b36ae99a1": [
+            "v1/content/NT1-98007-013.jpg"
+        ],
+        "f4c79a93ddc328d8ff1d0d3d0a65793db2133dc5095960241dbd8e7d0ade5959bee2cb861d7b5a98c822244bf6ff1476c3d5248d73d15448aa4dcf08a7ffee27": [
+            "v1/content/NT1-98007-014.jpg"
+        ],
+        "5a0f79945812640db82b5de0de19dc214e648fae2c35f08e0009bdca70a1820404470afafc50ba81bd67bfaee7f2ae89b191722ecd05cd34a0490dfaebdbaea5": [
+            "v1/content/NT1-98007-015.jpg"
+        ],
+        "2bc4ef54dbd4e4779a463d23cfac877213a32050c4d38ca89cdff051ea8319865491df62b6aa0c94d13b6d040ce7c0f110dd773755b4588599b2a5ea22e353b2": [
+            "v1/content/NT1-98007-016.jpg"
+        ],
+        "9b75d3902bad040cac4a58583cfeca0406bed7bcce4ba37320feca4c8b5014225d982f8d1eb9bde8ecd49efdf1cf7cc826f769fbd02b519ef1129b59bf04c663": [
+            "v1/content/NT1-98007-017.jpg"
+        ],
+        "24f0f6d8826c4c99c9df3f29b715892b6e88dcf1cd3bb7378bab4a727340d0219cea4b5de7e9f6bd335004e8ebdc42350caa61eaa88977541e814f06d4cec9cf": [
+            "v1/content/NT1-98007-018.jpg"
+        ],
+        "a0b3bbc618c5a2ed46304bc629411b432c103453d09dd14d840b3c7a55b257d82b064661d8393e8e93228d92e3dc715baee0fafebcb58e190f6c77c7804b1a7f": [
+            "v1/content/NT1-98007-019.jpg"
+        ],
+        "ade71de94fde51b8ac42e2e828897e4dd7cf06b89c5c3c48c4a93e0227dcd979ae7638e42eb643f7e1db2161599a29f5e577d2da30786c2fef9734124ccec992": [
+            "v1/content/NT1-98007-020.jpg"
+        ],
+        "e0ac3d85ed5b0dd099f8fb00fa9991612004f0818153d8f3f760788b2461be512c5594cf3ff405f90ab746856e3cd3156ff828773392a38c28850b159b6336d4": [
+            "v1/content/NT1-98007-021.jpg"
+        ],
+        "b5745e700fdfe0ebede674202ffd1d7f726ebd4e550070f33a3aeed06b1486ed3f2bad33a63133ee6bf820213bafdef709dab78cf0e59947caead9093099eef4": [
+            "v1/content/NT1-98007-022.jpg"
+        ],
+        "9368fd1ab14ed2b78da9b34b473d262ebf45c463e685187b7a388af1fbe83ca7d27e7a647c051762cd0b85c8735a59ec869e839b218688e69d68bb127ace1deb": [
+            "v1/content/NT1-98007-023.jpg"
+        ],
+        "4d6a81c295c804e112532748d2b1184a6350e0a037db8ca5446839a8cab3359803a81300afc463242d22aaefed95f4381e1c8f6411a34c128edeeda7af64b323": [
+            "v1/content/NT1-98007-024.jpg"
+        ],
+        "08f1fb1f909ab1b203bf5700d8e1ea5fe342ac3d19b39a6f9a74eb033c9dfbec5de1ef5612f72efe3f62d5c22c45fd3912d793469beaebe8f486819fb21fe067": [
+            "v1/content/NT1-98007-025.jpg"
+        ],
+        "349bb9d44d2caea79859fa46266b7609240186b429642a577c4b78f82dc316793f89a891829a3452a5736e1808be52329588a9fa55888e3aaebf50e207868a3f": [
+            "v1/content/NT1-98007-026.jpg"
+        ],
+        "11e6a3ec6dfdb96785fc040b44b3e904d70bc0336ea0e1856d664e3cf7b7f5655ed7cec087971f836b2d8da743624155360cfa2ef4bdcbd6ea17ed4d6d8af62c": [
+            "v1/content/NT1-98007-027.jpg"
+        ],
+        "efc75033a93a191891a4207ebaf7da31bc20405189d644ee4363ecd65be9cc74b0de6a4b5ef6fc9835ddac033970ee3c6dde9d99f9a7962e9e2e9ca02b4d9653": [
+            "v1/content/NT1-98007-028.jpg"
+        ],
+        "48eaf5ed00c32494b5d4b5181c2b50c57ab2156790fb8218a31b43f933e599322b9247a1f6e0d0018e7e47ad82e4cb215b77dc4a87312e241f712666ed7b179e": [
+            "v1/content/NT1-98007-029.jpg"
+        ],
+        "910722fe2d1a33be472b67feee04ff60d0f7277c255838cbd5f05c1ae8e9f44ad2e11a42b3b32c3f834f91583b71e1ad9f11c5e1689c51ff965b39d16c0e7e5c": [
+            "v1/content/NT1-98007-030.jpg"
+        ],
+        "c1a4ffc24021c31b2ce74748945cd1baea28ffbdf71c85d894d4bfd12a0895c148e9434928a519b068bae20b1942f21dfbdec38d13d9d997ae8cdcfa7d17a0cc": [
+            "v1/content/NT1-98007-031.jpg"
+        ],
+        "50aca0e5873aa8c988da9b29b36e4892ee27ec6c6cba1e08f2c8819ffe528eba697d7e3d351ad31d54db0f657accd6acacb770e250905bfe719fa63bb043928d": [
+            "v1/content/NT1-98007-98007A.eaf"
+        ],
+        "6a77d5a64fee1dabf490c940b49a996305d876330954a83bd476db75e5e122826cbe3dc2a0ef0a8554fe77a260d9db863dcbd8e1430844c042e6615e277574fa": [
+            "v1/content/NT1-98007-98007A.flextext"
+        ],
+        "0bc2fe872aed12e3357f91be1151c98487f0d722af0f19ec535dd1581c94dd40b0d7b0431516e6070b2c6983ec983b609182920c4a68b20275b4e164547dc9b8": [
+            "v1/content/NT1-98007-98007A.ixt"
+        ],
+        "07438bb7c3db75454f5353c00a4749668e973e96fa7d07eed990a31a30bb84032737d1e900bd4e84bbe187c3db410b620d920f076881eb552c178aa0b081ddf5": [
+            "v1/content/NT1-98007-98007A.mp3"
+        ],
+        "a2d071904e7952f92a855ed818fd97007c17e595fc38f6bfa85514c4c56c109d8e0629179527de56a68e21f859ab45744a89986b580a330b2b5f205ed02e9dfe": [
+            "v1/content/NT1-98007-98007A.trs"
+        ],
+        "b2d8909818c285b844703969d174556c603d488722566187e99a7581cf0802148fe0a5aa10ee5fa56b76b4b985e8f0a8dd217d2cce8f40cb1eefb0232ae3946e": [
+            "v1/content/NT1-98007-98007B.eaf"
+        ],
+        "7b620f6b81cdc9028c1b6dfa0e78d733b0e9d062ebd1785b1ce1ceb346cb06c2932032bd6ad557e61386d6c308a8d81e67fef5428d92054e17f052368bad282c": [
+            "v1/content/NT1-98007-98007B.mp3"
+        ],
+        "2ce8d2135655ca03bf4b8a28c3990146da17ecb71b63afa85ed65edbfe996c5bedbe138831d78f4c874d0ef3604ddf69e8055dda5554430ce4e229ec1c694a2c": [
+            "v1/content/NT1-98007-98007az.xml"
+        ],
+        "2fb31f885eced9e82ca129f7f5c98678a64a73b8ce9b3be7217b28460181bac9bcfa4de9240be725cc55e453d1c24c9961c73c5fe24ec2f7b677d6375eeda79c": [
+            "v1/content/NT1-98007-A.tab"
+        ],
+        "ab6768d5225df62a7dee0b0e56ae7fbf2c3ebc3db2a94c2dbe9ddeeba205a89af3cd0cfa6616ef58775a1e6eb45ee06206445d043cfd163121ce78ddd63b0f6f": [
+            "v1/content/NT1-98007-A.xml"
+        ],
+        "b3c6bad804af199bd998f432b1905a5921a894dd741f56ad0c2bd6ea3d1c75ddb8be8c18e095cd04462da1a5ae4b21d22c0a83c806ce105d2931952347ec174a": [
+            "v1/content/NT1-98007-B.tab"
+        ],
+        "8f1cf2ec514bd5e30c933716a3218107b223bd6536648bcc29db5dbf43695c83413f47bf1b8d9312ef4a185329dc4c6eb101a25bf3d4dd23f41c723284dda4d5": [
+            "v1/content/NT1-98007-B.xml"
+        ],
+        "96be010b07e4950ca9b239f13c30f5995cf09888d784e6f77dfdcda44414b7048fd61799073703b32eeff27c1449740f346f0473051e585f49d1ed0a6f3763ba": [
+            "v1/content/item.json"
+        ],
+        "af985ef5e1ac2926d10925e5cf58abe17902227d2a58a289995e9e176102b55e67713c29e86bb3d6b49b3b858979668c42298d148b7d3ff3077ef23da201a2ff": [
+            "v1/content/ro-crate-metadata.jsonld"
+        ]
+    }
+}
