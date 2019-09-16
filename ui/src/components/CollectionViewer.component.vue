@@ -8,11 +8,13 @@
             <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
             <div>collection: {{$route.params.domain}}/{{$route.params.collectionId}}</div>
             <div>Author: {{collection.rocrate.author.name}}</div>
-            <div class="flex flex-row">
-                <div class="w-20">Items:</div>
-                <ul class="flex flex-col">
+            <div class="flex flex-col">
+                <div class="w-48">Items ({{collectionMembers.length}}):</div>
+                <ul class="flex flex-row flex-wrap">
                     <li v-for="(item, idx) of collectionMembers" :key="idx">
-                        <router-link :to="item.id">{{item.id}}</router-link>
+                        <el-tag type="warning" effect="dark" class="mx-1 my-1">
+                            <router-link :to="item.id">{{item.name}}</router-link>
+                        </el-tag>
                     </li>
                 </ul>
             </div>
@@ -110,11 +112,17 @@ export default {
                     collectionId
                 });
                 this.error = undefined;
-                this.collectionMembers = this.collection.rocrate[
+                let members = this.collection.rocrate[
                     "http://pcdm.org/models#hasMember"
                 ];
-                if (isPlainObject(this.collectionMembers))
-                    this.collectionMembers = [this.collectionMembers];
+                if (isPlainObject(members)) members = [members];
+                this.collectionMembers = members.map(member => {
+                    let name = member.id.split("/");
+                    return {
+                        id: member.id,
+                        name: name[3]
+                    };
+                });
             } catch (error) {
                 this.error = {
                     status: error.status,
