@@ -97,12 +97,7 @@ export class DataLoader {
         const identifier = this.hash(`${domain}/${collectionId}/${itemId}`);
         let data = await this.load({ identifier });
         if (!data.rocrate) return data;
-        data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
-            file["type"] = typeMappings[file.encodingFormat];
-            file["displayName"] = file.name.split(".").slice(0, -1)[0];
-            file.path = `/repository${data.path}${data.datafiles[file.name]}`;
-            return file;
-        });
+        data = this.enrichItemParts({ data });
         return data;
     }
 
@@ -147,7 +142,7 @@ export class DataLoader {
         return datafiles;
     }
 
-    async objectify({ rocrate }) {
+    async objectify({ rocrate, context = null }) {
         let data = (await jsonld.expand(rocrate))[0]["@graph"];
 
         let objectRoot = data.filter(e => e["@id"] === "./")[0];
@@ -171,7 +166,17 @@ export class DataLoader {
             root[rootElement] = values;
         });
         return await jsonld.compact(root, {
-            "@context": jsonldContext
+            "@context": context ? context : jsonldContext
         });
+    }
+
+    enrichItemParts({ data }) {
+        data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
+            file["type"] = typeMappings[file.encodingFormat];
+            file["displayName"] = file.name.split(".").slice(0, -1)[0];
+            file.path = `/repository${data.path}${data.datafiles[file.name]}`;
+            return file;
+        });
+        return data;
     }
 }
