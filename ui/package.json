@@ -6,7 +6,7 @@
     "scripts": {
         "develop": "npm install --no-progress && node_modules/.bin/webpack-dev-server --config webpack.develop.js --hot --inline",
         "build:production": "npm install --no-progress && node_modules/.bin/webpack --config webpack.production.js",
-        "unitTests": "npm install && node_modules/mocha/bin/mocha -w -r jsdom-global/register 'src/**/*.spec.js'"
+        "test": "jest --coverage"
     },
     "repository": {
         "type": "git",
@@ -38,19 +38,19 @@
         "@babel/core": "^7.4.3",
         "@babel/plugin-syntax-dynamic-import": "^7.2.0",
         "@babel/preset-env": "^7.4.3",
+        "babel-jest": "^24.9.0",
         "babel-loader": "^8.0.5",
-        "chai": "^4.2.0",
         "clean-webpack-plugin": "^0.1.19",
         "connect-history-api-fallback": "^1.6.0",
         "copy-webpack-plugin": "^5.0.4",
         "css-loader": "^0.28.11",
         "file-loader": "^1.1.11",
         "html-webpack-plugin": "^4.0.0-beta.5",
+        "jest": "^24.9.0",
         "jsdom": "^11.12.0",
         "jsdom-global": "^3.0.2",
         "koa-connect": "^2.0.1",
         "mini-css-extract-plugin": "^0.4.5",
-        "mocha": "^5.2.0",
         "node-sass": "^4.11.0",
         "optimize-css-assets-webpack-plugin": "^5.0.1",
         "postcss-loader": "^3.0.0",
