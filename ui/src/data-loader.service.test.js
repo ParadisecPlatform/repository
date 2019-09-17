@@ -117,3 +117,19 @@ test("test parts enrichment in objectified item", async () => {
     expect(parts[0].displayName).toBe("NT1-98007-001");
     expect(parts[0].path).toBe("/repository/v1/content/NT1-98007-001.jpg");
 });
+
+test("test collection member rework", async () => {
+    let rocrate = await readFile(`${__dirname}/test-data/AC1.json`);
+    rocrate = JSON.parse(rocrate);
+    rocrate = await dataLoader.objectify({
+        rocrate,
+        context: "https://schema.org/docs/jsonldcontext.jsonld"
+    });
+
+    let collectionMembers = dataLoader.enrichCollectionMembers({
+        collectionMembers: rocrate["http://pcdm.org/models#hasMember"]
+    });
+    let member = collectionMembers[0];
+    expect(member.id).toBe("/paradisec.org.au/AC1/000");
+    expect(member.name).toBe("000");
+});

@@ -3,7 +3,7 @@
 import pairtree from "pairtree";
 import shajs from "sha.js";
 import jsonld from "jsonld";
-import { map, isArray, isObject } from "lodash";
+import { map, isArray, isObject, isPlainObject, orderBy } from "lodash";
 
 const typeMappings = {
     "audio/x-wav": "audio",
@@ -90,7 +90,11 @@ export class DataLoader {
 
     async loadCollection({ domain, collectionId }) {
         const identifier = this.hash(`${domain}/${collectionId}`);
-        return await this.load({ identifier });
+        let data = await this.load({ identifier });
+        data.rocrate.collectionMembers = this.enrichCollectionMembers({
+            collectionMembers: data.rocrate["http://pcdm.org/models#hasMember"]
+        });
+        return data;
     }
 
     async loadItem({ domain, collectionId, itemId }) {
@@ -168,6 +172,20 @@ export class DataLoader {
         return await jsonld.compact(root, {
             "@context": context ? context : jsonldContext
         });
+    }
+
+    enrichCollectionMembers({ collectionMembers }) {
+        let members = collectionMembers;
+        members = orderBy(members, "id");
+        if (isPlainObject(members)) members = [members];
+        members = members.map(member => {
+            let name = member.id.split("/");
+            return {
+                id: member.id,
+                name: name[3]
+            };
+        });
+        return members;
     }
 
     enrichItemParts({ data }) {
