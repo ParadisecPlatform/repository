@@ -1,7 +1,10 @@
 <template>
-    <div>
-        <render-audio-component :items="items.audio" />
-        <render-video-component :items="items.video" />
+    <div class="flex flex-row">
+        <render-images-component :items="item.images" class="w-1/2 px-2" />
+        <div class="flex flex-col w-1/2 px-2">
+            <render-audio-component :items="item.audio" />
+            <render-video-component :items="item.video" />
+        </div>
     </div>
 </template>
 
@@ -9,15 +12,17 @@
 import { groupBy, map } from "lodash";
 import RenderAudioComponent from "./RenderAudio.component.vue";
 import RenderVideoComponent from "./RenderVideo.component.vue";
+import RenderImagesComponent from "./RenderImages.component.vue";
 
 export default {
     components: {
         RenderAudioComponent,
-        RenderVideoComponent
+        RenderVideoComponent,
+        RenderImagesComponent
     },
     props: {
-        content: {
-            type: Array,
+        item: {
+            type: Object,
             required: true
         }
     },
@@ -29,19 +34,7 @@ export default {
             }
         };
     },
-    mounted() {
-        let datatypes = groupBy(this.content, item => item.displayName);
-
-        for (let filename of Object.keys(datatypes)) {
-            let items = datatypes[filename];
-            if (items[0].type === "audio") {
-                this.items.audio.push(datatypes[filename]);
-            } else if (items[0].type === "video") {
-                this.items.video.push(datatypes[filename]);
-            }
-        }
-        // console.log(datatypes, null, 2);
-    }
+    mounted() {}
 };
 </script>
 
