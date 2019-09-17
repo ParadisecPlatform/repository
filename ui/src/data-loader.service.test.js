@@ -134,3 +134,85 @@ test("test collection member rework", async () => {
     expect(member.url).toBe("/paradisec.org.au/AC1/000");
     expect(member.name).toBe("000");
 });
+
+test("test creating item content type data structure - NT1/98007", async () => {
+    let rocrate = await readFile(`${__dirname}/test-data/NT1-98007.json`);
+    rocrate = JSON.parse(rocrate);
+    rocrate = await dataLoader.objectify({
+        rocrate,
+        context: "https://schema.org/docs/jsonldcontext.jsonld"
+    });
+
+    let inventory = await readFile(
+        `${__dirname}/test-data/NT1-98007.inventory.json`
+    );
+    inventory = JSON.parse(inventory);
+    let datafiles = dataLoader.extractObjectDataFiles({ inventory });
+
+    let data = dataLoader.enrichItemParts({
+        data: { rocrate, datafiles, path: "/" }
+    });
+    let parts = orderBy(data.rocrate.hasPart, "id");
+    parts = dataLoader.constructItemDataStructure({ parts });
+
+    expect(Object.keys(parts.images).length).toBe(31);
+    expect(Object.keys(parts.audio).length).toBe(2);
+    expect(Object.keys(parts.video).length).toBe(0);
+    expect(Object.keys(parts.transcriptions).length).toBe(2);
+    expect(parts.transcriptions["NT1-98007-98007A"].length).toBe(3);
+});
+
+test("test creating item content type data structure - AC1/001", async () => {
+    let rocrate = await readFile(`${__dirname}/test-data/AC1-001.json`);
+    rocrate = JSON.parse(rocrate);
+    rocrate = await dataLoader.objectify({
+        rocrate,
+        context: "https://schema.org/docs/jsonldcontext.jsonld"
+    });
+
+    let inventory = await readFile(
+        `${__dirname}/test-data/AC1-001.inventory.json`
+    );
+    inventory = JSON.parse(inventory);
+    let datafiles = dataLoader.extractObjectDataFiles({ inventory });
+
+    let data = dataLoader.enrichItemParts({
+        data: { rocrate, datafiles, path: "/" }
+    });
+    let parts = orderBy(data.rocrate.hasPart, "id");
+    parts = dataLoader.constructItemDataStructure({ parts });
+
+    expect(Object.keys(parts.images).length).toBe(3);
+    expect(Object.keys(parts.audio).length).toBe(1);
+    expect(Object.keys(parts.video).length).toBe(0);
+    expect(Object.keys(parts.transcriptions).length).toBe(0);
+});
+
+test("test creating item content type data structure - NT5/TokelauOf", async () => {
+    let rocrate = await readFile(`${__dirname}/test-data/NT5-TokelauOf.json`);
+    rocrate = JSON.parse(rocrate);
+    rocrate = await dataLoader.objectify({
+        rocrate,
+        context: "https://schema.org/docs/jsonldcontext.jsonld"
+    });
+
+    let inventory = await readFile(
+        `${__dirname}/test-data/NT5-TokelauOf.inventory.json`
+    );
+    inventory = JSON.parse(inventory);
+    let datafiles = dataLoader.extractObjectDataFiles({ inventory });
+
+    let data = dataLoader.enrichItemParts({
+        data: { rocrate, datafiles, path: "/" }
+    });
+    let parts = orderBy(data.rocrate.hasPart, "id");
+    parts = dataLoader.constructItemDataStructure({ parts });
+
+    expect(Object.keys(parts.images).length).toBe(0);
+    expect(Object.keys(parts.audio).length).toBe(0);
+    expect(Object.keys(parts.video).length).toBe(1);
+    expect(Object.keys(parts.transcriptions).length).toBe(1);
+    expect(Object.keys(parts.transcriptions["NT5-TokelauOf-vid"]).length).toBe(
+        4
+    );
+});
