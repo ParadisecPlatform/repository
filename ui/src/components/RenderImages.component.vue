@@ -1,14 +1,17 @@
 <template>
     <div class="flex flex-col justify-center">
-        <div class="text-center">
+        <div class="flex flex-row justify-center">
             <el-pagination
                 :background="true"
                 layout="prev, pager, next"
                 :page-size="1"
                 :total="totalImages"
+                :hide-on-single-page="true"
                 @current-change="update"
             ></el-pagination>
-            {{page}}
+            <el-button @click="toggleFullScreen" size="small">
+                <i class="fas fa-expand fa-fw"></i>
+            </el-button>
         </div>
         <div class="mt-4">
             <div class="text-center">{{items[currentImage].image.displayName}}</div>
@@ -20,6 +23,8 @@
 </template>
 
 <script>
+const { FullScreenViewer } = require("iv-viewer");
+
 export default {
     props: {
         items: {
@@ -29,7 +34,6 @@ export default {
     },
     data() {
         return {
-            page: 0,
             currentImage: Object.keys(this.items)[0],
             totalImages: Object.keys(this.items).length,
             imageNames: Object.keys(this.items)
@@ -38,13 +42,12 @@ export default {
     methods: {
         update(number) {
             this.currentImage = this.imageNames[number - 1];
+        },
+        toggleFullScreen() {
+            const viewer = new FullScreenViewer({});
+            const image = this.items[this.currentImage].image;
+            viewer.show(image.path);
         }
-        // previous(value) {
-        //     console.log("previous", value);
-        // },
-        // next(value) {
-        //     console.log("next", value);
-        // }
     }
 };
 </script>
