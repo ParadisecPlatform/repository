@@ -25,6 +25,8 @@ const typeMappings = {
 
 const transcriptionExtensions = ["eaf", "trs", "ixt"];
 
+const displayImageTypes = ["image/jpeg"];
+
 const maintainIds = [
     "http://pcdm.org/models#hasMember",
     "http://schema.org/memberOf",
@@ -237,12 +239,32 @@ export class DataLoader {
             documents: [],
             transcriptions: get({ parts, type: "transcription" })
         };
+        structure.images = preprocessImages({ images: structure.images });
         return structure;
 
         function get({ parts, type }) {
             let images = parts.filter(p => p.type === type);
             images = orderBy(images, "id");
             images = groupBy(images, "displayName");
+            return images;
+        }
+
+        function preprocessImages({ images }) {
+            let names = Object.keys(images);
+            for (let name of names) {
+                let displayImages = images[name].filter(i => {
+                    return displayImageTypes.includes(i.encodingFormat);
+                });
+                images[name] = {
+                    image: displayImages.filter(
+                        i => !i.name.match("thumbnail")
+                    )[0],
+                    thumbnail:
+                        displayImages.filter(i =>
+                            i.name.match("thumbnail")
+                        )[0] || {}
+                };
+            }
             return images;
         }
     }
