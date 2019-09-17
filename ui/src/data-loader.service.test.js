@@ -130,6 +130,7 @@ test("test collection member rework", async () => {
         collectionMembers: rocrate["http://pcdm.org/models#hasMember"]
     });
     let member = collectionMembers[0];
-    expect(member.id).toBe("/paradisec.org.au/AC1/000");
+    expect(member.id).toBe("paradisec.org.au/AC1/000");
+    expect(member.url).toBe("/paradisec.org.au/AC1/000");
     expect(member.name).toBe("000");
 });
