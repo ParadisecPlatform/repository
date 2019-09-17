@@ -29,7 +29,7 @@
                     data files
                 </el-button>
             </div>
-            <render-content-component :content="item.rocrate.hasPart" />
+            <render-content-component :item="item.rocrate" />
             <div v-if="show.inventory" class="bg-white p-8 mx-6 overflow-scroll my-4">
                 <div class="text-lg">Item Inventory</div>
                 <pre class="text-sm">{{item.inventory}}</pre>
