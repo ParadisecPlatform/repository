@@ -9,13 +9,21 @@ import {
     isObject,
     isPlainObject,
     orderBy,
+    groupBy,
     trimStart
 } from "lodash";
 
 const typeMappings = {
+    "image/tiff": "image",
+    "image/jpeg": "image",
     "audio/x-wav": "audio",
-    "audio/mpeg": "audio"
+    "audio/mpeg": "audio",
+    "video/quicktime": "video",
+    "video/mp4": "video",
+    "application/xml": "data"
 };
+
+const transcriptionExtensions = ["eaf", "trs", "ixt"];
 
 const maintainIds = [
     "http://pcdm.org/models#hasMember",
@@ -110,6 +118,10 @@ export class DataLoader {
         let data = await this.load({ identifier });
         if (!data.rocrate) return data;
         data = this.enrichItemParts({ data });
+        data.rocrate = {
+            ...data.rocrate,
+            ...this.constructItemDataStructure({ parts: data.rocrate.hasPart })
+        };
         return data;
     }
 
@@ -202,11 +214,36 @@ export class DataLoader {
 
     enrichItemParts({ data }) {
         data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
-            file["type"] = typeMappings[file.encodingFormat];
-            file["displayName"] = file.name.split(".").slice(0, -1)[0];
+            file.displayName = file.name.split(".").slice(0, -1)[0];
             file.path = `/repository${data.path}${data.datafiles[file.name]}`;
+
+            file.type = typeMappings[file.encodingFormat];
+            if (file.type === "data")
+                file.type = transcriptionExtensions.includes(
+                    file.name.split(".").pop()
+                )
+                    ? "transcription"
+                    : "data";
             return file;
         });
         return data;
+    }
+
+    constructItemDataStructure({ parts }) {
+        let structure = {
+            images: get({ parts, type: "image" }),
+            audio: get({ parts, type: "audio" }),
+            video: get({ parts, type: "video" }),
+            documents: [],
+            transcriptions: get({ parts, type: "transcription" })
+        };
+        return structure;
+
+        function get({ parts, type }) {
+            let images = parts.filter(p => p.type === type);
+            images = orderBy(images, "id");
+            images = groupBy(images, "displayName");
+            return images;
+        }
     }
 }
