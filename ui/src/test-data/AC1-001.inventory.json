@@ -1,0 +1,69 @@
+{
+  "id": "b1cc1875e195b22196132f1822e4a103b2cff48ac4f3caafdd2e0d3c74703ad5",
+  "type": "https://ocfl.io/1.0/spec/#inventory",
+  "digestAlgorithm": "sha512",
+  "head": "v1",
+  "versions": {
+    "v1": {
+      "created": "2019-09-16T01:33:45.605Z",
+      "state": {
+        "c8c8a2a9f62379a2b2f9db3ed4f53549714661ae2699e45a7d0b01a6c292243f11dac342976a1e05e5cf426d9f781381a4ae465f1807fdade6ebab10ba2cb848": [
+          "AC1-001-A.mp3"
+        ],
+        "7c72615087bac3cc02915ad7853b2ce0a12374389ca87767d1d329bb490fec250c32a0aac8c35886bc706c23d7661351cff7f57ee45675f8c32df2d5805125d5": [
+          "AC1-001-IMG_01.jpg"
+        ],
+        "0f2ba4e27aaa698ab718e50b538801a8b587ea7be3f2b876538b27ab75884cb0ae19fb0ce6eda8b36626996302b6543e93192be9745a141cd8c9c60289047ed1": [
+          "AC1-001-IMG_01.tif"
+        ],
+        "1d09e4a09d8db97be8166b572589b32fbc768d0642b4de06b4fd8cd4f3e406766c2fba3ddcbc5ee213cef8570180918e550526b904014586d1401e2d4cb40469": [
+          "AC1-001-IMG_02.jpg"
+        ],
+        "1818e7d0882a1b3e44a2229227130d04dd3888c8aabac821e55797efc3c06e28707a8ddce708a6b91a1e1d870ff25abc63143958015c1467650a32ac65e33f76": [
+          "AC1-001-IMG_02.tif"
+        ],
+        "23cb9f563fefad45c8a0769ae72441ff1275fccae54d7da49b61b15002f24c0ff56ad08b96fb3d9a3fb2bfcb493bf5e4e9b15d7b2485a45a9be0b88a8b963a76": [
+          "AC1-001-IMG_03.jpg"
+        ],
+        "a57198e27b314b1522d15794c1c8ba221ea8b36870911df607fa236bcc6f47a022a2299617463adb8242008634c75945253a24e59de227bf5c7689b01d9af6e7": [
+          "AC1-001-IMG_03.tif"
+        ],
+        "ee8ea24aedfded47f25cb5fecfd31f07f2f5bbd7880dc9348114921e1e3ea125504684d730955598e568a5816644529739cac45bd2f6eda757c9bf5015e0b396": [
+          "item.json"
+        ],
+        "f721577f79ffecf7125e9563006bbef89a61b997abc3a074eb2a84f6b34ffe3a9912be69cd9ce150bb865cacdb54083947eafbc49948052325e205cf92accf46": [
+          "ro-crate-metadata.jsonld"
+        ]
+      }
+    }
+  },
+  "manifest": {
+    "c8c8a2a9f62379a2b2f9db3ed4f53549714661ae2699e45a7d0b01a6c292243f11dac342976a1e05e5cf426d9f781381a4ae465f1807fdade6ebab10ba2cb848": [
+      "v1/content/AC1-001-A.mp3"
+    ],
+    "7c72615087bac3cc02915ad7853b2ce0a12374389ca87767d1d329bb490fec250c32a0aac8c35886bc706c23d7661351cff7f57ee45675f8c32df2d5805125d5": [
+      "v1/content/AC1-001-IMG_01.jpg"
+    ],
+    "0f2ba4e27aaa698ab718e50b538801a8b587ea7be3f2b876538b27ab75884cb0ae19fb0ce6eda8b36626996302b6543e93192be9745a141cd8c9c60289047ed1": [
+      "v1/content/AC1-001-IMG_01.tif"
+    ],
+    "1d09e4a09d8db97be8166b572589b32fbc768d0642b4de06b4fd8cd4f3e406766c2fba3ddcbc5ee213cef8570180918e550526b904014586d1401e2d4cb40469": [
+      "v1/content/AC1-001-IMG_02.jpg"
+    ],
+    "1818e7d0882a1b3e44a2229227130d04dd3888c8aabac821e55797efc3c06e28707a8ddce708a6b91a1e1d870ff25abc63143958015c1467650a32ac65e33f76": [
+      "v1/content/AC1-001-IMG_02.tif"
+    ],
+    "23cb9f563fefad45c8a0769ae72441ff1275fccae54d7da49b61b15002f24c0ff56ad08b96fb3d9a3fb2bfcb493bf5e4e9b15d7b2485a45a9be0b88a8b963a76": [
+      "v1/content/AC1-001-IMG_03.jpg"
+    ],
+    "a57198e27b314b1522d15794c1c8ba221ea8b36870911df607fa236bcc6f47a022a2299617463adb8242008634c75945253a24e59de227bf5c7689b01d9af6e7": [
+      "v1/content/AC1-001-IMG_03.tif"
+    ],
+    "ee8ea24aedfded47f25cb5fecfd31f07f2f5bbd7880dc9348114921e1e3ea125504684d730955598e568a5816644529739cac45bd2f6eda757c9bf5015e0b396": [
+      "v1/content/item.json"
+    ],
+    "f721577f79ffecf7125e9563006bbef89a61b997abc3a074eb2a84f6b34ffe3a9912be69cd9ce150bb865cacdb54083947eafbc49948052325e205cf92accf46": [
+      "v1/content/ro-crate-metadata.jsonld"
+    ]
+  }
+}

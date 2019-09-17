@@ -1,0 +1,52 @@
+{
+  "id": "41a07cb5ad4d421b22ba422a7f5f32aff2949be26e8683a79c39434f09dd894b",
+  "type": "https://ocfl.io/1.0/spec/#inventory",
+  "digestAlgorithm": "sha512",
+  "head": "v1",
+  "versions": {
+    "v1": {
+      "created": "2019-09-16T01:34:06.148Z",
+      "state": {
+        "34e3e8d5c10bae9ceee779482bf6d00b27bd8d8aaa7f7196d10070a6f67e0ac3203cb3e50102226f006e4bf00d1ac3a6ebc7bb3cb65f38c7410f9711574fee66": [
+          "NT5-TokelauOf-vid.eaf"
+        ],
+        "2a563b71d5b7a1425e8fab3d361855475a869db1ae5e6ab600f47a044a9154e62d24288792164918f1b81d45c8f84ccfb6d1f15108a141005f9cfe855bc1f608": [
+          "NT5-TokelauOf-vid.eopas1.ixt",
+          "NT5-TokelauOf-vid.ixt"
+        ],
+        "1d6c9981b6bf420c5c9a50bed7ae76140efe6381ba732bdfb1c5a7012b00123993695fe2ae3f2da1be03fc5d247a62a3bde68b60085320223442e5d1f8561d73": [
+          "NT5-TokelauOf-vid.eopas2.ixt"
+        ],
+        "19f45c31e31c5dbc3db97b23ac0279052ddb25e51a3ed0c206eab34c028e85cf924692956d61a84edcbe2f2bca87f0c83dab381bbc268a23d988417ceb67adf7": [
+          "NT5-TokelauOf-vid.mp4"
+        ],
+        "e1f23524a44483e77e404c3ba8e73a1fa4ecf2b54ba15ad2b2b40544558512f331bb202e688b0f7c32d811e694fb25f1143756b84c2b889280e2cb4802d55c9a": [
+          "item.json"
+        ],
+        "4df2c3b5dd709cf56b52051628ce5957adc26b7a005d283c588b357325833fccbbf6bf1e57f3a84fed385ada3fe412b0dbe65fa905bdd0c2677d3352c8fbd715": [
+          "ro-crate-metadata.jsonld"
+        ]
+      }
+    }
+  },
+  "manifest": {
+    "34e3e8d5c10bae9ceee779482bf6d00b27bd8d8aaa7f7196d10070a6f67e0ac3203cb3e50102226f006e4bf00d1ac3a6ebc7bb3cb65f38c7410f9711574fee66": [
+      "v1/content/NT5-TokelauOf-vid.eaf"
+    ],
+    "2a563b71d5b7a1425e8fab3d361855475a869db1ae5e6ab600f47a044a9154e62d24288792164918f1b81d45c8f84ccfb6d1f15108a141005f9cfe855bc1f608": [
+      "v1/content/NT5-TokelauOf-vid.eopas1.ixt"
+    ],
+    "1d6c9981b6bf420c5c9a50bed7ae76140efe6381ba732bdfb1c5a7012b00123993695fe2ae3f2da1be03fc5d247a62a3bde68b60085320223442e5d1f8561d73": [
+      "v1/content/NT5-TokelauOf-vid.eopas2.ixt"
+    ],
+    "19f45c31e31c5dbc3db97b23ac0279052ddb25e51a3ed0c206eab34c028e85cf924692956d61a84edcbe2f2bca87f0c83dab381bbc268a23d988417ceb67adf7": [
+      "v1/content/NT5-TokelauOf-vid.mp4"
+    ],
+    "e1f23524a44483e77e404c3ba8e73a1fa4ecf2b54ba15ad2b2b40544558512f331bb202e688b0f7c32d811e694fb25f1143756b84c2b889280e2cb4802d55c9a": [
+      "v1/content/item.json"
+    ],
+    "4df2c3b5dd709cf56b52051628ce5957adc26b7a005d283c588b357325833fccbbf6bf1e57f3a84fed385ada3fe412b0dbe65fa905bdd0c2677d3352c8fbd715": [
+      "v1/content/ro-crate-metadata.jsonld"
+    ]
+  }
+}
