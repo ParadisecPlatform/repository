@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div v-for="(item, idx) of items" :key="idx" class="flex flex-row my-6">
-            <div class="w-1/4">{{item[0].displayName}}</div>
-            <div class="w-1/2">
+        <div v-for="(item, name, idx) of items" :key="idx" class="flex flex-col my-6">
+            <div>{{name}}</div>
+            <div>
                 <audio controls ref="audioElement" class="style-audio-element">
                     <source :src="audio.path" v-for="(audio, idx2) of item" :key="idx2" />Your browser does not support the
                     <code>audio</code> element.
@@ -16,7 +16,7 @@
 export default {
     props: {
         items: {
-            type: Array,
+            type: Object,
             required: true
         }
     },
