@@ -20,22 +20,30 @@
         </div>
         <div class="flex flex-col mt-5">
             <p>
-                In this demonstrator a collection (NT1) and item (NT1-001) have been ingested into the domains "paradisec.org.au"
-                and "uts.edu.au". The URL path is "/{domain}/{collectionId}/{itemId}".
+                In this demonstrator the URL path is "/{domain}/{collectionId}/{itemId}".
                 <!-- The application can also
                 operate in a mode where it focuses on a single domain such that the URL path becomes "/{collectionId}/{itemId}".
                 -->
             </p>
-            <p class="my-4">
-                You can navigate to the collection and item directly viz:
-                <router-link to="/paradisec.org.au/NT11">/paradisec.org.au/NT11</router-link>&nbsp;and
-                <router-link to="/paradisec.org.au/NT11/001">/paradisec.org.au/NT11/001</router-link>
-            </p>
-            <p>
-                Likewise, to see the version from uts.edu.au:
-                <router-link to="/uts.edu.au/NT11">/uts.edu.au/NT11</router-link>&nbsp;and
-                <router-link to="/uts.edu.au/NT11/001">/uts.edu.au/NT11/001</router-link>
-            </p>
+            <div class="flex flex-col my-4">
+                You can navigate to the collection or item directly viz:
+                <div>
+                    <router-link to="/paradisec.org.au/AC1">/paradisec.org.au/AC1</router-link>&nbsp;and
+                    <router-link to="/paradisec.org.au/AC1/001">/paradisec.org.au/AC1/001</router-link>
+                </div>
+
+                <div>
+                    <router-link to="/paradisec.org.au/NT1">/paradisec.org.au/NT1</router-link>&nbsp;and
+                    <router-link to="/paradisec.org.au/NT1/98007">/paradisec.org.au/NT1/98007</router-link>
+                </div>
+
+                <div>
+                    <router-link to="/paradisec.org.au/NT5">/paradisec.org.au/NT5</router-link>&nbsp;and
+                    <router-link
+                        to="/paradisec.org.au/NT5/TokelauOf"
+                    >/paradisec.org.au/NT5/TokelauOf</router-link>
+                </div>
+            </div>
         </div>
     </div>
 </template>
