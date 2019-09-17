@@ -8,12 +8,13 @@
             <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
             <div>collection: {{$route.params.domain}}/{{$route.params.collectionId}}</div>
             <div>Author: {{collection.rocrate.author.name}}</div>
-            <div>Items ({{collection.rocrate.collectionMembers.length}}):</div>
+            <div>Items ({{this.collectionMembers.length}}):</div>
             <div class="flex flex-wrap">
-                <div v-for="(item, idx) of collection.rocrate.collectionMembers" :key="idx">
-                    <el-tag type="warning" effect="dark" class="mx-1 my-1">
-                        <router-link :to="item.id">{{item.name}}</router-link>
+                <div v-for="(item, idx) of this.collectionMembers" :key="idx">
+                    <el-tag type="warning" effect="dark" class="mx-1 my-1" v-if="item.available">
+                        <router-link :to="item.url">{{item.name}}</router-link>
                     </el-tag>
+                    <el-tag type="info" effect="dark" class="mx-1 my-1" v-else>{{item.name}}</el-tag>
                 </div>
             </div>
             <div class="flex flex-row my-4">
@@ -109,6 +110,23 @@ export default {
                     collectionId
                 });
                 this.error = undefined;
+
+                let members = [...this.collection.rocrate.collectionMembers];
+                let data;
+                this.collectionMembers = [];
+                for (let member of members) {
+                    try {
+                        data = await dataLoader.load({
+                            identifier: member.id,
+                            check: true
+                        });
+                        member.available = true;
+                    } catch (error) {
+                        member.available = false;
+                    }
+                    this.collectionMembers.push(member);
+                }
+                members = members.map(member => {});
             } catch (error) {
                 this.error = {
                     status: error.status,
