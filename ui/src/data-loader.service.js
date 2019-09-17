@@ -3,7 +3,14 @@
 import pairtree from "pairtree";
 import shajs from "sha.js";
 import jsonld from "jsonld";
-import { map, isArray, isObject, isPlainObject, orderBy } from "lodash";
+import {
+    map,
+    isArray,
+    isObject,
+    isPlainObject,
+    orderBy,
+    trimStart
+} from "lodash";
 
 const typeMappings = {
     "audio/x-wav": "audio",
@@ -89,26 +96,29 @@ export class DataLoader {
     }
 
     async loadCollection({ domain, collectionId }) {
-        const identifier = this.hash(`${domain}/${collectionId}`);
+        const identifier = `${domain}/${collectionId}`;
         let data = await this.load({ identifier });
         data.rocrate.collectionMembers = this.enrichCollectionMembers({
             collectionMembers: data.rocrate["http://pcdm.org/models#hasMember"]
         });
+
         return data;
     }
 
     async loadItem({ domain, collectionId, itemId }) {
-        const identifier = this.hash(`${domain}/${collectionId}/${itemId}`);
+        const identifier = `${domain}/${collectionId}/${itemId}`;
         let data = await this.load({ identifier });
         if (!data.rocrate) return data;
         data = this.enrichItemParts({ data });
         return data;
     }
 
-    async load({ identifier }) {
+    async load({ identifier, check = false }) {
+        identifier = this.hash(identifier);
         const path = pairtree.path(identifier);
         let response = await fetch(`${this.repository}${path}inventory.json`);
         if (!response.ok) throw response;
+        if (check) return true;
 
         let inventory = await response.json();
         let datafiles = this.extractObjectDataFiles({ inventory });
@@ -169,9 +179,10 @@ export class DataLoader {
             }
             root[rootElement] = values;
         });
-        return await jsonld.compact(root, {
+        root = await jsonld.compact(root, {
             "@context": context ? context : jsonldContext
         });
+        return root;
     }
 
     enrichCollectionMembers({ collectionMembers }) {
@@ -181,7 +192,8 @@ export class DataLoader {
         members = members.map(member => {
             let name = member.id.split("/");
             return {
-                id: member.id,
+                id: trimStart(member.id, "/"),
+                url: member.id,
                 name: name[3]
             };
         });
