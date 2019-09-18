@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { DataLoader } from "src/data-loader.service";
+import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import RenderContentComponent from "./RenderContent.component.vue";
 import LoadingErrorComponent from "./LoadingError.component.vue";

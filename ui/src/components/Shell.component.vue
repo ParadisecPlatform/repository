@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { DataLoader } from "src/data-loader.service";
+import { DataLoader } from "src/services/data-loader.service";
 import IntroductionComponent from "./Introduction.component.vue";
 
 export default {

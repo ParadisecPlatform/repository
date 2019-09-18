@@ -4,7 +4,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { flattenDeep } from "lodash";
 Vue.use(Vuex);
-import { DataLoader } from "src/data-loader.service";
+import { DataLoader } from "src/services/data-loader.service";
 
 const configuration = {
     strict: process.env.NODE_ENV !== "production",

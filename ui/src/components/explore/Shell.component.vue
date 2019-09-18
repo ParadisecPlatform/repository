@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { DataLoader } from "src/data-loader.service";
+import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import { SearchService } from "./search.service";
 import ListDomainsComponent from "./ListDomains.component.vue";
