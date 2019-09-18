@@ -9,7 +9,13 @@
                 :name="name"
                 class="m-3"
             />
-            <render-video-component :items="item.video" />
+            <render-video-component
+                v-for="(item, name, idx) of item.video"
+                :key="idx"
+                :item="item"
+                :name="name"
+                class="m-3"
+            />
         </div>
     </div>
 </template>

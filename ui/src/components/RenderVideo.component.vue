@@ -1,6 +1,9 @@
 <template>
-    <div>
-        <div v-for="(item, name, idx) of items" :key="idx" class="flex flex-col my-6">
+    <el-card shadow="never">
+        <div slot="header" class="text-center">
+            <div>{{name}}</div>
+        </div>
+        <div class="flex flex-col my-6">
             <div>{{name}}</div>
             <div>
                 <video controls ref="videoElement" class="style-video-element">
@@ -9,14 +12,18 @@
                 </video>
             </div>
         </div>
-    </div>
+    </el-card>
 </template>
 
 <script>
 export default {
     props: {
-        items: {
-            type: Object,
+        name: {
+            type: String,
+            required: true
+        },
+        item: {
+            type: Array,
             required: true
         }
     },
