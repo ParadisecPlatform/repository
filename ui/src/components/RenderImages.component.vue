@@ -1,25 +1,29 @@
 <template>
-    <div class="flex flex-col justify-center">
-        <div class="flex flex-row justify-center">
-            <el-pagination
-                :background="true"
-                layout="prev, pager, next"
-                :page-size="1"
-                :total="totalImages"
-                :hide-on-single-page="true"
-                @current-change="update"
-            ></el-pagination>
-            <el-button @click="toggleFullScreen" size="small">
-                <i class="fas fa-expand fa-fw"></i>
-            </el-button>
-        </div>
-        <div class="mt-4">
+    <el-card shadow="never">
+        <div slot="header" class="text-center">
             <div class="text-center">{{items[currentImage].image.displayName}}</div>
-            <div>
-                <img :src="items[currentImage].image.path" />
+        </div>
+        <div class="flex flex-col justify-center">
+            <div class="flex flex-row justify-center">
+                <el-pagination
+                    :background="true"
+                    layout="prev, pager, next"
+                    :page-size="1"
+                    :total="totalImages"
+                    :hide-on-single-page="true"
+                    @current-change="update"
+                ></el-pagination>
+                <el-button @click="toggleFullScreen" size="small">
+                    <i class="fas fa-expand fa-fw"></i>
+                </el-button>
+            </div>
+            <div class="mt-4">
+                <div>
+                    <img :src="items[currentImage].image.path" />
+                </div>
             </div>
         </div>
-    </div>
+    </el-card>
 </template>
 
 <script>
