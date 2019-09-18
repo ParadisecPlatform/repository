@@ -106,7 +106,7 @@ export class DataLoader {
     }
 
     async loadCollection({ domain, collectionId }) {
-        const identifier = `${domain}/${collectionId}`;
+        const identifier = `/${domain}/${collectionId}`;
         let data = await this.load({ identifier });
         data.rocrate.collectionMembers = this.enrichCollectionMembers({
             collectionMembers: data.rocrate["http://pcdm.org/models#hasMember"]
@@ -116,7 +116,7 @@ export class DataLoader {
     }
 
     async loadItem({ domain, collectionId, itemId }) {
-        const identifier = `${domain}/${collectionId}/${itemId}`;
+        const identifier = `/${domain}/${collectionId}/${itemId}`;
         let data = await this.load({ identifier });
         if (!data.rocrate) return data;
         data = this.enrichItemParts({ data });
@@ -193,21 +193,28 @@ export class DataLoader {
             }
             root[rootElement] = values;
         });
-        root = await jsonld.compact(root, {
-            "@context": context ? context : jsonldContext
-        });
+        root = await jsonld.compact(
+            root,
+            {
+                "@context": context ? context : jsonldContext
+            },
+            {
+                base: null,
+                compactArrays: false,
+                compactToRelative: true,
+                skipExpansion: true
+            }
+        );
         return root;
     }
 
     enrichCollectionMembers({ collectionMembers }) {
         let members = collectionMembers;
         members = orderBy(members, "id");
-        if (isPlainObject(members)) members = [members];
         members = members.map(member => {
             let name = member.id.split("/");
             return {
-                id: trimStart(member.id, "/"),
-                url: member.id,
+                id: member.id,
                 name: name[3]
             };
         });
