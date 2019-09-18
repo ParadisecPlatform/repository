@@ -4,7 +4,6 @@
             <div>{{name}}</div>
         </div>
         <div class="flex flex-col my-6">
-            <div>{{name}}</div>
             <div>
                 <video controls ref="videoElement" class="style-video-element">
                     <source :src="video.path" v-for="(video, idx2) of item" :key="idx2" />Your browser does not support the
