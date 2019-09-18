@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row">
-        <render-images-component :items="item.images" class="w-1/2 px-2" />
+        <render-images-component :items="item.images" class="w-1/2 px-2 m-3" />
         <div class="flex flex-col w-1/2 px-2">
             <render-audio-component
                 v-for="(item, name, idx) of item.audio"
