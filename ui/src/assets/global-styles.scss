@@ -17,3 +17,9 @@ a:active {
     text-decoration: underline;
     // opacity: 0.8;
 }
+
+.el-card {
+    border: unset;
+    border-radius: 0;
+    background-color: rgba(242, 241, 239, 1);
+}
