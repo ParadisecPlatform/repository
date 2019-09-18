@@ -2,7 +2,13 @@
     <div class="flex flex-row">
         <render-images-component :items="item.images" class="w-1/2 px-2" />
         <div class="flex flex-col w-1/2 px-2">
-            <render-audio-component :items="item.audio" />
+            <render-audio-component
+                v-for="(item, name, idx) of item.audio"
+                :key="idx"
+                :item="item"
+                :name="name"
+                class="m-3"
+            />
             <render-video-component :items="item.video" />
         </div>
     </div>
