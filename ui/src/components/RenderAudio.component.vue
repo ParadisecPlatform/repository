@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card shadow="never">
         <div slot="header" class="text-center">
             <div>{{name}}</div>
         </div>
