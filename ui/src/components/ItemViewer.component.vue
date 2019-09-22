@@ -6,7 +6,7 @@
 
         <div v-if="!error && item.rocrate">
             <div class="my-10 text-3xl">{{item.rocrate.name}}</div>
-            <div>Item: {{$route.params.domain}}/{{$route.params.collectionId}}/{{$route.params.itemId}}</div>
+            <div>Item: /{{$route.params.domain}}/{{$route.params.collectionId}}/{{$route.params.itemId}}</div>
             <div>Author: {{item.rocrate.author.name}}</div>
             <div>
                 Collection:

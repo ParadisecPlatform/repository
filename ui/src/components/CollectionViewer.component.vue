@@ -6,13 +6,13 @@
 
         <div v-if="!error && collection.rocrate">
             <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
-            <div>collection: {{$route.params.domain}}/{{$route.params.collectionId}}</div>
+            <div>collection: /{{$route.params.domain}}/{{$route.params.collectionId}}</div>
             <div>Author: {{collection.rocrate.author.name}}</div>
             <div>Items ({{this.collectionMembers.length}}):</div>
             <div class="flex flex-wrap">
                 <div v-for="(item, idx) of this.collectionMembers" :key="idx">
                     <el-tag type="warning" effect="dark" class="mx-1 my-1" v-if="item.available">
-                        <router-link :to="item.url">{{item.name}}</router-link>
+                        <router-link :to="item.id">{{item.name}}</router-link>
                     </el-tag>
                     <el-tag type="info" effect="dark" class="mx-1 my-1" v-else>{{item.name}}</el-tag>
                 </div>
