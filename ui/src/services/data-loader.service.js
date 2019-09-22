@@ -200,7 +200,7 @@ export class DataLoader {
             },
             {
                 base: null,
-                compactArrays: false,
+                // compactArrays: false,
                 compactToRelative: true,
                 skipExpansion: true
             }
@@ -211,6 +211,7 @@ export class DataLoader {
     enrichCollectionMembers({ collectionMembers }) {
         let members = collectionMembers;
         members = orderBy(members, "id");
+        if (isPlainObject(members)) members = [members];
         members = members.map(member => {
             let name = member.id.split("/");
             return {
