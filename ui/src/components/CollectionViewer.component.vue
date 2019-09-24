@@ -37,7 +37,7 @@
                 <el-button @click="show.crate= !show.crate" size="mini">
                     <span v-if="!show.crate">Show</span>
                     <span v-else>Hide</span>
-                    RO-Crate metadata
+                    RO-Crate
                 </el-button>
                 <el-button @click="show.datafiles= !show.datafiles" size="mini">
                     <span v-if="!show.datafiles">Show</span>
@@ -51,7 +51,7 @@
             </div>
             <div v-if="show.crate" class="bg-white p-8 mx-6 overflow-scroll my-4">
                 <div class="text-lg">Collection RO-Crate</div>
-                <pre class="text-sm">{{collection.rocrate}}</pre>
+                <pre class="text-sm">{{collection.flattenedCrate}}</pre>
             </div>
             <div v-if="show.datafiles" class="bg-white p-8 mx-6 overflow-scroll my-4">
                 <div class="text-lg">Collection datafiles</div>

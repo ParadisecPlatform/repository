@@ -154,9 +154,9 @@ export class DataLoader {
         );
         if (!response.ok) throw response;
 
-        let rocrate = await response.json();
-        rocrate = await this.objectify({ rocrate });
-        return { inventory, rocrate, datafiles, path };
+        let flattenedCrate = await response.json();
+        let rocrate = await this.objectify({ rocrate: flattenedCrate });
+        return { inventory, rocrate, flattenedCrate, datafiles, path };
     }
 
     async loadTranscription({ transcription }) {
