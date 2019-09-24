@@ -17,7 +17,7 @@ services:
             - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./ui/dist:/usr/share/nginx/html:delegated
             - ./nginx/configuration.json:/usr/share/nginx/html/configuration.json
-            - ./ocfl-repository:/usr/share/nginx/html/repository:delegated
+            - ./ocfl-repository:/srv/repository:delegated
             - ui-modules:/srv/ui/node_modules:delegated
         ports:
             - 80:80
