@@ -1,23 +1,19 @@
 "use strict";
 
-module.exports = IXTParserService;
+import { map, isArray } from "lodash";
 
-IXTParserService.$inject = ["lodash"];
-function IXTParserService(lodash) {
-    var ixtParser = {};
-
-    // parse an ixt XML file and return an object keyed on timeslot id
-    ixtParser.parse = function(data) {
-        var text = lodash.map(data.eopas.interlinear.phrase, function(d) {
-            var words = lodash.map(d.wordlist.word, function(w) {
+export class IXTParser {
+    parse(data) {
+        let text = map(data.eopas.interlinear.phrase, d => {
+            var words = map(d.wordlist.word, w => {
                 try {
-                    if (!lodash.isArray(w.morphemelist.morpheme)) {
+                    if (!isArray(w.morphemelist.morpheme)) {
                         w.morphemelist.morpheme = [w.morphemelist.morpheme];
                     }
                 } catch (e) {
                     return {};
                 }
-                var word = lodash.map(w.morphemelist.morpheme, function(m) {
+                var word = map(w.morphemelist.morpheme, function(m) {
                     return {
                         morpheme: m.text[0]["#text"],
                         gloss: m.text[1]["#text"]
@@ -39,8 +35,9 @@ function IXTParserService(lodash) {
                 words: words
             };
         });
+        for (let i = 0; i < text.length - 1; i++) {
+            text[i].time.end = text[i + 1].time.begin;
+        }
         return text;
-    };
-
-    return ixtParser;
+    }
 }

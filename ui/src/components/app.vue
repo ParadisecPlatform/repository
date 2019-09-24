@@ -3,33 +3,26 @@
         <header class="w-full p-4 style-header fixed z-10 top-0 style-background">
             <header-component></header-component>
         </header>
-        <div id="content" class="flex-1 px-4 py-2 mt-24 pb-10">
+        <div id="content" class="w-full xl:w-3/4 xxl:w-1/2 px-4 m-auto mt-16 pb-16">
             <router-view></router-view>
         </div>
-        <footer
-            class="w-full p-2 style-footer fixed z-10 bottom-0 style-background style-footer-links"
+        <div
+            class="w-full style-footer p-4 fixed z-10 bottom-0 style-background style-footer-links"
         >
-            <div class="text-xs">
-                <router-link to="/health-check">
-                    <i class="fas fa-heartbeat"></i> Health Check
-                </router-link>
-                <div class="float-right">
-                    <a
-                        href="https://language-archives.services"
-                        target="_blank"
-                    >Another fine product from the CoEDL</a>
-                </div>
-            </div>
-        </footer>
+            <footer-component />
+        </div>
     </div>
 </template>
 
 <script>
 import HeaderComponent from "./Header.component.vue";
+import FooterComponent from "./Footer.component.vue";
+
 export default {
     el: "#app",
     components: {
-        HeaderComponent
+        HeaderComponent,
+        FooterComponent
     }
 };
 </script>

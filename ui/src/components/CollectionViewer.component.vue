@@ -8,7 +8,18 @@
             <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
             <div>collection: /{{$route.params.domain}}/{{$route.params.collectionId}}</div>
             <div>Author: {{collection.rocrate.author.name}}</div>
-            <div>Items ({{this.collectionMembers.length}}):</div>
+            <div class="inline">
+                <div
+                    v-if="collectionMembers.length !== collection.rocrate.collectionMembers.length"
+                >
+                    <el-progress
+                        :percentage="collectionMembers.length / collection.rocrate.collectionMembers.length * 100"
+                        :show-text="false"
+                    ></el-progress>
+                </div>
+
+                <span v-else>Items: {{collectionMembers.length}}</span>
+            </div>
             <div class="flex flex-wrap">
                 <div v-for="(item, idx) of this.collectionMembers" :key="idx">
                     <el-tag type="warning" effect="dark" class="mx-1 my-1" v-if="item.available">
@@ -112,6 +123,7 @@ export default {
                 this.error = undefined;
 
                 let members = [...this.collection.rocrate.collectionMembers];
+                const pauseTime = members.length < 50 ? 50 : 30;
                 let data;
                 this.collectionMembers = [];
                 for (let member of members) {
@@ -125,6 +137,9 @@ export default {
                         member.available = false;
                     }
                     this.collectionMembers.push(member);
+                    await new Promise(resolve =>
+                        setTimeout(resolve, pauseTime)
+                    );
                 }
                 members = members.map(member => {});
             } catch (error) {

@@ -1,7 +1,7 @@
 <template>
     <div class="px-4">
         <div class="flex justify-center">
-            <div class="text-3xl style-heading">OCFL Digital Repository PoC</div>
+            <div class="text-3xl style-heading">OCFL Catalog Viewer PoC</div>
         </div>
         <div class="flex flex-col mt-5">
             <p>

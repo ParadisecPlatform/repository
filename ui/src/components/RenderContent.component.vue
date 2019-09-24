@@ -1,23 +1,36 @@
 <template>
-    <div class="flex flex-row">
-        <render-images-component :items="item.images" class="w-1/2 px-2 m-3" />
-        <div class="flex flex-col w-1/2 px-2">
+    <el-tabs type="border-card" tab-position="top" v-model="activeTab">
+        <el-tab-pane label="Images" name="images" v-if="Object.keys(item.images).length">
+            <span slot="label">
+                <i class="fas fa-images"></i> Images
+            </span>
+            <render-images-component :items="item.images" v-if="Object.keys(item.images).length" />
+        </el-tab-pane>
+        <el-tab-pane label="Audio" name="audio" v-if="Object.keys(item.audio).length">
+            <span slot="label">
+                <i class="fas fa-volume-up"></i> Audio
+            </span>
             <render-audio-component
-                v-for="(item, name, idx) of item.audio"
+                v-for="(instance, name, idx) of item.audio"
                 :key="idx"
-                :item="item"
+                :item="instance"
                 :name="name"
-                class="m-3"
+                :transcriptions="item.transcriptions[name]"
             />
+        </el-tab-pane>
+        <el-tab-pane label="Video" name="video" v-if="Object.keys(item.video).length">
+            <span slot="label">
+                <i class="fas fa-video"></i> Video
+            </span>
             <render-video-component
-                v-for="(item, name, idx) of item.video"
+                v-for="(instance, name, idx) of item.video"
                 :key="idx"
-                :item="item"
+                :item="instance"
                 :name="name"
-                class="m-3"
+                :transcriptions="item.transcriptions[name]"
             />
-        </div>
-    </div>
+        </el-tab-pane>
+    </el-tabs>
 </template>
 
 <script>
@@ -40,13 +53,27 @@ export default {
     },
     data() {
         return {
+            activeTab: "images",
             items: {
                 audio: [],
                 video: []
             }
         };
     },
-    mounted() {}
+    mounted() {
+        let content = {
+            images: Object.keys(this.item.images).length > 0,
+            audio: Object.keys(this.item.audio).length > 0,
+            video: Object.keys(this.item.video).length > 0
+        };
+        const types = Object.keys(content);
+        for (let type of types) {
+            if (content[type]) {
+                this.activeTab = type;
+                return;
+            }
+        }
+    }
 };
 </script>
 
