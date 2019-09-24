@@ -1,46 +1,43 @@
 <template>
     <div>
         <div class="text-center">
+            <div>
+                <p>Search for an item or collection</p>
+            </div>
             <el-form ref="form" :model="form" :inline="true" @submit.native.prevent>
                 <el-form-item>
                     <el-autocomplete
                         v-model="text"
                         :fetch-suggestions="querySearch"
                         :clearable="true"
-                        placeholder="Please input"
+                        placeholder="Search for an item or collection"
                         class="style-input"
                         @select="handleSelect"
                     >
                         <template slot-scope="{ item }">
                             <span
-                                style="float: left"
+                                class="style-collection-result text-sm md:text-xl"
                                 v-if="item.type === 'collection'"
-                                class="style-collection-result"
-                            >{{ item.name}}</span>
+                            >
+                                <i class="far fa-clone"></i>
+                                {{ item.name}}
+                            </span>
                             <span
-                                style="float: left"
+                                class="style-item-result text-sm md:text-xl"
                                 v-if="item.type === 'item'"
-                                class="style-item-result"
-                            >{{ item.name}}</span>
-                            <span
-                                style="float: right; color: #8492a6; font-size: 13px"
-                            >{{item.type}}: {{ item.id}}</span>
+                            >
+                                <i class="fas fa-chevron-right"></i>
+                                {{ item.name}}
+                            </span>
+                            <span class="text-xs text-gray-500">&nbsp;&nbsp;&nbsp;&nbsp;{{ item.id}}</span>
                         </template>
                     </el-autocomplete>
                 </el-form-item>
                 <div
                     class="text-sm text-gray-600"
                 >* This will search both the name and description of collections and items.</div>
+                <div class="text-sm text-gray-600">** Try searching "south" or "capell".</div>
             </el-form>
-        </div>
-        <div class="mt-6">Results ({{results.total}})</div>
-        <div class="flex flex-col">
-            <ol>
-                <li v-for="(document, idx) of results.documents" :key="idx">
-                    {{document}}
-                    <router-link :to="document">{{document}}</router-link>
-                </li>
-            </ol>
         </div>
     </div>
 </template>
@@ -91,6 +88,6 @@ export default {
     }
 }
 .style-item-result {
-    color: $brand-highlight-color;
+    // color: $brand-highlight-color;
 }
 </style>

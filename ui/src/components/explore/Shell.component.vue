@@ -12,7 +12,7 @@
                 />
                 <list-collections-and-items-component selection="item" class="mt-6 flex-grow" />
             </div>
-            <search-component class="mt-6" />
+            <search-component class="mt-8" />
         </div>
         <div v-else>Uh oh. For one reason or another this is not going to work right now.</div>
     </div>
