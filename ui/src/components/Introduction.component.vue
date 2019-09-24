@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4">
+    <div>
         <div class="flex justify-center">
             <div class="text-3xl style-heading">OCFL Catalog Viewer PoC</div>
         </div>
@@ -25,7 +25,7 @@
                 operate in a mode where it focuses on a single domain such that the URL path becomes "/{collectionId}/{itemId}".
                 -->
             </p>
-            <div class="flex flex-col my-4">
+            <div class="flex flex-col m-4">
                 You can navigate to the collection or item directly viz:
                 <div>
                     <router-link to="/paradisec.org.au/AC1">/paradisec.org.au/AC1</router-link>&nbsp;and

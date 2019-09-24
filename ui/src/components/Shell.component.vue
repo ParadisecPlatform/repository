@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="showIntroduction" class="mt-10">
+        <div v-if="showIntroduction">
             <introduction-component></introduction-component>
         </div>
         <router-view v-else></router-view>

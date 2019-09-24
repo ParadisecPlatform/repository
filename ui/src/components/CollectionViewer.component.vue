@@ -5,7 +5,7 @@
         </div>
 
         <div v-if="!error && collection.rocrate">
-            <div class="my-10 text-3xl">{{collection.rocrate.name}}</div>
+            <div class="my-4 text-3xl">{{collection.rocrate.name}}</div>
             <div>collection: /{{$route.params.domain}}/{{$route.params.collectionId}}</div>
             <div>Author: {{collection.rocrate.author.name}}</div>
             <div class="inline">
