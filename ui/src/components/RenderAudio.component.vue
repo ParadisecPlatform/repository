@@ -42,12 +42,23 @@ export default {
         transcriptions: {
             type: Array | undefined,
             required: true
+        },
+        isActive: {
+            type: Boolean,
+            required: true
         }
     },
     data() {
         return {
+            watchers: {},
             currentTime: 0
         };
+    },
+    mounted() {
+        this.watchers.isActive = this.$watch("isActive", this.stopAudio);
+    },
+    beforeDestroy() {
+        this.watchers.isActive();
     },
     methods: {
         playFrom({ start, end }) {
@@ -58,7 +69,11 @@ export default {
             }, (end - start) * 1000);
         },
         notifyTranscription(time) {
-            this.currentTime = this.$refs.audioElement.currentTime;
+            if (this.$refs.audioElement)
+                this.currentTime = this.$refs.audioElement.currentTime;
+        },
+        stopAudio() {
+            if (!this.isActive) this.$refs.audioElement.pause();
         }
     }
 };

@@ -44,12 +44,23 @@ export default {
         transcriptions: {
             type: Array,
             required: true
+        },
+        isActive: {
+            type: Boolean,
+            required: true
         }
     },
     data() {
         return {
+            watchers: {},
             currentTime: 0
         };
+    },
+    mounted() {
+        this.watchers.isActive = this.$watch("isActive", this.stopVideo);
+    },
+    beforeDestroy() {
+        this.watchers.isActive();
     },
     methods: {
         playFrom({ start, end }) {
@@ -60,7 +71,11 @@ export default {
             }, (end - start) * 1000);
         },
         notifyTranscription(time) {
-            this.currentTime = this.$refs.videoElement.currentTime;
+            if (this.$refs.videoElement)
+                this.currentTime = this.$refs.videoElement.currentTime;
+        },
+        stopVideo() {
+            if (!this.isActive) this.$refs.videoElement.pause();
         }
     }
 };
@@ -71,7 +86,7 @@ export default {
     min-width: 500px;
     width: 100%;
 }
-</style>
+</style>w
 
 
 

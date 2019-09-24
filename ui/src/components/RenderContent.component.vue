@@ -16,6 +16,7 @@
                 :item="instance"
                 :name="name"
                 :transcriptions="item.transcriptions[name]"
+                :is-active="activeTab === 'audio'"
             />
         </el-tab-pane>
         <el-tab-pane label="Video" name="video" v-if="Object.keys(item.video).length">
@@ -28,6 +29,7 @@
                 :item="instance"
                 :name="name"
                 :transcriptions="item.transcriptions[name]"
+                :is-active="activeTab === 'video'"
             />
         </el-tab-pane>
     </el-tabs>
