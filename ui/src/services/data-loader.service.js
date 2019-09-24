@@ -192,8 +192,12 @@ export class DataLoader {
             let files = inventory.versions[`v${version}`];
             files = Object.entries(files.state);
             for (let file of files) {
+                // file[1].forEach(f => {
+                //     datafiles[f] = `v${version}/content/${f}`;
+                // });
                 file[1].forEach(f => {
-                    datafiles[f] = `v${version}/content/${f}`;
+                    // TODO: Remove this dirty hack when OCFL working sensibly
+                    datafiles[f] = `v1/content/${f}`;
                 });
             }
         });
