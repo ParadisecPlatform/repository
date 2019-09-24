@@ -4,7 +4,7 @@ cd ui
 npm run build:production
 cd -
 
-docker-compose -f docker-compose-production.yml up -d
+\sudo docker-compose -f docker-compose-production.yml up -d
 
 echo "Sleeping for 30 seconds so elastic has time to start"
 sleep 30
