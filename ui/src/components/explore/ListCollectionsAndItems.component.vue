@@ -3,7 +3,7 @@
         <div>
             The following
             <span v-if="selection === 'collection'">collections</span>
-            <span v-else>items</span>&nbsp;have been found in this repository:
+            <span v-else>items</span>&nbsp;have been found:
         </div>
         <div v-for="(item, idx) of items.results" :key="idx">
             <router-link :to="item">{{item}}</router-link>

@@ -94,7 +94,7 @@ export class SearchService {
         return { results, total };
     }
 
-    async searchCollections({ text }) {
+    async search({ text }) {
         let query = {
             query: {
                 multi_match: {
@@ -106,7 +106,12 @@ export class SearchService {
         let response = await this.execute({ query });
         const total = response.hits.total.value;
         let documents = response.hits.hits.map(hit => {
-            return hit._source.identifier.filter(i => i.name === "id")[0].value;
+            return {
+                id: hit._source.identifier.filter(i => i.name === "id")[0]
+                    .value,
+                name: hit._source.name,
+                type: hit._source["schema:additionalType"]
+            };
         });
         return { documents, total };
     }

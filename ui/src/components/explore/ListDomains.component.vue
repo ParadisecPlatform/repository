@@ -1,10 +1,7 @@
 <template>
     <div class="flex flex-col">
-        <div>The following domains have data in this repository:</div>
-        <div
-            v-for="(domain, idx) of domains"
-            :key="idx"
-        >{{domain.key}} (File Count: {{domain.doc_count}})</div>
+        <div>The following domains have data in this catalog:</div>
+        <div v-for="(domain, idx) of domains" :key="idx">{{domain.key}} ({{domain.doc_count}})</div>
     </div>
 </template>
 

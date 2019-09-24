@@ -1,10 +1,7 @@
 <template>
     <div class="flex flex-col">
-        <div>The following authors have been found in this repository:</div>
-        <div
-            v-for="(author, idx) of authors"
-            :key="idx"
-        >{{author.key}} (File Count: {{author.doc_count}})</div>
+        <div>The following authors have been found:</div>
+        <div v-for="(author, idx) of authors" :key="idx">{{author.key}} ({{author.doc_count}})</div>
     </div>
 </template>
 
