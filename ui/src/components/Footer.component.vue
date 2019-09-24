@@ -6,7 +6,7 @@
         <div class="flex-grow"></div>
         <div>
             <a href="https://language-archives.services" target="_blank">
-                by the CoEDL
+                CoEDL Labs
                 <i class="fas fa-external-link-alt"></i>
             </a>
         </div>
