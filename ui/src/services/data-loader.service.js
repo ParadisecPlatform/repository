@@ -204,42 +204,71 @@ export class DataLoader {
         return datafiles;
     }
 
-    async objectify({ rocrate, context = null }) {
-        let data = (await jsonld.expand(rocrate))[0]["@graph"];
+    async objectify({ rocrate }) {
+        let data = await jsonld.expand(rocrate);
 
-        let objectRoot = data.filter(e => e["@id"] === "./")[0];
-        let content = data.filter(e => e["@id"] !== "./");
-
-        let root = {};
-        map(objectRoot, (values, rootElement) => {
-            if (isArray(values)) {
-                values = values.map(v => {
-                    if (isObject(v) && v["@id"]) {
-                        let element = content.filter(
-                            c => c["@id"] === v["@id"]
-                        )[0];
-                        if (!maintainIds.includes(rootElement)) delete v["@id"];
-                        if (element) delete element["@id"];
-                        v = { ...v, ...element };
-                    }
-                    return v;
-                });
-            }
-            root[rootElement] = values;
+        let root = data.filter(i => {
+            if (i["@type"])
+                return i["@type"].includes("http://schema.org/Dataset");
+        })[0];
+        let content = data.filter(i => {
+            if (i["@type"])
+                return !i["@type"].includes("http://schema.org/Dataset");
+            return i;
         });
-        root = await jsonld.compact(
-            root,
-            {
-                "@context": context ? context : jsonldContext
-            },
-            {
-                base: null,
-                // compactArrays: false,
-                compactToRelative: true,
-                skipExpansion: true
+
+        let rootProperties = Object.keys(root);
+        for (let property of rootProperties) {
+            let item = root[property];
+            if (isArray(item)) {
+                item = mapContent({ property, item, content });
+                root[property] = [...item];
             }
-        );
-        return root;
+        }
+
+        return await compact(root);
+
+        async function compact(root) {
+            return await jsonld.compact(
+                root,
+                {
+                    "@context": "https://schema.org"
+                },
+                {
+                    base: null,
+                    // compactArrays: false,
+                    compactToRelative: true,
+                    skipExpansion: true
+                }
+            );
+        }
+
+        function mapContent({ property, item, content }) {
+            item = item.map(entry => {
+                if (entry["@id"]) {
+                    let entryData = content.filter(
+                        c => c["@id"] === entry["@id"]
+                    )[0];
+
+                    if (entryData) {
+                        let properties = Object.keys(entryData);
+                        for (let prop of properties) {
+                            if (isArray(entryData[prop]))
+                                entryData[prop] = mapContent({
+                                    property: prop,
+                                    item: entryData[prop],
+                                    content
+                                });
+                        }
+                        entry = { ...entry, ...entryData };
+                        if (!maintainIds.includes(property))
+                            delete entry["@id"];
+                    }
+                }
+                return entry;
+            });
+            return item;
+        }
     }
 
     enrichCollectionMembers({ collectionMembers }) {
