@@ -4,23 +4,29 @@
             <div>{{name}}</div>
         </div>
         <div class="flex flex-col lg:flex-row">
-            <div class="w-full lg:w-1/2 mx-2">
+            <div class="w-full lg:w-1/2 mx-2 flex flex-col">
                 <video
                     controls
-                    ref="videoElement"
+                    ref="mediaElement"
                     class="style-video-element"
                     @timeupdate="notifyTranscription"
                 >
                     <source :src="video.path" v-for="(video, idx2) of item" :key="idx2" />Your browser does not support the
                     <code>video</code> element.
                 </video>
+                <render-transcription-selector-component
+                    v-if="transcriptions"
+                    :transcriptions="transcriptions"
+                    v-on:load-transcription="loadTranscription"
+                />
             </div>
             <div class="w-full lg:w-1/2">
                 <render-transcriptions-component
                     v-if="transcriptions"
                     :transcriptions="transcriptions"
                     :current-time="currentTime"
-                    v-on:playFrom="playFrom"
+                    :selected-transcription="selectedTranscription"
+                    v-on:play-from="playFrom"
                 />
             </div>
         </div>
@@ -28,58 +34,10 @@
 </template>
 
 <script>
-import RenderTranscriptionsComponent from "./RenderTranscriptions.component.vue";
+import { mixin } from "./RenderMediaMixins";
 
 export default {
-    components: {
-        RenderTranscriptionsComponent
-    },
-    props: {
-        name: {
-            type: String,
-            required: true
-        },
-        item: {
-            type: Array,
-            required: true
-        },
-        transcriptions: {
-            type: Array,
-            required: true
-        },
-        isActive: {
-            type: Boolean,
-            required: true
-        }
-    },
-    data() {
-        return {
-            watchers: {},
-            currentTime: 0
-        };
-    },
-    mounted() {
-        this.watchers.isActive = this.$watch("isActive", this.stopVideo);
-    },
-    beforeDestroy() {
-        this.watchers.isActive();
-    },
-    methods: {
-        playFrom({ start, end }) {
-            this.$refs.videoElement.currentTime = start;
-            this.$refs.videoElement.play();
-            setTimeout(() => {
-                this.$refs.videoElement.pause();
-            }, (end - start) * 1000);
-        },
-        notifyTranscription(time) {
-            if (this.$refs.videoElement)
-                this.currentTime = this.$refs.videoElement.currentTime;
-        },
-        stopVideo() {
-            if (!this.isActive) this.$refs.videoElement.pause();
-        }
-    }
+    mixins: [mixin]
 };
 </script>
 

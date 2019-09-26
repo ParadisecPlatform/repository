@@ -1,36 +1,25 @@
 <template>
     <div class="flex flex-col">
-        <el-radio-group
-            v-model="selectedTranscription"
-            @change="loadTranscription"
-            class="flex flex-row flex-wrap my-4"
-        >
-            <el-radio
-                v-for="(transcription, idx) of transcriptions"
-                :key="idx"
-                :label="transcription"
-            >{{transcription.name}}</el-radio>
-        </el-radio-group>
         <div :id="transcription.displayName" class="style-transcription">
             <render-transcription-eaf-component
                 v-if="transcription.type === 'eaf'"
                 :transcription="transcription"
                 :current-time="currentTime"
-                v-on:playFrom="playFrom"
+                v-on:play-from="playFrom"
             />
 
             <render-transcription-eaf-component
                 v-if="transcription.type === 'trs'"
                 :transcription="transcription"
                 :current-time="currentTime"
-                v-on:playFrom="playFrom"
+                v-on:play-from="playFrom"
             />
 
             <render-transcription-ixt-component
                 v-if="transcription.type === 'ixt'"
                 :transcription="transcription"
                 :current-time="currentTime"
-                v-on:playFrom="playFrom"
+                v-on:play-from="playFrom"
             />
 
             <div
@@ -59,13 +48,17 @@ export default {
             type: Array,
             required: true
         },
+        selectedTranscription: {
+            type: Object,
+            required: true
+        },
         currentTime: {
             type: Number
         }
     },
     data() {
         return {
-            selectedTranscription: this.transcriptions[0],
+            watchers: {},
             transcription: {
                 type: undefined,
                 segments: []
@@ -73,12 +66,19 @@ export default {
         };
     },
     mounted() {
-        this.loadTranscription(this.transcriptions[0]);
+        this.watchers.selectedTranscription = this.$watch(
+            "selectedTranscription",
+            this.loadTranscription
+        );
+        this.loadTranscription();
+    },
+    beforeDestroy() {
+        this.watchers.selectedTranscription();
     },
     methods: {
-        async loadTranscription(transcription) {
-            transcription = this.transcriptions.filter(
-                t => t.id === transcription.id
+        async loadTranscription() {
+            let transcription = this.transcriptions.filter(
+                t => t.id === this.selectedTranscription.id
             )[0];
             try {
                 this.transcription = {
@@ -97,7 +97,7 @@ export default {
             }
         },
         playFrom({ start, end }) {
-            this.$emit("playFrom", { start, end });
+            this.$emit("play-from", { start, end });
         }
     }
 };

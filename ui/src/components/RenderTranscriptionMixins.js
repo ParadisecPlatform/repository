@@ -29,7 +29,7 @@ export let mixin = {
     },
     methods: {
         playSegment(segment) {
-            this.$emit("playFrom", {
+            this.$emit("play-from", {
                 start: segment.time.begin,
                 end: segment.time.end
             });
