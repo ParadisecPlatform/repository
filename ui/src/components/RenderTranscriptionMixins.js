@@ -1,6 +1,7 @@
 "use strict";
 
 import { round as roundValue, throttle } from "lodash";
+import { format } from "date-fns";
 
 export let mixin = {
     props: {
@@ -40,9 +41,6 @@ export let mixin = {
                 });
             }, 100);
         },
-        round(value) {
-            return roundValue(value, 2);
-        },
         scrollToSegment(time) {
             const container = `#${this.transcription.displayName}`;
             const segment = this.transcription.segments
@@ -52,6 +50,9 @@ export let mixin = {
             this.$scrollTo(`#${segment.htmlId}`, 300, {
                 container
             });
+        },
+        format(seconds) {
+            return format(seconds * 1000, "mm:ss");
         }
     }
 };

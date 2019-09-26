@@ -9,7 +9,7 @@
             <div>
                 <el-button @click="playSegment(segment)" size="small">
                     <i class="fas fa-play"></i>
-                    PLAY ({{round(segment.time.begin / 100)}})
+                    PLAY ({{format(segment.time.begin)}})
                 </el-button>
             </div>
         </div>
