@@ -225,8 +225,9 @@ export class DataLoader {
                 root[property] = [...item];
             }
         }
-
-        return await compact(root);
+        root = await compact(root);
+        root = refactorGeoShape({ root });
+        return root;
 
         async function compact(root) {
             return await jsonld.compact(
@@ -268,6 +269,25 @@ export class DataLoader {
                 return entry;
             });
             return item;
+        }
+
+        function refactorGeoShape({ root }) {
+            let shape = root.contentLocation.geo.box;
+            let coordinates = [
+                [
+                    shape.split(" ")[0].split(",")[1],
+                    shape.split(" ")[0].split(",")[0]
+                ],
+                [
+                    shape.split(" ")[1].split(",")[1],
+                    shape.split(" ")[1].split(",")[0]
+                ]
+            ];
+            root.contentLocation = {
+                type: "envelope",
+                coordinates
+            };
+            return root;
         }
     }
 

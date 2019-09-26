@@ -4,44 +4,56 @@
             <loading-error-component :error="error" source="item" />
         </div>
 
-        <div v-if="!error && item.rocrate">
-            <div class="my-4 text-3xl">{{item.rocrate.name}}</div>
-            <div>Item: /{{$route.params.domain}}/{{$route.params.collectionId}}/{{$route.params.itemId}}</div>
-            <div>Author: {{item.rocrate.author.name}}</div>
-            <div>
-                Collection:
-                <router-link :to="item.rocrate.memberOf.id">{{item.rocrate.memberOf.id}}</router-link>
+        <div v-if="!error && item.rocrate" class="flex flex-col">
+            <div class="flex flex-row xl:px-8">
+                <div class="w-3/4">
+                    <div class="my-4 text-3xl">{{item.rocrate.name}}</div>
+                    <div>Item: /{{$route.params.domain}}/{{$route.params.collectionId}}/{{$route.params.itemId}}</div>
+                    <div>Author: {{item.rocrate.author.name}}</div>
+                    <div>
+                        Collection:
+                        <router-link :to="item.rocrate.memberOf.id">{{item.rocrate.memberOf.id}}</router-link>
+                    </div>
+                    <div class="flex flex-row flex-wrap my-4 hidden lg:block">
+                        <el-button @click="show.inventory= !show.inventory" size="mini">
+                            <span v-if="!show.inventory">Show</span>
+                            <span v-else>Hide</span>
+                            OCFL inventory file
+                        </el-button>
+                        <el-button @click="show.crate= !show.crate" size="mini">
+                            <span v-if="!show.crate">Show</span>
+                            <span v-else>Hide</span>
+                            RO-Crate
+                        </el-button>
+                        <el-button @click="show.datafiles= !show.datafiles" size="mini">
+                            <span v-if="!show.datafiles">Show</span>
+                            <span v-else>Hide</span>
+                            data files
+                        </el-button>
+                    </div>
+                </div>
+                <div class="hidden lg:block">
+                    <render-location-component :geo="item.rocrate.contentLocation" />
+                </div>
             </div>
-            <div class="flex flex-row flex-wrap my-4">
-                <el-button @click="show.inventory= !show.inventory" size="mini">
-                    <span v-if="!show.inventory">Show</span>
-                    <span v-else>Hide</span>
-                    OCFL inventory file
-                </el-button>
-                <el-button @click="show.crate= !show.crate" size="mini">
-                    <span v-if="!show.crate">Show</span>
-                    <span v-else>Hide</span>
-                    RO-Crate
-                </el-button>
-                <el-button @click="show.datafiles= !show.datafiles" size="mini">
-                    <span v-if="!show.datafiles">Show</span>
-                    <span v-else>Hide</span>
-                    data files
-                </el-button>
+
+            <div class="hidden lg:block">
+                <div v-if="show.inventory" class="bg-white p-8 mx-6 overflow-scroll my-4">
+                    <div class="text-lg">Item Inventory</div>
+                    <pre class="text-sm">{{item.inventory}}</pre>
+                </div>
+                <div v-if="show.crate" class="bg-white p-8 mx-6 overflow-scroll my-4">
+                    <div class="text-lg">Item RO-Crate</div>
+                    <pre class="text-sm">{{item.flattenedCrate}}</pre>
+                </div>
+                <div v-if="show.datafiles" class="bg-white p-8 mx-6 overflow-scroll my-4">
+                    <div class="text-lg">Item datafiles</div>
+                    <pre class="text-sm">{{item.datafiles}}</pre>
+                </div>
             </div>
-            <div v-if="show.inventory" class="bg-white p-8 mx-6 overflow-scroll my-4">
-                <div class="text-lg">Item Inventory</div>
-                <pre class="text-sm">{{item.inventory}}</pre>
+            <div class="mt-4">
+                <render-content-component :item="item.rocrate" />
             </div>
-            <div v-if="show.crate" class="bg-white p-8 mx-6 overflow-scroll my-4">
-                <div class="text-lg">Item RO-Crate</div>
-                <pre class="text-sm">{{item.flattenedCrate}}</pre>
-            </div>
-            <div v-if="show.datafiles" class="bg-white p-8 mx-6 overflow-scroll my-4">
-                <div class="text-lg">Item datafiles</div>
-                <pre class="text-sm">{{item.datafiles}}</pre>
-            </div>
-            <render-content-component :item="item.rocrate" />
         </div>
     </div>
 </template>
@@ -50,12 +62,14 @@
 import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import RenderContentComponent from "./RenderContent.component.vue";
+import RenderLocationComponent from "./RenderLocation.component.vue";
 import LoadingErrorComponent from "./LoadingError.component.vue";
 
 export default {
     components: {
         RenderContentComponent,
-        LoadingErrorComponent
+        LoadingErrorComponent,
+        RenderLocationComponent
     },
     data() {
         return {
