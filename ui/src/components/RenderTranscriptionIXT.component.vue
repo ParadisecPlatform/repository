@@ -4,7 +4,7 @@
             v-for="(segment, idx) of transcription.segments"
             :key="idx"
             :id="segment.htmlId"
-            class="style-segment p-2"
+            class="style-segment"
         >
             <div>
                 <el-button @click="playSegment(segment)" size="small">

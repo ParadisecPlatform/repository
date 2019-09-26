@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-col h-full">
-        <header class="w-full p-4 style-header fixed z-10 top-0 style-background">
+        <header class="fixed z-10 top-0 p-4 style-background w-full">
             <header-component></header-component>
         </header>
-        <div id="content" class="w-full xl:w-3/4 xxl:w-1/2 py-4 px-4 m-auto mt-20 pb-16">
+        <div id="content" class="w-full xl:w-3/4 xxl:w-4/6 py-4 px-4 m-auto mt-20 pb-16">
             <router-view></router-view>
         </div>
         <div

@@ -3,7 +3,7 @@
         <el-radio-group
             v-model="selectedTranscription"
             @change="loadTranscription"
-            class="flex flex-row flex-wrap m-4"
+            class="flex flex-row flex-wrap my-4"
         >
             <el-radio
                 v-for="(transcription, idx) of transcriptions"
@@ -11,7 +11,7 @@
                 :label="transcription"
             >{{transcription.name}}</el-radio>
         </el-radio-group>
-        <div :id="transcription.displayName" class="style-transcription m-4">
+        <div :id="transcription.displayName" class="style-transcription">
             <render-transcription-eaf-component
                 v-if="transcription.type === 'eaf'"
                 :transcription="transcription"

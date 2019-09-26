@@ -3,8 +3,8 @@
         <div slot="header" class="text-center">
             <div>{{name}}</div>
         </div>
-        <div class="flex flex-row">
-            <div class="mx-4">
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full lg:w-1/2 mx-2">
                 <video
                     controls
                     ref="videoElement"
@@ -15,12 +15,14 @@
                     <code>video</code> element.
                 </video>
             </div>
-            <render-transcriptions-component
-                v-if="transcriptions"
-                :transcriptions="transcriptions"
-                :current-time="currentTime"
-                v-on:playFrom="playFrom"
-            />
+            <div class="w-full lg:w-1/2">
+                <render-transcriptions-component
+                    v-if="transcriptions"
+                    :transcriptions="transcriptions"
+                    :current-time="currentTime"
+                    v-on:playFrom="playFrom"
+                />
+            </div>
         </div>
     </el-card>
 </template>
@@ -83,10 +85,9 @@ export default {
 
 <style lang="scss" scoped>
 .style-video-element {
-    min-width: 500px;
     width: 100%;
 }
-</style>w
+</style>
 
 
 
