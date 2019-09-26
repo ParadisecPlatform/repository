@@ -28,7 +28,7 @@
                     <el-tag type="info" effect="dark" class="mx-1 my-1" v-else>{{item.name}}</el-tag>
                 </div>
             </div>
-            <div class="flex flex-row my-4">
+            <div class="flex flex-row flex-wrap my-4">
                 <el-button @click="show.inventory= !show.inventory" size="mini">
                     <span v-if="!show.inventory">Show</span>
                     <span v-else>Hide</span>

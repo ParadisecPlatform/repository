@@ -12,7 +12,7 @@
                 Collection:
                 <router-link :to="item.rocrate.memberOf.id">{{item.rocrate.memberOf.id}}</router-link>
             </div>
-            <div class="flex flex-row my-4">
+            <div class="flex flex-row flex-wrap my-4">
                 <el-button @click="show.inventory= !show.inventory" size="mini">
                     <span v-if="!show.inventory">Show</span>
                     <span v-else>Hide</span>
