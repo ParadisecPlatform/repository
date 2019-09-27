@@ -233,7 +233,7 @@ export class DataLoader {
             return await jsonld.compact(
                 root,
                 {
-                    "@context": "https://schema.org"
+                    "@context": jsonldContext
                 },
                 {
                     base: null,
