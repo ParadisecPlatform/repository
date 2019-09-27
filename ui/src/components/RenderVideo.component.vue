@@ -4,7 +4,7 @@
             <div>{{name}}</div>
         </div>
         <div class="flex flex-col lg:flex-row">
-            <div class="w-full lg:w-1/2 mx-2 flex flex-col">
+            <div class="w-full mx-2 flex flex-col" :class="{ 'lg:w-1/2': transcriptions}">
                 <video
                     controls
                     ref="mediaElement"
@@ -20,7 +20,7 @@
                     v-on:load-transcription="loadTranscription"
                 />
             </div>
-            <div class="w-full lg:w-1/2">
+            <div class="w-full lg:w-1/2" v-if="transcriptions">
                 <render-transcriptions-component
                     v-if="transcriptions"
                     :transcriptions="transcriptions"
