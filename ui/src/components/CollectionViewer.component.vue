@@ -22,6 +22,7 @@
 
                         <span v-else>Items: {{collectionMembers.length}}</span>
                     </div>
+                    <div class="my-4 px-6 text-xl">{{collection.rocrate.description}}</div>
                     <div class="flex flex-row flex-wrap">
                         <div v-for="(item, idx) of this.collectionMembers" :key="idx">
                             <el-tag
@@ -35,7 +36,6 @@
                             <el-tag type="info" effect="dark" class="mx-1 my-1" v-else>{{item.name}}</el-tag>
                         </div>
                     </div>
-                    <div class="my-4 px-6 text-lg">{{collection.rocrate.description}}</div>
                 </div>
                 <div class="w-1/4 hidden lg:block">
                     <render-location-component :geo="collection.rocrate.contentLocation" />
