@@ -14,6 +14,7 @@
                         Collection:
                         <router-link :to="item.rocrate.memberOf.id">{{item.rocrate.memberOf.id}}</router-link>
                     </div>
+                    <div class="my-4 px-6 text-lg">{{item.rocrate.description}}</div>
                     <div class="flex flex-row flex-wrap my-4 hidden lg:block">
                         <el-button @click="show.inventory= !show.inventory" size="mini">
                             <span v-if="!show.inventory">Show</span>

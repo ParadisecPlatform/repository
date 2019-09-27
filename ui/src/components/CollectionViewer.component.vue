@@ -35,6 +35,7 @@
                             <el-tag type="info" effect="dark" class="mx-1 my-1" v-else>{{item.name}}</el-tag>
                         </div>
                     </div>
+                    <div class="my-4 px-6 text-lg">{{collection.rocrate.description}}</div>
                 </div>
                 <div class="w-1/4 hidden lg:block">
                     <render-location-component :geo="collection.rocrate.contentLocation" />
