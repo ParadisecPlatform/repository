@@ -9,6 +9,7 @@
 
 <script>
 import leaflet from "leaflet";
+import styles from "src/assets/variables.scss";
 
 export default {
     props: {
@@ -30,9 +31,10 @@ export default {
             }
         ).addTo(this.map);
         const rectangle = L.rectangle(this.geo.coordinates, {
-            color: "red"
+            color: styles.brandHighlightColor
         }).addTo(this.map);
         this.map.fitBounds(rectangle.getBounds());
+        this.map.zoomOut();
         // L.tileLayer(
         //     "https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}",
         //     {
