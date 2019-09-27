@@ -52,7 +52,7 @@ export let mixin = {
                 this.currentTime = this.$refs.mediaElement.currentTime;
         },
         stopVideo() {
-            if (!this.isActive) this.$refs.medialement.pause();
+            if (!this.isActive) this.$refs.mediaElement.pause();
         },
         loadTranscription(transcription) {
             this.selectedTranscription = transcription;
