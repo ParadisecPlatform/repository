@@ -45,11 +45,11 @@ export default {
     },
     props: {
         transcriptions: {
-            type: Array,
+            type: Array | undefined,
             required: true
         },
         selectedTranscription: {
-            type: Object,
+            type: Object | undefined,
             required: true
         },
         currentTime: {
@@ -77,6 +77,7 @@ export default {
     },
     methods: {
         async loadTranscription() {
+            if (!this.selectedTranscription) return;
             let transcription = this.transcriptions.filter(
                 t => t.id === this.selectedTranscription.id
             )[0];

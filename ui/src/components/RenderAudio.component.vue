@@ -14,12 +14,12 @@
                 <code>audio</code> element.
             </audio>
             <render-transcription-selector-component
-                v-if="transcriptions"
+                v-if="transcriptions && transcriptions.length"
                 :transcriptions="transcriptions"
                 v-on:load-transcription="loadTranscription"
             />
             <render-transcriptions-component
-                v-if="transcriptions"
+                v-if="transcriptions && transcriptions.length"
                 :transcriptions="transcriptions"
                 :current-time="currentTime"
                 :selected-transcription="selectedTranscription"

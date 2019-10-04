@@ -4,7 +4,10 @@
             <div>{{name}}</div>
         </div>
         <div class="flex flex-col lg:flex-row">
-            <div class="w-full mx-2 flex flex-col" :class="{ 'lg:w-1/2': transcriptions}">
+            <div
+                class="w-full mx-2 flex flex-col"
+                :class="{ 'lg:w-1/2': transcriptions && transcriptions.length}"
+            >
                 <video
                     controls
                     ref="mediaElement"
@@ -15,14 +18,13 @@
                     <code>video</code> element.
                 </video>
                 <render-transcription-selector-component
-                    v-if="transcriptions"
+                    v-if="transcriptions && transcriptions.length"
                     :transcriptions="transcriptions"
                     v-on:load-transcription="loadTranscription"
                 />
             </div>
-            <div class="w-full lg:w-1/2" v-if="transcriptions">
+            <div class="w-full lg:w-1/2" v-if="transcriptions && transcriptions.length">
                 <render-transcriptions-component
-                    v-if="transcriptions"
                     :transcriptions="transcriptions"
                     :current-time="currentTime"
                     :selected-transcription="selectedTranscription"

@@ -18,7 +18,7 @@ export let mixin = {
             required: true
         },
         transcriptions: {
-            type: Array,
+            type: Array | undefined,
             required: true
         },
         isActive: {
@@ -30,11 +30,15 @@ export let mixin = {
         return {
             watchers: {},
             currentTime: 0,
-            selectedTranscription: this.transcriptions[0]
+            selectedTranscription: undefined
         };
     },
     mounted() {
         this.watchers.isActive = this.$watch("isActive", this.stopVideo);
+        this.selectedTranscription =
+            this.transcriptions && this.transcriptions.length
+                ? this.transcriptions[0]
+                : undefined;
     },
     beforeDestroy() {
         this.watchers.isActive();
