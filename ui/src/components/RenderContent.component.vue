@@ -34,7 +34,7 @@
         </el-tab-pane>
         <el-tab-pane label="XML Files" name="xmlFiles">
             <span slot="label">
-                <i class="fas fa-file"></i> Files
+                <i class="fas fa-file"></i> XML Files
             </span>
             <render-xml-component :files="item.hasPart" />
         </el-tab-pane>
