@@ -63,7 +63,7 @@ export default {
     },
     data() {
         return {
-            activeTab: "xmlFiles",
+            activeTab: "images",
             items: {
                 audio: [],
                 video: []
@@ -79,7 +79,7 @@ export default {
         const types = Object.keys(content);
         for (let type of types) {
             if (content[type]) {
-                // this.activeTab = type;
+                this.activeTab = type;
                 return;
             }
         }
