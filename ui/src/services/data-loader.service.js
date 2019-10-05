@@ -159,6 +159,12 @@ export class DataLoader {
         return { inventory, rocrate, flattenedCrate, datafiles, path };
     }
 
+    async loadFile({ file }) {
+        let response = await fetch(file.path);
+        if (!response.ok) throw response;
+        return await response.text();
+    }
+
     async loadTranscription({ transcription }) {
         const type = transcription.name.split(".").pop();
         let response = await fetch(transcription.path);

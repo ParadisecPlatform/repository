@@ -32,6 +32,12 @@
                 :is-active="activeTab === 'video'"
             />
         </el-tab-pane>
+        <el-tab-pane label="XML Files" name="xmlFiles">
+            <span slot="label">
+                <i class="fas fa-file"></i> Files
+            </span>
+            <render-xml-component :files="item.hasPart" />
+        </el-tab-pane>
     </el-tabs>
 </template>
 
@@ -40,12 +46,14 @@ import { groupBy, map } from "lodash";
 import RenderAudioComponent from "./RenderAudio.component.vue";
 import RenderVideoComponent from "./RenderVideo.component.vue";
 import RenderImagesComponent from "./RenderImages.component.vue";
+import RenderXmlComponent from "./RenderXML.component.vue";
 
 export default {
     components: {
         RenderAudioComponent,
         RenderVideoComponent,
-        RenderImagesComponent
+        RenderImagesComponent,
+        RenderXmlComponent
     },
     props: {
         item: {
@@ -55,7 +63,7 @@ export default {
     },
     data() {
         return {
-            activeTab: "images",
+            activeTab: "xmlFiles",
             items: {
                 audio: [],
                 video: []
@@ -71,7 +79,7 @@ export default {
         const types = Object.keys(content);
         for (let type of types) {
             if (content[type]) {
-                this.activeTab = type;
+                // this.activeTab = type;
                 return;
             }
         }

@@ -8,5 +8,16 @@ module.exports = {
                 }
             }
         ]
+    ],
+    plugins: [
+        [
+            "prismjs",
+            {
+                languages: ["xml", "javascript", "css", "markup"],
+                plugins: ["line-numbers"],
+                theme: "okaidia",
+                css: true
+            }
+        ]
     ]
 };
