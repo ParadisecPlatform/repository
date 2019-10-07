@@ -97,7 +97,9 @@ export default {
         let content = {
             images: Object.keys(this.item.images).length > 0,
             audio: Object.keys(this.item.audio).length > 0,
-            video: Object.keys(this.item.video).length > 0
+            video: Object.keys(this.item.video).length > 0,
+            documents: this.documents.length > 0,
+            xmlFiles: this.xmlFiles.length > 0
         };
         const types = Object.keys(content);
         for (let type of types) {
@@ -106,7 +108,6 @@ export default {
                 return;
             }
         }
-        console.log(this.documents);
     }
 };
 </script>
