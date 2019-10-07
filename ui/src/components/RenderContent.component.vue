@@ -32,11 +32,17 @@
                 :is-active="activeTab === 'video'"
             />
         </el-tab-pane>
-        <el-tab-pane label="XML Files" name="xmlFiles">
+        <el-tab-pane label="Documents" name="documents" v-if="documents.length">
+            <span slot="label">
+                <i class="fas fa-file-pdf"></i> Documents
+            </span>
+            <render-documents-component :files="documents" />
+        </el-tab-pane>
+        <el-tab-pane label="XML Files" name="xmlFiles" v-if="xmlFiles.length">
             <span slot="label">
                 <i class="fas fa-file"></i> XML Files
             </span>
-            <render-xml-component :files="item.hasPart" />
+            <render-xml-component :files="xmlFiles" />
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -47,13 +53,15 @@ import RenderAudioComponent from "./RenderAudio.component.vue";
 import RenderVideoComponent from "./RenderVideo.component.vue";
 import RenderImagesComponent from "./RenderImages.component.vue";
 import RenderXmlComponent from "./RenderXML.component.vue";
+import RenderDocumentsComponent from "./RenderDocuments.component.vue";
 
 export default {
     components: {
         RenderAudioComponent,
         RenderVideoComponent,
         RenderImagesComponent,
-        RenderXmlComponent
+        RenderXmlComponent,
+        RenderDocumentsComponent
     },
     props: {
         item: {
@@ -64,13 +72,28 @@ export default {
     data() {
         return {
             activeTab: "images",
-            items: {
-                audio: [],
-                video: []
-            }
+            documentFileExtensions: [
+                "pdf",
+                "doc",
+                "docx",
+                "xls",
+                "xlsx",
+                "ppt",
+                "pptx"
+            ],
+            documents: [],
+            xmlFiles: []
         };
     },
     mounted() {
+        this.documents = this.item.hasPart.filter(file => {
+            return this.documentFileExtensions.includes(
+                file.name.split(".").pop()
+            );
+        });
+        this.xmlFiles = this.item.hasPart.filter(
+            file => file.encodingFormat === "application/xml"
+        );
         let content = {
             images: Object.keys(this.item.images).length > 0,
             audio: Object.keys(this.item.audio).length > 0,
@@ -83,6 +106,7 @@ export default {
                 return;
             }
         }
+        console.log(this.documents);
     }
 };
 </script>
