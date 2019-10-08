@@ -9,7 +9,19 @@
                 <div class="flex flex-col w-3/4 px-2">
                     <div class="my-4 text-3xl">{{collection.rocrate.name}}</div>
                     <div>collection: /{{$route.params.domain}}/{{$route.params.collectionId}}</div>
+                    <div class="h-2"></div>
                     <div>Author: {{collection.rocrate.author.name}}</div>
+                    <div>
+                        Contributors:
+                        <ul class="px-6">
+                            <li
+                                class="list-disc"
+                                v-for="(contributor, idx) of collection.rocrate.contributor"
+                                :key="idx"
+                            >{{contributor.contributor.name}} ({{contributor.name}})</li>
+                        </ul>
+                    </div>
+                    <div class="h-2"></div>
                     <div class="inline">
                         <div
                             v-if="collectionMembers.length !== collection.rocrate.collectionMembers.length"
@@ -19,7 +31,6 @@
                                 :show-text="false"
                             ></el-progress>
                         </div>
-
                         <span v-else>Items: {{collectionMembers.length}}</span>
                     </div>
                     <div class="my-4 px-6 text-xl">{{collection.rocrate.description}}</div>

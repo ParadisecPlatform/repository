@@ -9,10 +9,21 @@
                 <div class="w-3/4">
                     <div class="my-4 text-3xl">{{item.rocrate.name}}</div>
                     <div>Item: /{{$route.params.domain}}/{{$route.params.collectionId}}/{{$route.params.itemId}}</div>
-                    <div>Author: {{item.rocrate.author.name}}</div>
                     <div>
                         Collection:
                         <router-link :to="item.rocrate.memberOf.id">{{item.rocrate.memberOf.id}}</router-link>
+                    </div>
+                    <div class="h-2"></div>
+                    <div>Author: {{item.rocrate.author.name}}</div>
+                    <div>
+                        Contributors:
+                        <ul class="px-6">
+                            <li
+                                class="list-disc"
+                                v-for="(contributor, idx) of item.rocrate.contributor"
+                                :key="idx"
+                            >{{contributor.contributor.name}} ({{contributor.name}})</li>
+                        </ul>
                     </div>
                     <div class="my-4 px-6 text-xl">{{item.rocrate.description}}</div>
                     <div class="flex flex-row flex-wrap my-4 hidden lg:block">

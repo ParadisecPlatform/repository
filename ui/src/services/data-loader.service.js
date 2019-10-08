@@ -120,6 +120,8 @@ export class DataLoader {
     async loadCollection({ domain, collectionId }) {
         const identifier = `/${domain}/${collectionId}`;
         let data = await this.load({ identifier });
+        if (isPlainObject(data.rocrate.contributor))
+            data.rocrate.contributor = [data.rocrate.contributor];
         data.rocrate.collectionMembers = this.enrichCollectionMembers({
             collectionMembers: data.rocrate["http://pcdm.org/models#hasMember"]
         });
@@ -130,6 +132,8 @@ export class DataLoader {
     async loadItem({ domain, collectionId, itemId }) {
         const identifier = `/${domain}/${collectionId}/${itemId}`;
         let data = await this.load({ identifier });
+        if (isPlainObject(data.rocrate.contributor))
+            data.rocrate.contributor = [data.rocrate.contributor];
         if (!data.rocrate) return data;
         data = this.enrichItemParts({ data });
         data.rocrate = {
