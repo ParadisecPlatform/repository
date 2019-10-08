@@ -12,9 +12,14 @@
                 @current-change="next"
             ></el-pagination>
         </div>
-        <pre class="style-file-view">
-        <code v-html="fileContent"></code>
-    </pre>
+        <iframe :src="selectedFileUrl" class="style-file-view">
+            <p>Your browser does not support iframes.</p>
+        </iframe>
+        <!-- <iframe
+    src="https://docs.google.com/viewer?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true"
+    style="width:600px; height:500px;"
+    frameborder="0"
+        ></iframe>-->
     </div>
 </template>
 
@@ -33,37 +38,34 @@ export default {
     },
     data() {
         return {
+            documents: [],
+            fileExtensions: [
+                "pdf",
+                "doc",
+                "docx",
+                "xls",
+                "xlsx",
+                "ppt",
+                "pptx"
+            ],
             pagerCount: window.innerWidth < 500 ? 5 : 7,
             total: 0,
             current: 0,
-            fileContent: ""
+            fileContent: "",
+            selectedFileUrl: undefined
         };
     },
     mounted() {
         this.total = this.files.length;
-        this.highlight();
+        this.setFile();
     },
     methods: {
-        async highlight() {
-            let file = this.files[this.current];
-            let data = await load({ file });
-            this.fileContent = Prism.highlight(
-                data,
-                Prism.languages.xml,
-                "xml"
-            );
-
-            async function load({ file }) {
-                try {
-                    return await dataLoader.loadFile({ file });
-                } catch (error) {
-                    console.log(error);
-                }
-            }
+        setFile() {
+            this.selectedFileUrl = `https://docs.google.com/viewer?url=${window.location.origin}${this.files[this.current].path}&embedded=true`;
         },
         next(current) {
             this.current = current - 1;
-            this.highlight();
+            this.setFile();
         }
     }
 };
@@ -71,8 +73,7 @@ export default {
 
 <style lang="scss" scoped>
 .style-file-view {
-    background-color: black;
     height: calc(100vh - 250px);
-    overflow: scroll;
+    width: 100%;
 }
 </style>
