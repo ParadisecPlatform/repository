@@ -48,44 +48,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-1/4 hidden lg:block">
+                <div class="hidden lg:block">
                     <render-location-component :geo="collection.rocrate.contentLocation" />
                 </div>
             </div>
-
-            <div class="hidden lg:block">
-                <div class="flex flex-row flex-wrap my-4">
-                    <el-button @click="show.inventory= !show.inventory" size="mini">
-                        <span v-if="!show.inventory">Show</span>
-                        <span v-else>Hide</span>
-                        OCFL inventory file
-                    </el-button>
-                    <el-button @click="show.crate= !show.crate" size="mini">
-                        <span v-if="!show.crate">Show</span>
-                        <span v-else>Hide</span>
-                        RO-Crate
-                    </el-button>
-                    <el-button @click="show.datafiles= !show.datafiles" size="mini">
-                        <span v-if="!show.datafiles">Show</span>
-                        <span v-else>Hide</span>
-                        data files
-                    </el-button>
-                </div>
-            </div>
-            <div class="hidden lg:block">
-                <div v-if="show.inventory" class="bg-white p-8 mx-6 overflow-scroll my-4">
-                    <div class="text-lg">Collection Inventory</div>
-                    <pre class="text-sm">{{collection.inventory}}</pre>
-                </div>
-                <div v-if="show.crate" class="bg-white p-8 mx-6 overflow-scroll my-4">
-                    <div class="text-lg">Collection RO-Crate</div>
-                    <pre class="text-sm">{{collection.flattenedCrate}}</pre>
-                </div>
-                <div v-if="show.datafiles" class="bg-white p-8 mx-6 overflow-scroll my-4">
-                    <div class="text-lg">Collection datafiles</div>
-                    <pre class="text-sm">{{collection.datafiles}}</pre>
-                </div>
-            </div>
+            <data-display-component :data="collection" />
         </div>
     </div>
 </template>
@@ -95,11 +62,13 @@ import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import RenderLocationComponent from "./RenderLocation.component.vue";
 import LoadingErrorComponent from "./LoadingError.component.vue";
+import DataDisplayComponent from "./DataDisplay.component.vue";
 
 export default {
     components: {
         LoadingErrorComponent,
-        RenderLocationComponent
+        RenderLocationComponent,
+        DataDisplayComponent
     },
     data() {
         return {
@@ -109,12 +78,7 @@ export default {
                 inventory: undefined,
                 rocrate: undefined
             },
-            collectionMembers: [],
-            show: {
-                inventory: false,
-                crate: false,
-                datafiles: false
-            }
+            collectionMembers: []
         };
     },
     mounted() {
