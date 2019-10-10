@@ -14,6 +14,11 @@ const configuration = {
             api: undefined,
             search: undefined,
             ocfl: undefined
+        },
+        search: {
+            filters: [],
+            query: {},
+            results: []
         }
     },
     mutations: {
@@ -22,6 +27,13 @@ const configuration = {
         },
         saveStatus(state, status) {
             state.status = { ...status };
+        },
+        updateFiltersAndQuery(state, payload) {
+            state.search.filters = [...payload.filters];
+            state.search.query = { ...payload.query };
+        },
+        updateQueryResults(state, payload) {
+            state.search.results = { ...payload };
         }
     },
     actions: {

@@ -1,20 +1,23 @@
 <template>
     <div>
         <div v-if="isOnline">
-            <div class="flex flex-col md:flex-row">
-                <list-domains-component class="mt-6 flex-grow" />
-                <list-authors-component class="mt-6 flex-grow" />
+            <div class="flex flex-row">
+                <div class="style-search-controls flex flex-col fixed" v-if="notPhone">
+                    <aggregation-component name="Domain" field="domain" class="mb-4" />
+                    <aggregation-component name="Type" field="type" class="mb-4" />
+                    <aggregation-component name="Author" field="author" class="mb-4" />
+                    <aggregation-component name="Publisher" field="publisher" class="mb-4" />
+                </div>
+                <div class="flex flex-col flex-grow" :class="{ 'ml-64': notPhone }">
+                    <search-filters-component class="h-32 overflow-scroll" v-if="notPhone" />
+                    <search-results-component class="p-4" />
+                </div>
             </div>
-            <div class="flex flex-col md:flex-row">
-                <list-collections-and-items-component
-                    selection="collection"
-                    class="mt-6 flex-grow"
-                />
-                <list-collections-and-items-component selection="item" class="mt-6 flex-grow" />
-            </div>
-            <search-component class="mt-8" />
         </div>
-        <div v-else>Uh oh. For one reason or another this is not going to work right now.</div>
+        <div
+            v-else
+            class="text-center"
+        >Oh dear. For one reason or another this is not working right now!</div>
     </div>
 </template>
 
@@ -22,20 +25,22 @@
 import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import { SearchService } from "./search.service";
-import ListDomainsComponent from "./ListDomains.component.vue";
-import ListAuthorsComponent from "./ListAuthors.component.vue";
-import ListCollectionsAndItemsComponent from "./ListCollectionsAndItems.component.vue";
-import SearchComponent from "./Search.component.vue";
+import AggregationComponent from "./Aggregation.component.vue";
+import SearchResultsComponent from "./SearchResults.component.vue";
+import SearchFiltersComponent from "./SearchFilters.component.vue";
+import SearchTitleDescriptionComponent from "./SearchTitleDescription.component.vue";
 
 export default {
     components: {
-        ListDomainsComponent,
-        ListAuthorsComponent,
-        ListCollectionsAndItemsComponent,
-        SearchComponent
+        AggregationComponent,
+        SearchResultsComponent,
+        SearchFiltersComponent,
+        SearchTitleDescriptionComponent
     },
     data() {
-        return {};
+        return {
+            notPhone: false
+        };
     },
     computed: {
         isOnline: function() {
@@ -43,12 +48,19 @@ export default {
         }
     },
     async mounted() {
+        this.notPhone = window.innerWidth >= 768 ? true : false;
         await dataLoader.verifySearchServiceAvailable({
-            service: this.$store.state.configuration.service.search
+            store: this.$store
         });
+        this.search = new SearchService({ store: this.$store });
+        this.search.search({ page: 0 });
     }
 };
 </script>
 
 <style lang="scss" scoped>
+.style-search-controls {
+    min-width: 200px;
+    width: 200px;
+}
 </style>
