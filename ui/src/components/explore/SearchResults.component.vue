@@ -5,6 +5,7 @@
             layout="total, prev, pager, next"
             :total="results.total"
             @current-change="update"
+            v-if="results.total"
         ></el-pagination>
         <ol>
             <li
@@ -23,7 +24,9 @@
             layout="total, prev, pager, next"
             :total="results.total"
             @current-change="update"
+            v-if="results.total"
         ></el-pagination>
+        <div v-if="!results.total" class="text-center">There are no results matching those filters.</div>
     </div>
 </template>
 
