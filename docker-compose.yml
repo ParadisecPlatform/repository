@@ -3,6 +3,7 @@ version: "2"
 volumes:
     ui-modules:
     api-modules:
+    search:
 
 services:
     ui:
@@ -12,7 +13,7 @@ services:
         environment:
             TERM: "xterm-256color"
             NODE_ENV: "development"
-        mem_limit: 512M
+        mem_limit: 1024M
         volumes:
             - $PWD/ui:/srv/ui:delegated
             - $PWD/ocfl-repository:/srv/ui/dist/repository:delegated
@@ -79,8 +80,7 @@ services:
             - http.host=0.0.0.0
             - xpack.security.enabled=true
             - xpack.security.http.ssl.enabled=false
-            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-        mem_limit: 1024m
+            - "ES_JAVA_OPTS=-Xms4096m -Xmx4096m"
         ulimits:
             memlock:
                 soft: -1
@@ -91,6 +91,7 @@ services:
         cap_add:
             - IPC_LOCK
         volumes:
+            - search:/usr/share/elasticsearch/data
             - $PWD/elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
             - $PWD/elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
             - $PWD/elastic/users:/usr/share/elasticsearch/config/users
