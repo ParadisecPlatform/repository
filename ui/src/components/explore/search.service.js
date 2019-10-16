@@ -148,6 +148,14 @@ export class SearchService {
         }
     }
 
+    async getStats() {
+        let domains = await this.aggregateDomains();
+        let authors = await this.aggregateAuthors();
+        let publishers = await this.aggregatePublishers();
+        let types = await this.aggregateTypes();
+        return { domains, authors, publishers, types };
+    }
+
     async aggregateDomains() {
         let query = {
             size: 0,
