@@ -2,7 +2,7 @@
 
 import { uniqBy } from "lodash";
 
-const numberOfAggregations = 10;
+const numberOfAggregations = 5;
 
 export class SearchService {
     constructor({ store }) {
@@ -149,14 +149,14 @@ export class SearchService {
     }
 
     async getStats() {
-        let domains = await this.aggregateDomains();
-        let authors = await this.aggregateAuthors();
-        let publishers = await this.aggregatePublishers();
-        let types = await this.aggregateTypes();
+        let domains = await this.aggregateDomains({});
+        let authors = await this.aggregateAuthors({});
+        let publishers = await this.aggregatePublishers({});
+        let types = await this.aggregateTypes({});
         return { domains, authors, publishers, types };
     }
 
-    async aggregateDomains() {
+    async aggregateDomains({ size = numberOfAggregations }) {
         let query = {
             size: 0,
             aggs: {
@@ -175,7 +175,7 @@ export class SearchService {
                                 values: {
                                     terms: {
                                         field: "identifier.value",
-                                        size: numberOfAggregations
+                                        size
                                     }
                                 }
                             }
@@ -189,7 +189,7 @@ export class SearchService {
         return domains;
     }
 
-    async aggregateAuthors() {
+    async aggregateAuthors({ size = numberOfAggregations }) {
         let query = {
             size: 0,
             aggs: {
@@ -201,7 +201,7 @@ export class SearchService {
                         values: {
                             terms: {
                                 field: "author.name",
-                                size: numberOfAggregations
+                                size
                             }
                         }
                     }
@@ -213,7 +213,7 @@ export class SearchService {
         return authors;
     }
 
-    async aggregatePublishers() {
+    async aggregatePublishers({ size = numberOfAggregations }) {
         let query = {
             size: 0,
             aggs: {
@@ -225,7 +225,7 @@ export class SearchService {
                         values: {
                             terms: {
                                 field: "publisher.name",
-                                size: numberOfAggregations
+                                size
                             }
                         }
                     }
@@ -237,13 +237,14 @@ export class SearchService {
         return publishers;
     }
 
-    async aggregateTypes() {
+    async aggregateTypes({ size = numberOfAggregations }) {
         let query = {
             size: 0,
             aggs: {
                 type: {
                     terms: {
-                        field: "schema:additionalType"
+                        field: "schema:additionalType",
+                        size
                     }
                 }
             }
