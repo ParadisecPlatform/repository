@@ -2,13 +2,15 @@
     <div>
         <div v-if="isOnline">
             <div class="flex flex-row">
-                <div class="style-search-controls flex flex-col fixed" v-if="notPhone">
-                    <aggregation-component name="Domain" field="domain" class="mb-4" />
-                    <aggregation-component name="Type" field="type" class="mb-4" />
-                    <aggregation-component name="Author" field="author" class="mb-4" />
-                    <aggregation-component name="Publisher" field="publisher" class="mb-4" />
+                <div class="fixed" v-if="notPhone">
+                    <div class="style-search-controls overflow-scroll">
+                        <aggregation-component name="Domain" field="domain" class="mb-4" />
+                        <aggregation-component name="Type" field="type" class="mb-4" />
+                        <aggregation-component name="Author" field="author" class="mb-4" />
+                        <aggregation-component name="Publisher" field="publisher" class="mb-4" />
+                    </div>
                 </div>
-                <div class="flex flex-col flex-grow" :class="{ 'ml-64': notPhone }">
+                <div class="flex flex-col flex-grow" :class="{ 'style-results': notPhone }">
                     <search-filters-component class="h-32 overflow-scroll" v-if="notPhone" />
                     <search-results-component class="p-4" />
                 </div>
@@ -60,7 +62,12 @@ export default {
 
 <style lang="scss" scoped>
 .style-search-controls {
-    min-width: 200px;
-    width: 200px;
+    min-width: 300px;
+    width: 0px;
+    height: 80vh;
+}
+
+.style-results {
+    margin-left: 310px;
 }
 </style>

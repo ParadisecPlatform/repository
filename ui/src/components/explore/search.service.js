@@ -2,7 +2,7 @@
 
 import { uniqBy } from "lodash";
 
-const numberOfAggregations = 5;
+const numberOfAggregations = 10;
 
 export class SearchService {
     constructor({ store }) {
@@ -57,7 +57,7 @@ export class SearchService {
         const pageSize = 10;
         if (!filters) filters = [...this.store.state.search.filters];
         let query = this.assembleQuery({ filters });
-        // console.log(JSON.stringify(query, null, 2), page);
+        // console.log(JSON.stringify(query, null, 2));
         let payload = { filters, query };
         this.store.commit("updateFiltersAndQuery", payload);
         let response = await this.execute({
