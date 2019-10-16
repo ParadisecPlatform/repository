@@ -46,7 +46,7 @@ services:
         cap_add:
             - IPC_LOCK
         volumes:
-            - search:/usr/share/elasticsearch/data
+            - search:/usr/share/elasticsearch/data:delegated
             - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
             - ./elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
             - ./elastic/users:/usr/share/elasticsearch/config/users
