@@ -17,6 +17,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.10.2",
         "@fortawesome/fontawesome-svg-core": "^1.2.19",
+        "apexcharts": "^3.10.0",
         "babel-plugin-prismjs": "^1.1.1",
         "core-js": "^3.2.1",
         "date-fns": "^2.3.0",
@@ -32,6 +33,7 @@
         "sha.js": "^2.4.11",
         "tailwindcss": "^1.1.2",
         "vue": "^2.6.10",
+        "vue-apexcharts": "^1.5.0",
         "vue-infinite-scroll": "^2.0.2",
         "vue-masonry": "^0.11.7",
         "vue-router": "^3.0.5",
