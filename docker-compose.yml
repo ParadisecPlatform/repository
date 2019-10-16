@@ -15,8 +15,8 @@ services:
             NODE_ENV: "development"
         mem_limit: 1024M
         volumes:
-            - $PWD/ui:/srv/ui:delegated
-            - $PWD/ocfl-repository:/srv/ui/dist/repository:delegated
+            - $PWD/ui:/srv/ui:cached
+            - $PWD/ocfl-repository:/srv/ui/dist/repository:cached
             - ui-modules:/srv/ui/node_modules:delegated
         working_dir: /srv/ui
         command: ["npm", "run", "develop"]
@@ -78,8 +78,8 @@ services:
             - cluster.name="search"
             - bootstrap.memory_lock=true
             - http.host=0.0.0.0
-            - xpack.security.enabled=true
-            - xpack.security.http.ssl.enabled=false
+            # - xpack.security.enabled=true
+            # - xpack.security.http.ssl.enabled=false
             - "ES_JAVA_OPTS=-Xms4096m -Xmx4096m"
         ulimits:
             memlock:
@@ -91,7 +91,7 @@ services:
         cap_add:
             - IPC_LOCK
         volumes:
-            - search:/usr/share/elasticsearch/data
+            - search:/usr/share/elasticsearch/data:delegated
             - $PWD/elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
             - $PWD/elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
             - $PWD/elastic/users:/usr/share/elasticsearch/config/users
