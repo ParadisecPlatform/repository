@@ -3,7 +3,7 @@
         <router-link to="/health-check">
             <i class="fas fa-heartbeat"></i> Health Check
         </router-link>
-        <router-link to="/about" class="mx-2">
+        <router-link to="/about" class="block md:hidden mx-4">
             <i class="fas fa-info-circle"></i> About
         </router-link>
         <div class="flex-grow"></div>
