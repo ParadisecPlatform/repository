@@ -2,7 +2,7 @@
     <div class="my-4">
         <div class="flex flex-row flex-wrap my-5 justify-center" v-if="show">
             <apex-chart
-                width="200"
+                :width="chartWidth"
                 type="donut"
                 v-for="(chart, idx) of chart"
                 :key="idx"
@@ -23,6 +23,7 @@ export default {
     },
     data() {
         return {
+            chartWidth: window.innerWidth <= 1024 ? 200 : 300,
             show: false,
             content: ["types", "domains", "authors", "publishers"],
             chart: []
