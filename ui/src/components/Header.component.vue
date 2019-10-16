@@ -8,7 +8,7 @@
             <i class="fas fa-search"></i>
             <span class="hidden md:inline">Explore</span>
         </router-link>
-        <router-link to="/about" class="hidden md:block">
+        <router-link to="/about" class="px-5 hidden md:block">
             <i class="fas fa-info-circle"></i> About
         </router-link>
         <div class="flex-grow"></div>
