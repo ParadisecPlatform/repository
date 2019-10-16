@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 import ShellComponent from "components/Shell.component.vue";
 import BadRequestComponent from "components/BadRequest.component.vue";
 import HealthCheckComponent from "components/HealthCheck.component.vue";
+import AboutComponent from "components/About.component.vue";
 import ExploreComponent from "components/explore/Shell.component.vue";
 import CollectionViewerComponent from "components/CollectionViewer.component.vue";
 import ItemViewerComponent from "components/ItemViewer.component.vue";
@@ -18,6 +19,11 @@ export function router({ configuration }) {
             name: "HealthCheck",
             path: "/health-check",
             component: HealthCheckComponent
+        },
+        {
+            name: "About",
+            path: "/about",
+            component: AboutComponent
         },
         {
             path: "/",
@@ -33,7 +39,7 @@ export function router({ configuration }) {
 
     // if the app has been configured to serve a single domain
     if (configuration.domain) {
-        routes[2].children.push(
+        routes[3].children.push(
             ...[
                 {
                     path: ":collectionId",
@@ -47,7 +53,7 @@ export function router({ configuration }) {
         );
     } else {
         // configured to server multiple domains
-        routes[2].children.push(
+        routes[3].children.push(
             ...[
                 {
                     path: ":domain/:collectionId",
