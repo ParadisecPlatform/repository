@@ -26,25 +26,23 @@
                         <div
                             v-if="collectionMembers.length !== collection.rocrate.collectionMembers.length"
                         >
-                            <el-progress
+                            <!-- <el-progress
                                 :percentage="collectionMembers.length / collection.rocrate.collectionMembers.length * 100"
                                 :show-text="false"
-                            ></el-progress>
+                            ></el-progress>-->
                         </div>
                         <span v-else>Items: {{collectionMembers.length}}</span>
                     </div>
                     <div class="my-4 px-6 text-xl">{{collection.rocrate.description}}</div>
                     <div class="flex flex-row flex-wrap">
-                        <div v-for="(item, idx) of this.collectionMembers" :key="idx">
-                            <el-tag
-                                type="warning"
-                                effect="dark"
-                                class="mx-1 my-1"
-                                v-if="item.available"
-                            >
+                        <div
+                            v-for="(item, idx) of this.collection.rocrate.collectionMembers"
+                            :key="idx"
+                        >
+                            <el-tag type="warning" effect="dark" class="mx-1 my-1">
                                 <router-link :to="item.id">{{item.name}}</router-link>
                             </el-tag>
-                            <el-tag type="info" effect="dark" class="mx-1 my-1" v-else>{{item.name}}</el-tag>
+                            <!-- <el-tag type="info" effect="dark" class="mx-1 my-1" v-else>{{item.name}}</el-tag> -->
                         </div>
                     </div>
                 </div>
@@ -117,26 +115,26 @@ export default {
                 });
                 this.error = undefined;
 
-                let members = [...this.collection.rocrate.collectionMembers];
-                const pauseTime = members.length < 50 ? 50 : 30;
-                let data;
-                this.collectionMembers = [];
-                for (let member of members) {
-                    try {
-                        data = await dataLoader.load({
-                            identifier: member.id,
-                            check: true
-                        });
-                        member.available = true;
-                    } catch (error) {
-                        member.available = false;
-                    }
-                    this.collectionMembers.push(member);
-                    await new Promise(resolve =>
-                        setTimeout(resolve, pauseTime)
-                    );
-                }
-                members = members.map(member => {});
+                // let members = [...this.collection.rocrate.collectionMembers];
+                // const pauseTime = members.length < 50 ? 50 : 30;
+                // let data;
+                // this.collectionMembers = [];
+                // for (let member of members) {
+                //     try {
+                //         data = await dataLoader.load({
+                //             identifier: member.id,
+                //             check: true
+                //         });
+                //         member.available = true;
+                //     } catch (error) {
+                //         member.available = false;
+                //     }
+                //     this.collectionMembers.push(member);
+                //     await new Promise(resolve =>
+                //         setTimeout(resolve, pauseTime)
+                //     );
+                // }
+                // members = members.map(member => {});
             } catch (error) {
                 this.error = {
                     status: error.status,
