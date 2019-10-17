@@ -33,6 +33,7 @@
         "sha.js": "^2.4.11",
         "tailwindcss": "^1.1.2",
         "vue": "^2.6.10",
+        "vue-analytics": "^5.17.2",
         "vue-apexcharts": "^1.5.0",
         "vue-infinite-scroll": "^2.0.2",
         "vue-masonry": "^0.11.7",
