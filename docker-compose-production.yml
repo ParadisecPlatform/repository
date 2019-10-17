@@ -1,4 +1,4 @@
-version: "2"
+version: "3.4"
 
 volumes:
     ui-modules:
@@ -10,10 +10,16 @@ services:
         image: nginx:latest
         hostname: ui
         tty: true
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost/configuration.json"]
+            interval: 2m
+            timeout: 10s
+            retries: 3
+            start_period: 45s
+        restart: unless-stopped
         environment:
             TERM: "xterm-256color"
             NODE_ENV: "production"
-        mem_limit: 1024M
         volumes:
             - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./ui/dist:/usr/share/nginx/html:delegated
@@ -26,6 +32,13 @@ services:
     search:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
         hostname: search
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost/search/_search"]
+            interval: 2m
+            timeout: 10s
+            retries: 3
+            start_period: 45s
+        restart: unless-stopped
         environment:
             - node.name=search
             - discovery.seed_hosts=search
