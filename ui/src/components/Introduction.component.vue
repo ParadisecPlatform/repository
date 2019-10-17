@@ -56,7 +56,7 @@ export default {
                 "NT1/2004",
                 "NT1/20003",
                 "NT3/nafakoron",
-                "NT3/sesake",
+                "NT3/SESAKE",
                 "NT5/TokelauOf",
                 "NT6/2005V001",
                 "PAMBU/DOC1014",
