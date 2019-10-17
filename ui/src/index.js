@@ -15,16 +15,17 @@ Vue.use(ElementUI, { locale });
 Vue.use(VueScrollTo);
 Vue.use(infiniteScroll);
 Vue.use(VueMasonryPlugin);
+import App from "components/app.vue";
+import { router } from "./routes";
+import { store } from "store";
+
 Vue.use(VueAnalytics, {
     id: "UA-79571514-3",
     debug: {
         sendHitTask: process.env.NODE_ENV === "production"
-    }
+    },
+    router
 });
-
-import App from "components/app.vue";
-import { router } from "./routes";
-import { store } from "store";
 (async () => {
     await store.dispatch("initialise");
     const configuration = store.state.configuration;
