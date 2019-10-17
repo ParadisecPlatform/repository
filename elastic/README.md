@@ -20,6 +20,13 @@ This is where we define the `anonymous` role which is permitted to read all indi
 
 This is where we define the `indexer` user that the `ocfl-indexer` uses to load data. The password is hashed using `bcrypt` but the easiest way to generate a new user and password is probably to do it within elastic search using the command `/usr/share/elasticsearch/bin/elasticsearch-users`.    
 
+```
+Run up a container viz:
+> docker run  -it docker.elastic.co/elasticsearch/elasticsearch:7.4.0 bash
+> cd /usr/share/elasticsearch/bin/
+> ./elasticsearch-users useradd ${username}
+```
+
 The credentials set up in this file are:
 ```
 > username: indexer
