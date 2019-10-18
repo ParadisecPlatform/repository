@@ -1,5 +1,5 @@
 <template>
-    <div class="container flex flex-col items-center text-xl">
+    <div class="container flex flex-col items-center text-sm lg:text-lg xl:text-xl">
         <div>
             <div class="flex flex-row">
                 <a href="http://www.dynamicsoflanguage.edu.au/" target="_blank">
@@ -10,19 +10,23 @@
                     <el-image :src="images[2]" fit="contain" class="style-pdsc-images" />
                 </a>
             </div>
-            <div class="text-2xl my-8">About this application</div>
+            <div class="text-2xl my-8 text-center md:text-left">About this application</div>
 
-            <div class="flex flex-row my-8 md:px-8">
+            <div class="flex flex-col md:flex-row my-8 justify-center text-center md:text-left">
                 <a href="https://ardc.edu.au/" target="_blank">
-                    <el-image :src="images[0]" fit="contain" class="style-pdsc-images mx-12" />
+                    <el-image
+                        :src="images[0]"
+                        fit="contain"
+                        class="style-pdsc-images my-4 md:my-0"
+                    />
                 </a>
-                <div>
+                <div class="md:mx-6">
                     This work was funded in 2019 by a grant from the ARDC titled
                     <br />"Modularising PARADISEC 's catalogue as a model for the data commons".
                 </div>
             </div>
 
-            <p class="my-8 md:px-8">
+            <p class="my-8">
                 This proof of concept is intended to demonstrate a single page application
                 operating over an OCFL on-disk repository. In the current configuration, the
                 application enables browsing and discovery of the content (collections and items)
@@ -31,14 +35,14 @@
                 collections and items will continue to work).
             </p>
 
-            <p class="my-8 md:px-8">
+            <p class="my-8">
                 The current status of the application can be seen on the
                 <router-link to="/health-check">health-check</router-link>
                 &nbsp;page.
                 In this demonstrator the URL path is "/{domain}/{collectionId}/{itemId}".
             </p>
 
-            <p class="my-8 md:px-8">
+            <p class="my-8">
                 The code for this application is available from @
                 <a
                     href="https://github.com/CoEDL/modpdsc"
@@ -75,6 +79,11 @@ export default {
 @import "src/assets/variables.scss";
 
 .style-pdsc-images {
-    height: 80px;
+    height: 50px;
+}
+@media (min-width: 768px) {
+    .style-pdsc-images {
+        height: 80px;
+    }
 }
 </style>
