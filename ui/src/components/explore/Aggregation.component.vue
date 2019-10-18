@@ -56,6 +56,7 @@ export default {
     },
     data() {
         return {
+            watchers: {},
             aggregations: [],
             drawerVisible: false,
             displayShowMoreToggle: false
@@ -66,11 +67,21 @@ export default {
             return window.innerWidth <= 1024
                 ? "50%"
                 : `${(400 / window.innerWidth) * 100}%`;
+        },
+        searchResults: function() {
+            return this.$store.state.search.results;
         }
     },
     async mounted() {
         this.search = new SearchService({ store: this.$store });
         this.loadAggregations({});
+        this.watchers.searchResults = this.$watch(
+            "searchResults",
+            this.loadAggregations
+        );
+    },
+    beforeDestroy() {
+        if (this.watchers.searchResults) this.watchers.searchResults();
     },
     methods: {
         async loadAggregations({ size = 5 }) {

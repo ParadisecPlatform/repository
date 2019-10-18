@@ -184,6 +184,12 @@ export class SearchService {
                 }
             }
         };
+        let filters = [...this.store.state.search.filters];
+        let q = this.assembleQuery({ filters });
+        query = {
+            query: q,
+            ...query
+        };
         let response = await this.execute({ query });
         let domains = response.aggregations.domains.results.values.buckets;
         return domains;
@@ -207,6 +213,12 @@ export class SearchService {
                     }
                 }
             }
+        };
+        let filters = [...this.store.state.search.filters];
+        let q = this.assembleQuery({ filters });
+        query = {
+            query: q,
+            ...query
         };
         let response = await this.execute({ query });
         let authors = response.aggregations.authors.values.buckets;
@@ -232,6 +244,12 @@ export class SearchService {
                 }
             }
         };
+        let filters = [...this.store.state.search.filters];
+        let q = this.assembleQuery({ filters });
+        query = {
+            query: q,
+            ...query
+        };
         let response = await this.execute({ query });
         let publishers = response.aggregations.publishers.values.buckets;
         return publishers;
@@ -248,6 +266,12 @@ export class SearchService {
                     }
                 }
             }
+        };
+        let filters = [...this.store.state.search.filters];
+        let q = this.assembleQuery({ filters });
+        query = {
+            query: q,
+            ...query
         };
         let response = await this.execute({ query });
         let types = response.aggregations.type.buckets;
