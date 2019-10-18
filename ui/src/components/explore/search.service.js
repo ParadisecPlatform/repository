@@ -53,6 +53,10 @@ export class SearchService {
         this.search({ filters, page: 0 });
     }
 
+    async clearAllFilters() {
+        this.search({ filters: [], page: 0 });
+    }
+
     async search({ filters, page }) {
         const pageSize = 10;
         if (!filters) filters = [...this.store.state.search.filters];

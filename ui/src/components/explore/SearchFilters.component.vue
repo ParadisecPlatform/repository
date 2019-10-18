@@ -1,7 +1,15 @@
 
 <template>
     <div class="flex flex-col border-solid border-b-2 border-gray-200 p-4">
-        <div class="text-sm underline mb-2">Applied filters (click to negate)</div>
+        <div class="flex flex-row mb-2 text-sm">
+            <div class="underline">Applied filters (click to negate)</div>
+            <div class="flex flex-grow"></div>
+            <div>
+                <a href @click.stop.prevent="clearAllFilters" class="mx-8">
+                    <i class="fas fa-ban"></i> clear all filters
+                </a>
+            </div>
+        </div>
         <div class="flex flex-row flex-wrap">
             <el-tag
                 class="m-1"
@@ -49,6 +57,9 @@ export default {
         },
         negateFilter(filter) {
             this.search.negateFilter({ filter });
+        },
+        clearAllFilters() {
+            this.search.clearAllFilters();
         }
     }
 };
