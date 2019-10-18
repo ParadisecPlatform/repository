@@ -19,17 +19,17 @@ import App from "components/app.vue";
 import { router } from "./routes";
 import { store } from "store";
 
-Vue.use(VueAnalytics, {
-    id: "UA-79571514-3",
-    debug: {
-        sendHitTask: process.env.NODE_ENV === "production"
-    },
-    router
-});
 (async () => {
     await store.dispatch("initialise");
     const configuration = store.state.configuration;
     App.router = router({ configuration });
     App.store = store;
+    Vue.use(VueAnalytics, {
+        id: "UA-79571514-3",
+        debug: {
+            sendHitTask: process.env.NODE_ENV === "production"
+        },
+        router: App.router
+    });
     new Vue(App);
 })();
