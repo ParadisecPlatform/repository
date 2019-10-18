@@ -2,14 +2,20 @@
     <div class="container flex flex-col items-center text-xl">
         <div>
             <div class="flex flex-row">
-                <el-image :src="images[1]" fit="contain" class="style-pdsc-images" />
+                <a href="http://www.dynamicsoflanguage.edu.au/" target="_blank">
+                    <el-image :src="images[1]" fit="contain" class="style-pdsc-images" />
+                </a>
                 <div class="flex-grow"></div>
-                <el-image :src="images[2]" fit="contain" class="style-pdsc-images" />
+                <a href="http://www.paradisec.org.au/" target="blank">
+                    <el-image :src="images[2]" fit="contain" class="style-pdsc-images" />
+                </a>
             </div>
             <div class="text-2xl my-8">About this application</div>
 
             <div class="flex flex-row my-8 md:px-8">
-                <el-image :src="images[0]" fit="contain" class="style-pdsc-images mx-12" />
+                <a href="https://ardc.edu.au/" target="_blank">
+                    <el-image :src="images[0]" fit="contain" class="style-pdsc-images mx-12" />
+                </a>
                 <div>
                     This work was funded in 2019 by a grant from the ARDC titled
                     <br />"Modularising PARADISEC 's catalogue as a model for the data commons".
