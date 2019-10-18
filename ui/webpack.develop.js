@@ -6,7 +6,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ImageminPlugin = require("imagemin-webpack-plugin").default;
 
 module.exports = {
     target: "web",
@@ -61,7 +62,7 @@ module.exports = {
             template: "./src/index.html"
         }),
         new VueLoaderPlugin(),
-        new CopyPlugin([
+        new CopyWebpackPlugin([
             {
                 from: "./src/configuration.json",
                 to: "configuration.json"
@@ -69,8 +70,18 @@ module.exports = {
             {
                 from: "./jsonldcontext.jsonld",
                 to: "jsonldcontext.jsonld"
+            },
+            {
+                from: "src/assets/images",
+                to: "assets/images"
             }
-        ])
+        ]),
+        new ImageminPlugin({
+            test: /\.(jpe?g|png|gif|svg)$/i,
+            pngquant: {
+                quality: "95-100"
+            }
+        })
     ],
     module: {
         rules: [
