@@ -20,10 +20,7 @@
                 v-for="must of mustFilters"
                 :key="must.id"
             >
-                <span
-                    v-if="['schema:dateCreated', 'schema:dateModified'].includes(must.field)"
-                >{{must.field}}: {{formatDate(must.dateRange.min)}} - {{formatDate(must.dateRange.max)}}</span>
-                <span v-else>{{must.field}}: {{must.value}}</span>
+                <search-filter-text-component :data="must" />
             </el-tag>
             <el-tag
                 class="m-1"
@@ -34,11 +31,7 @@
                 v-for="mustNot of mustNotFilters"
                 :key="mustNot.id"
             >
-                NOT
-                <span
-                    v-if="['schema:dateCreated', 'schema:dateModified'].includes(mustNot.field)"
-                >{{mustNot.field}}: {{formatDate(mustNot.dateRange.min)}} - {{formatDate(mustNot.dateRange.max)}}</span>
-                <span v-else>{{mustNot.field}}: {{mustNot.value}}</span>
+                <search-filter-text-component :data="mustNot" type="not" />
             </el-tag>
         </div>
     </div>
@@ -47,8 +40,12 @@
 <script>
 import { SearchService } from "./search.service";
 import { format, parseISO } from "date-fns";
+import SearchFilterTextComponent from "./SearchFilterText.component.vue";
 
 export default {
+    components: {
+        SearchFilterTextComponent
+    },
     data() {
         return {};
     },
