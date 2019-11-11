@@ -51,7 +51,13 @@ export default {
             type: String,
             required: true,
             validator: val =>
-                ["domain", "author", "type", "publisher"].includes(val)
+                [
+                    "domain",
+                    "author",
+                    "type",
+                    "publisher",
+                    "contentType"
+                ].includes(val)
         }
     },
     data() {
@@ -102,6 +108,11 @@ export default {
                     break;
                 case "publisher":
                     aggregations = await this.search.aggregatePublishers({
+                        size
+                    });
+                    break;
+                case "contentType":
+                    aggregations = await this.search.aggregateContentTypes({
                         size
                     });
                     break;

@@ -8,7 +8,13 @@
                         <aggregation-component name="Type" field="type" class="mb-4" />
                         <aggregation-component name="Author" field="author" class="mb-4" />
                         <aggregation-component name="Publisher" field="publisher" class="mb-4" />
+                        <aggregation-component
+                            name="Content Type"
+                            field="contentType"
+                            class="mb-4"
+                        />
                         <filter-by-date-component />
+                        <!-- <advanced-controls-component class="my-5" /> -->
                     </div>
                 </div>
                 <div class="flex flex-col flex-grow" :class="{ 'style-results': notPhone }">
@@ -30,6 +36,7 @@ const dataLoader = new DataLoader();
 import { SearchService } from "./search.service";
 import AggregationComponent from "./Aggregation.component.vue";
 import FilterByDateComponent from "./FilterByDate.component.vue";
+import AdvancedControlsComponent from "./AdvancedControls.component.vue";
 import SearchResultsComponent from "./SearchResults.component.vue";
 import SearchFiltersComponent from "./SearchFilters.component.vue";
 import SearchTitleDescriptionComponent from "./SearchTitleDescription.component.vue";
@@ -38,6 +45,7 @@ export default {
     components: {
         AggregationComponent,
         FilterByDateComponent,
+        AdvancedControlsComponent,
         SearchResultsComponent,
         SearchFiltersComponent,
         SearchTitleDescriptionComponent

@@ -94,6 +94,9 @@ export class SearchService {
                 case 'publisher':
                     term = constructPublisherQuery({filter});
                     break;
+                case 'contentType':
+                    term = constructContentTypeQuery({filter});
+                    break;
                 case 'schema:dateCreated':
                     term = constructDateQuery({filter});
                 case 'schema:dateModified':
@@ -155,6 +158,17 @@ export class SearchService {
             };
         }
 
+        function constructContentTypeQuery({filter}) {
+            return {
+                nested: {
+                    path: 'hasPart',
+                    query: {
+                        term: {'hasPart.encodingFormat': filter.value},
+                    },
+                },
+            };
+        }
+
         function constructDateQuery({filter}) {
             return {
                 range: {
@@ -195,6 +209,36 @@ export class SearchService {
             min: response.aggregations.dateRange.min_as_string,
             max: response.aggregations.dateRange.max_as_string,
         };
+    }
+
+    async aggregateContentTypes({size = numberOfAggregations}) {
+        let query = {
+            size: 0,
+            aggs: {
+                type: {
+                    nested: {
+                        path: 'hasPart',
+                    },
+                    aggs: {
+                        values: {
+                            terms: {
+                                field: 'hasPart.encodingFormat',
+                                size,
+                            },
+                        },
+                    },
+                },
+            },
+        };
+        let filters = [...this.store.state.search.filters];
+        let q = this.assembleQuery({filters});
+        query = {
+            query: q,
+            ...query,
+        };
+        let response = await this.execute({query});
+        let types = response.aggregations.type.values.buckets;
+        return types;
     }
 
     async aggregateDomains({size = numberOfAggregations}) {
