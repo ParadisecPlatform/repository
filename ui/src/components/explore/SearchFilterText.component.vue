@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { parseISO, format } from "date-fns";
+
 export default {
     props: {
         type: {
@@ -24,6 +26,11 @@ export default {
     },
     data() {
         return {};
+    },
+    methods: {
+        formatDate(date) {
+            return format(parseISO(date), "yyyy-MM");
+        }
     }
 };
 </script>

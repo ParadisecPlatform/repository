@@ -61,9 +61,6 @@ export default {
         this.search = new SearchService({ store: this.$store });
     },
     methods: {
-        formatDate(date) {
-            return format(parseISO(date), "yyyy-MM-dd");
-        },
         removeFilter(filter) {
             this.search.removeFilter({ filter });
         },
