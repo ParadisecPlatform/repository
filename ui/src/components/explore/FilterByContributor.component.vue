@@ -23,20 +23,20 @@
         >show more</a>
 
         <el-drawer
-            :title="setDrawerTitle()"
+            title="Filter By Contributor"
             :visible.sync="drawerVisible"
             direction="rtl"
             :before-close="handleDrawClose"
         >
             <div class="style-drawer-content overflow-scroll">
-                <ol class="list-decimal px-12 text-sm">
-                    <li v-for="(agg, idx) of aggregations" :key="idx">
-                        role: {{agg.role}}
+                <ol class="px-12 text-sm">
+                    <li v-for="(agg, idx) of aggregations" :key="idx" class="mb-4">
+                        <span class="text-xl">role: {{agg.role}}</span>
                         <div class="flex flex-col">
                             <a
                                 v-for="(person, idx2) of agg.names"
                                 :key="idx2"
-                                class="text-sm style-filter-selection"
+                                class="ml-4 text-sm style-filter-selection"
                                 @click.stop.prevent="applyAggregation({role: agg.role, person: person.key})"
                             >{{person.key}} ({{person.doc_count}})</a>
                         </div>
