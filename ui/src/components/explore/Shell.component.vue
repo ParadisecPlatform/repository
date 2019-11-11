@@ -7,13 +7,14 @@
                         <aggregation-component name="Domain" field="domain" class="mb-4" />
                         <aggregation-component name="Type" field="type" class="mb-4" />
                         <aggregation-component name="Author" field="author" class="mb-4" />
+                        <filter-by-contributor-component class="mb-4" />
                         <aggregation-component name="Publisher" field="publisher" class="mb-4" />
                         <aggregation-component
                             name="Content Type"
                             field="contentType"
                             class="mb-4"
                         />
-                        <filter-by-date-component />
+                        <filter-by-date-component class="mb-4" />
                         <!-- <advanced-controls-component class="my-5" /> -->
                     </div>
                 </div>
@@ -36,6 +37,7 @@ const dataLoader = new DataLoader();
 import { SearchService } from "./search.service";
 import AggregationComponent from "./Aggregation.component.vue";
 import FilterByDateComponent from "./FilterByDate.component.vue";
+import FilterByContributorComponent from "./FilterByContributor.component.vue";
 import AdvancedControlsComponent from "./AdvancedControls.component.vue";
 import SearchResultsComponent from "./SearchResults.component.vue";
 import SearchFiltersComponent from "./SearchFilters.component.vue";
@@ -45,6 +47,7 @@ export default {
     components: {
         AggregationComponent,
         FilterByDateComponent,
+        FilterByContributorComponent,
         AdvancedControlsComponent,
         SearchResultsComponent,
         SearchFiltersComponent,

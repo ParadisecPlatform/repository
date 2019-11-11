@@ -88,6 +88,9 @@ export class SearchService {
                 case 'author':
                     term = constructAuthorQuery({filter});
                     break;
+                case 'contributor':
+                    term = constructContributorQuery({filter});
+                    break;
                 case 'type':
                     term = constructTypeQuery({filter});
                     break;
@@ -119,6 +122,8 @@ export class SearchService {
                                     term: {
                                         'identifier.name': 'domain',
                                     },
+                                },
+                                {
                                     term: {
                                         'identifier.value': filter.value,
                                     },
@@ -136,6 +141,30 @@ export class SearchService {
                     path: 'author',
                     query: {
                         term: {'author.name': filter.value},
+                    },
+                },
+            };
+        }
+
+        function constructContributorQuery({filter}) {
+            return {
+                nested: {
+                    path: 'contributor',
+                    query: {
+                        bool: {
+                            must: [
+                                {
+                                    term: {
+                                        'contributor.name': filter.value,
+                                    },
+                                },
+                                {
+                                    term: {
+                                        'contributor.role': filter.role,
+                                    },
+                                },
+                            ],
+                        },
                     },
                 },
             };
@@ -308,6 +337,51 @@ export class SearchService {
         let response = await this.execute({query});
         let authors = response.aggregations.authors.values.buckets;
         return authors;
+    }
+
+    async aggregateContributors({size = numberOfAggregations}) {
+        let query = {
+            size: 0,
+            aggs: {
+                contributors: {
+                    nested: {
+                        path: 'contributor',
+                    },
+                    aggs: {
+                        roles: {
+                            terms: {
+                                field: 'contributor.role',
+                                size,
+                            },
+                            aggs: {
+                                names: {
+                                    terms: {
+                                        field: 'contributor.name',
+                                        size,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        };
+        let filters = [...this.store.state.search.filters];
+        let q = this.assembleQuery({filters});
+        query = {
+            query: q,
+            ...query,
+        };
+        let response = await this.execute({query});
+        let contributors = response.aggregations.contributors.roles.buckets.map(
+            role => {
+                return {
+                    role: role.key,
+                    names: role.names.buckets,
+                };
+            }
+        );
+        return contributors;
     }
 
     async aggregatePublishers({size = numberOfAggregations}) {
