@@ -6,9 +6,10 @@
             <el-radio label="schema:dateModified">modified</el-radio>
         </el-radio-group>
         <el-date-picker
+            type="monthrange"
             size="small"
             v-model="selectedDateRange"
-            type="daterange"
+            unlink-panels
             range-separator="To"
             start-placeholder="Start date"
             end-placeholder="End date"
