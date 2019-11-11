@@ -3,11 +3,12 @@
         <div v-if="isOnline">
             <div class="flex flex-row">
                 <div class="fixed" v-if="notPhone">
-                    <div class="style-search-controls overflow-scroll">
+                    <div class="style-search-controls overflow-scroll px-1">
                         <aggregation-component name="Domain" field="domain" class="mb-4" />
                         <aggregation-component name="Type" field="type" class="mb-4" />
                         <aggregation-component name="Author" field="author" class="mb-4" />
                         <aggregation-component name="Publisher" field="publisher" class="mb-4" />
+                        <filter-by-date-component />
                     </div>
                 </div>
                 <div class="flex flex-col flex-grow" :class="{ 'style-results': notPhone }">
@@ -28,6 +29,7 @@ import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import { SearchService } from "./search.service";
 import AggregationComponent from "./Aggregation.component.vue";
+import FilterByDateComponent from "./FilterByDate.component.vue";
 import SearchResultsComponent from "./SearchResults.component.vue";
 import SearchFiltersComponent from "./SearchFilters.component.vue";
 import SearchTitleDescriptionComponent from "./SearchTitleDescription.component.vue";
@@ -35,6 +37,7 @@ import SearchTitleDescriptionComponent from "./SearchTitleDescription.component.
 export default {
     components: {
         AggregationComponent,
+        FilterByDateComponent,
         SearchResultsComponent,
         SearchFiltersComponent,
         SearchTitleDescriptionComponent
@@ -62,12 +65,12 @@ export default {
 
 <style lang="scss" scoped>
 .style-search-controls {
-    min-width: 300px;
+    min-width: 355px;
     width: 0px;
     height: 80vh;
 }
 
 .style-results {
-    margin-left: 310px;
+    margin-left: 365px;
 }
 </style>

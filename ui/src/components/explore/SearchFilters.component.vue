@@ -19,7 +19,12 @@
                 @click="negateFilter(must)"
                 v-for="must of mustFilters"
                 :key="must.id"
-            >{{must.field}}: {{must.value}}</el-tag>
+            >
+                <span
+                    v-if="['schema:dateCreated', 'schema:dateModified'].includes(must.field)"
+                >{{must.field}}: {{formatDate(must.dateRange.min)}} - {{formatDate(must.dateRange.max)}}</span>
+                <span v-else>{{must.field}}: {{must.value}}</span>
+            </el-tag>
             <el-tag
                 class="m-1"
                 type="danger"
@@ -28,13 +33,20 @@
                 @click="negateFilter(mustNot)"
                 v-for="mustNot of mustNotFilters"
                 :key="mustNot.id"
-            >NOT - {{mustNot.field}}: {{mustNot.value}}</el-tag>
+            >
+                NOT
+                <span
+                    v-if="['schema:dateCreated', 'schema:dateModified'].includes(mustNot.field)"
+                >{{mustNot.field}}: {{formatDate(mustNot.dateRange.min)}} - {{formatDate(mustNot.dateRange.max)}}</span>
+                <span v-else>{{mustNot.field}}: {{mustNot.value}}</span>
+            </el-tag>
         </div>
     </div>
 </template>
 
 <script>
 import { SearchService } from "./search.service";
+import { format, parseISO } from "date-fns";
 
 export default {
     data() {
@@ -52,6 +64,9 @@ export default {
         this.search = new SearchService({ store: this.$store });
     },
     methods: {
+        formatDate(date) {
+            return format(parseISO(date), "yyyy-MM-dd");
+        },
         removeFilter(filter) {
             this.search.removeFilter({ filter });
         },
