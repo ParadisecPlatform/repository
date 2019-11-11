@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="underline">Filter by date</div>
+        <div class="underline">Date</div>
         <el-radio-group v-model="field" @change="loadDates">
             <el-radio label="schema:dateCreated">Date Created</el-radio>
             <el-radio label="schema:dateModified">Date Modified</el-radio>
