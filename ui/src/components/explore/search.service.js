@@ -64,6 +64,7 @@ export class SearchService {
         // console.log(JSON.stringify(query, null, 2));
         let payload = {filters, query};
         this.store.commit('updateFiltersAndQuery', payload);
+        // console.log(JSON.stringify(query, null, 2));
         let response = await this.execute({
             query: {query, from: page * pageSize, size: pageSize},
         });

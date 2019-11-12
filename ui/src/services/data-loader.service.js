@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-import pairtree from "pairtree";
-import shajs from "sha.js";
-import jsonld from "jsonld";
+import pairtree from 'pairtree';
+import shajs from 'sha.js';
+import jsonld from 'jsonld';
 import {
     map,
     isArray,
@@ -10,39 +10,39 @@ import {
     isPlainObject,
     orderBy,
     groupBy,
-    trimStart
-} from "lodash";
+    trimStart,
+} from 'lodash';
 
-import { EAFParser } from "./eaf-parser.service";
-import { IXTParser } from "./ixt-parser.service";
-import { TRSParser } from "./trs-parser.service";
-import { FlextextParser } from "./flextext-parser.service";
+import {EAFParser} from './eaf-parser.service';
+import {IXTParser} from './ixt-parser.service';
+import {TRSParser} from './trs-parser.service';
+import {FlextextParser} from './flextext-parser.service';
 
 const parser = {
     eaf: new EAFParser(),
     ixt: new IXTParser(),
     trs: new TRSParser(),
-    flextext: new FlextextParser()
+    flextext: new FlextextParser(),
 };
 
 const typeMappings = {
-    "image/tiff": "image",
-    "image/jpeg": "image",
-    "audio/x-wav": "audio",
-    "audio/mpeg": "audio",
-    "video/quicktime": "video",
-    "video/mp4": "video",
-    "application/xml": "data"
+    'image/tiff': 'image',
+    'image/jpeg': 'image',
+    'audio/x-wav': 'audio',
+    'audio/mpeg': 'audio',
+    'video/quicktime': 'video',
+    'video/mp4': 'video',
+    'application/xml': 'data',
 };
 
-const transcriptionExtensions = ["eaf", "trs", "ixt"];
+const transcriptionExtensions = ['eaf', 'trs', 'ixt'];
 
-const displayImageTypes = ["image/jpeg"];
+const displayImageTypes = ['image/jpeg'];
 
 const maintainIds = [
-    "http://pcdm.org/models#hasMember",
-    "http://schema.org/memberOf",
-    "http://schema.org/hasPart"
+    'http://pcdm.org/models#hasMember',
+    'http://schema.org/memberOf',
+    'http://schema.org/hasPart',
 ];
 
 const jsonldContext = `${window.location.origin}/jsonldcontext.jsonld`;
@@ -50,23 +50,23 @@ const jsonldContext = `${window.location.origin}/jsonldcontext.jsonld`;
 
 export class DataLoader {
     constructor() {
-        this.repository = "/repository";
-        this.ocflRootDescriptor = "0=ocfl_1.0";
+        this.repository = '/repository';
+        this.ocflRootDescriptor = '0=ocfl_1.0';
         this.configuration = {
-            domain: "",
+            domain: '',
             service: {
-                search: "http://localhost:8000/search",
-                api: "http://localhost:8000"
-            }
+                search: 'http://localhost:8000/search',
+                api: 'http://localhost:8000',
+            },
         };
     }
 
     async getConfiguration() {
         let response = await fetch(`/configuration.json`);
-        let configuration = { ...this.configuration };
+        let configuration = {...this.configuration};
         if (response.status === 200) {
             configuration = await response.json();
-            configuration = { ...this.configuration, ...configuration };
+            configuration = {...this.configuration, ...configuration};
         }
         return configuration;
     }
@@ -77,7 +77,7 @@ export class DataLoader {
         );
         if (response.status !== 200) {
             console.log(
-                "Error: the OCFL filesystem does not seem to be mounted."
+                'Error: the OCFL filesystem does not seem to be mounted.'
             );
             return false;
         }
@@ -88,62 +88,62 @@ export class DataLoader {
         try {
             let response = await fetch(`${service}/health-check`);
             if (response.status !== 200) {
-                console.log("Error: the API does not seem to be available.");
+                console.log('Error: the API does not seem to be available.');
                 return false;
             }
             return true;
         } catch (error) {
-            console.log("Error: the API does not seem to be available.");
+            console.log('Error: the API does not seem to be available.');
             return false;
         }
     }
 
-    async verifySearchServiceAvailable({ service }) {
+    async verifySearchServiceAvailable({service}) {
         try {
             let response = await fetch(`${service}/_search?size=0`);
             // do nothing for now
             if (response.status !== 200) {
                 console.log(
-                    "Error: the Search endpoint does not seem to be available."
+                    'Error: the Search endpoint does not seem to be available.'
                 );
                 return false;
             }
             return true;
         } catch (error) {
             console.log(
-                "Error: the Search endpoint does not seem to be available."
+                'Error: the Search endpoint does not seem to be available.'
             );
             return false;
         }
     }
 
-    async loadCollection({ domain, collectionId }) {
+    async loadCollection({domain, collectionId}) {
         const identifier = `/${domain}/${collectionId}`;
-        let data = await this.load({ identifier });
+        let data = await this.load({identifier});
         if (isPlainObject(data.rocrate.contributor))
             data.rocrate.contributor = [data.rocrate.contributor];
         data.rocrate.collectionMembers = this.enrichCollectionMembers({
-            collectionMembers: data.rocrate["http://pcdm.org/models#hasMember"]
+            collectionMembers: data.rocrate['http://pcdm.org/models#hasMember'],
         });
 
         return data;
     }
 
-    async loadItem({ domain, collectionId, itemId }) {
+    async loadItem({domain, collectionId, itemId}) {
         const identifier = `/${domain}/${collectionId}/${itemId}`;
-        let data = await this.load({ identifier });
+        let data = await this.load({identifier});
         if (isPlainObject(data.rocrate.contributor))
             data.rocrate.contributor = [data.rocrate.contributor];
         if (!data.rocrate) return data;
-        data = this.enrichItemParts({ data });
+        data = this.enrichItemParts({data});
         data.rocrate = {
             ...data.rocrate,
-            ...this.constructItemDataStructure({ parts: data.rocrate.hasPart })
+            ...this.constructItemDataStructure({parts: data.rocrate.hasPart}),
         };
         return data;
     }
 
-    async load({ identifier, check = false }) {
+    async load({identifier, check = false}) {
         identifier = this.hash(identifier);
         const path = pairtree.path(identifier);
         let response = await fetch(`${this.repository}${path}inventory.json`);
@@ -151,26 +151,26 @@ export class DataLoader {
         if (check) return true;
 
         let inventory = await response.json();
-        let datafiles = this.extractObjectDataFiles({ inventory });
+        let datafiles = this.extractObjectDataFiles({inventory});
 
         response = await fetch(
-            `${this.repository}${path}${datafiles["ro-crate-metadata.jsonld"]}`
+            `${this.repository}${path}${datafiles['ro-crate-metadata.jsonld']}`
         );
         if (!response.ok) throw response;
 
         let flattenedCrate = await response.json();
-        let rocrate = await this.objectify({ rocrate: flattenedCrate });
-        return { inventory, rocrate, flattenedCrate, datafiles, path };
+        let rocrate = await this.objectify({rocrate: flattenedCrate});
+        return {inventory, rocrate, flattenedCrate, datafiles, path};
     }
 
-    async loadFile({ file }) {
+    async loadFile({file}) {
         let response = await fetch(file.path);
         if (!response.ok) throw response;
         return await response.text();
     }
 
-    async loadTranscription({ transcription }) {
-        const type = transcription.name.split(".").pop();
+    async loadTranscription({transcription}) {
+        const type = transcription.name.split('.').pop();
         let response = await fetch(transcription.path);
         if (!response.ok) throw response;
         let xml = await response.text();
@@ -181,21 +181,21 @@ export class DataLoader {
         segments = segments.map(segment => {
             return {
                 ...segment,
-                htmlId: `s${this.hash(segment.id)}`
+                htmlId: `s${this.hash(segment.id)}`,
             };
         });
-        return { type, segments };
+        return {type, segments};
     }
 
     hash(identifier) {
-        return shajs("sha256")
+        return shajs('sha256')
             .update(identifier)
-            .digest("hex");
+            .digest('hex');
     }
 
-    extractObjectDataFiles({ inventory }) {
+    extractObjectDataFiles({inventory}) {
         const versions = Object.keys(inventory.versions)
-            .map(v => parseInt(v.replace("v", "")))
+            .map(v => parseInt(v.replace('v', '')))
             .sort();
         let datafiles = {};
         versions.forEach(version => {
@@ -214,16 +214,16 @@ export class DataLoader {
         return datafiles;
     }
 
-    async objectify({ rocrate }) {
+    async objectify({rocrate}) {
         let data = await jsonld.expand(rocrate);
 
         let root = data.filter(i => {
-            if (i["@type"])
-                return i["@type"].includes("http://schema.org/Dataset");
+            if (i['@type'])
+                return i['@type'].includes('http://schema.org/Dataset');
         })[0];
         let content = data.filter(i => {
-            if (i["@type"])
-                return !i["@type"].includes("http://schema.org/Dataset");
+            if (i['@type'])
+                return !i['@type'].includes('http://schema.org/Dataset');
             return i;
         });
 
@@ -231,34 +231,34 @@ export class DataLoader {
         for (let property of rootProperties) {
             let item = root[property];
             if (isArray(item)) {
-                item = mapContent({ property, item, content });
+                item = mapContent({property, item, content});
                 root[property] = [...item];
             }
         }
         root = await compact(root);
-        root = refactorGeoShape({ root });
+        root = refactorGeoShape({root});
         return root;
 
         async function compact(root) {
             return await jsonld.compact(
                 root,
                 {
-                    "@context": jsonldContext
+                    '@context': jsonldContext,
                 },
                 {
                     base: null,
                     // compactArrays: false,
                     compactToRelative: true,
-                    skipExpansion: true
+                    skipExpansion: true,
                 }
             );
         }
 
-        function mapContent({ property, item, content }) {
+        function mapContent({property, item, content}) {
             item = item.map(entry => {
-                if (entry["@id"]) {
+                if (entry['@id']) {
                     let entryData = content.filter(
-                        c => c["@id"] === entry["@id"]
+                        c => c['@id'] === entry['@id']
                     )[0];
 
                     if (entryData) {
@@ -268,12 +268,12 @@ export class DataLoader {
                                 entryData[prop] = mapContent({
                                     property: prop,
                                     item: entryData[prop],
-                                    content
+                                    content,
                                 });
                         }
-                        entry = { ...entry, ...entryData };
+                        entry = {...entry, ...entryData};
                         if (!maintainIds.includes(property))
-                            delete entry["@id"];
+                            delete entry['@id'];
                     }
                 }
                 return entry;
@@ -281,79 +281,79 @@ export class DataLoader {
             return item;
         }
 
-        function refactorGeoShape({ root }) {
+        function refactorGeoShape({root}) {
             let shape = root.contentLocation.geo.box;
             let coordinates = [
                 [
-                    shape.split(" ")[0].split(",")[1],
-                    shape.split(" ")[0].split(",")[0]
+                    shape.split(' ')[0].split(',')[1],
+                    shape.split(' ')[0].split(',')[0],
                 ],
                 [
-                    shape.split(" ")[1].split(",")[1],
-                    shape.split(" ")[1].split(",")[0]
-                ]
+                    shape.split(' ')[1].split(',')[1],
+                    shape.split(' ')[1].split(',')[0],
+                ],
             ];
             root.contentLocation = {
-                type: "envelope",
-                coordinates
+                type: 'envelope',
+                coordinates,
             };
             return root;
         }
     }
 
-    enrichCollectionMembers({ collectionMembers }) {
+    enrichCollectionMembers({collectionMembers}) {
         let members = collectionMembers;
-        members = orderBy(members, "id");
+        members = orderBy(members, 'id');
         if (isPlainObject(members)) members = [members];
         members = members.map(member => {
-            let name = member.id.split("/");
+            let name = member.id.split('/');
             return {
                 id: member.id,
-                name: name[3]
+                name: name[3],
             };
         });
         return members;
     }
 
-    enrichItemParts({ data }) {
+    enrichItemParts({data}) {
         if (isPlainObject(data.rocrate.hasPart))
             data.rocrate.hasPart = [data.rocrate.hasPart];
         data.rocrate.hasPart = data.rocrate.hasPart.map(file => {
-            file.displayName = file.name.split(".").slice(0, -1)[0];
+            file.displayName = file.name.split('.').slice(0, -1)[0];
             file.path = `/repository${data.path}${data.datafiles[file.name]}`;
 
             file.type = typeMappings[file.encodingFormat];
-            file.extension = file.name.split(".").pop();
-            if (file.type === "data")
+            file.extension = file.name.split('.').pop();
+            if (file.type === 'data')
                 file.type = transcriptionExtensions.includes(
-                    file.name.split(".").pop()
+                    file.name.split('.').pop()
                 )
-                    ? "transcription"
-                    : "data";
+                    ? 'transcription'
+                    : 'data';
             return file;
         });
         return data;
     }
 
-    constructItemDataStructure({ parts }) {
+    constructItemDataStructure({parts}) {
         let structure = {
-            images: get({ parts, type: "image" }),
-            audio: get({ parts, type: "audio" }),
-            video: get({ parts, type: "video" }),
+            images: get({parts, type: 'image'}),
+            audio: get({parts, type: 'audio'}),
+            video: get({parts, type: 'video'}),
             documents: [],
-            transcriptions: get({ parts, type: "transcription" })
+            transcriptions: get({parts, type: 'transcription'}),
         };
-        structure.images = preprocessImages({ images: structure.images });
+        structure.images = preprocessImages({images: structure.images});
         return structure;
 
-        function get({ parts, type }) {
+        function get({parts, type}) {
             let images = parts.filter(p => p.type === type);
-            images = orderBy(images, "id");
-            images = groupBy(images, "displayName");
+            images = orderBy(images, 'id');
+            images = groupBy(images, 'displayName');
             return images;
         }
 
-        function preprocessImages({ images }) {
+        function preprocessImages({images}) {
             let names = Object.keys(images);
             for (let name of names) {
                 let displayImages = images[name].filter(i => {
@@ -361,12 +361,12 @@ export class DataLoader {
                 });
                 images[name] = {
                     image: displayImages.filter(
-                        i => !i.name.match("thumbnail")
+                        i => !i.name.match('thumbnail')
                     )[0],
                     thumbnail:
                         displayImages.filter(i =>
-                            i.name.match("thumbnail")
-                        )[0] || {}
+                            i.name.match('thumbnail')
+                        )[0] || {},
                 };
             }
             return images;
@@ -431,10 +431,10 @@ export class DataLoader {
             // element
             // do attributes
             if (xml.attributes.length > 0) {
-                obj["@attributes"] = {};
+                obj['@attributes'] = {};
                 for (var j = 0; j < xml.attributes.length; j++) {
                     var attribute = xml.attributes.item(j);
-                    obj["@attributes"][attribute.nodeName] =
+                    obj['@attributes'][attribute.nodeName] =
                         attribute.nodeValue;
                 }
             }
@@ -448,10 +448,10 @@ export class DataLoader {
             for (var i = 0; i < xml.childNodes.length; i++) {
                 var item = xml.childNodes.item(i);
                 var nodeName = item.nodeName;
-                if (typeof obj[nodeName] === "undefined") {
+                if (typeof obj[nodeName] === 'undefined') {
                     obj[nodeName] = this.convertXmlToJson(item);
                 } else {
-                    if (typeof obj[nodeName].push === "undefined") {
+                    if (typeof obj[nodeName].push === 'undefined') {
                         var old = obj[nodeName];
                         obj[nodeName] = [];
                         obj[nodeName].push(old);
