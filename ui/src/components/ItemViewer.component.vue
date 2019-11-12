@@ -25,7 +25,9 @@
                             >{{contributor.contributor.name}} ({{contributor.name}})</li>
                         </ul>
                     </div>
-                    <div class="my-4 px-6 text-xl">{{item.rocrate.description}}</div>
+                    <div class="my-4 px-6 text-xl">
+                        <render-description-component :description="item.rocrate.description" />
+                    </div>
                 </div>
                 <div class="hidden lg:block">
                     <render-location-component :geo="item.rocrate.contentLocation" />
@@ -44,6 +46,7 @@ import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import RenderContentComponent from "./RenderContent.component.vue";
 import RenderLocationComponent from "./RenderLocation.component.vue";
+import RenderDescriptionComponent from "./RenderDescription.component.vue";
 import LoadingErrorComponent from "./LoadingError.component.vue";
 import DataDisplayComponent from "./DataDisplay.component.vue";
 
@@ -51,6 +54,7 @@ export default {
     components: {
         RenderContentComponent,
         LoadingErrorComponent,
+        RenderDescriptionComponent,
         RenderLocationComponent,
         DataDisplayComponent
     },

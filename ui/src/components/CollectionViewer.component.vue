@@ -33,7 +33,11 @@
                         </div>
                         <span v-else>Items: {{collectionMembers.length}}</span>
                     </div>
-                    <div class="my-4 px-6 text-xl">{{collection.rocrate.description}}</div>
+                    <div class="my-4 px-6 text-xl">
+                        <render-description-component
+                            :description="collection.rocrate.description"
+                        />
+                    </div>
                     <div class="flex flex-row flex-wrap">
                         <div
                             v-for="(item, idx) of this.collection.rocrate.collectionMembers"
@@ -59,6 +63,7 @@
 import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import RenderLocationComponent from "./RenderLocation.component.vue";
+import RenderDescriptionComponent from "./RenderDescription.component.vue";
 import LoadingErrorComponent from "./LoadingError.component.vue";
 import DataDisplayComponent from "./DataDisplay.component.vue";
 
@@ -66,6 +71,7 @@ export default {
     components: {
         LoadingErrorComponent,
         RenderLocationComponent,
+        RenderDescriptionComponent,
         DataDisplayComponent
     },
     data() {
