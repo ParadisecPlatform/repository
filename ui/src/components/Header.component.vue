@@ -12,10 +12,10 @@
             <i class="fas fa-info-circle"></i>
             <span class="hidden md:inline">About</span>
         </router-link>
-        <router-link to="/support" class="px-5 hidden md:block">
+        <!-- <router-link to="/support" class="px-5 hidden md:block">
             <i class="fas fa-question-circle"></i>
             <span class="hidden md:inline">Support</span>
-        </router-link>
+        </router-link>-->
         <div class="flex-grow"></div>
         <div>OCFL Catalog Viewer</div>
     </div>
