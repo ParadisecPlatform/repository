@@ -1,11 +1,12 @@
 # Modern PARADISEC Catalog
 
-- [Modern PARADISEC Catalog](#modern-paradisec-catalog)
-  - [Getting setup](#getting-setup)
-  - [Starting the development environment](#starting-the-development-environment)
-  - [Stopping the development environment](#stopping-the-development-environment)
-  - [Repository Structure](#repository-structure)
-    - [User Interface](#user-interface)
+-   [Modern PARADISEC Catalog](#modern-paradisec-catalog)
+-   [Getting setup](#getting-setup)
+-   [Starting the development environment](#starting-the-development-environment)
+-   [Stopping the development environment](#stopping-the-development-environment)
+-   [Repository Structure](#repository-structure)
+    -   [User Interface](#user-interface)
+    -   [OCFL Tools](#ocfl-tools)
 
 How might Nabu work if backed by OCFL? Let's find out...
 
@@ -46,3 +47,7 @@ This is the User Interface (UI) code. The core technologies used to build the UI
     -   responsive CSS utilities - nice addition to the UI controls provided by ElementUI
 
 `Webpack` is used to build the application and `webpack-development-server` provides the auto-reload capability in development.
+
+### OCFL Tools
+
+In order to index content for use with this application you will also need the OCFL tools @ git@github.com:CoEDL/ocfl-tools.git. Check them out and read the instructions there on what's available and to use it.
