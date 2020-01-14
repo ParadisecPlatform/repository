@@ -6,7 +6,6 @@
                     <div class="style-search-controls overflow-scroll px-1">
                         <aggregation-component name="Domain" field="domain" class="mb-4" />
                         <aggregation-component name="Type" field="type" class="mb-4" />
-                        <aggregation-component name="Author" field="author" class="mb-4" />
                         <filter-by-contributor-component class="mb-4" />
                         <aggregation-component name="Publisher" field="publisher" class="mb-4" />
                         <aggregation-component
