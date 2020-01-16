@@ -1,8 +1,5 @@
 <template>
     <div class="mt-4">
-        <!-- <pre>
-        {{geo.coordinates}}
-        </pre>-->
         <div ref="map" class="z-0 style-map"></div>
     </div>
 </template>
@@ -13,8 +10,12 @@ import styles from "src/assets/variables.scss";
 
 export default {
     props: {
-        geo: {
-            type: Object,
+        topLeft: {
+            type: Array,
+            required: true
+        },
+        bottomRight: {
+            type: Array,
             required: true
         }
     },
@@ -30,7 +31,7 @@ export default {
                 //     "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012"
             }
         ).addTo(this.map);
-        const rectangle = L.rectangle(this.geo.coordinates, {
+        const rectangle = L.rectangle([this.topLeft, this.bottomRight], {
             color: styles.brandHighlightColor
         }).addTo(this.map);
         this.map.fitBounds(rectangle.getBounds());

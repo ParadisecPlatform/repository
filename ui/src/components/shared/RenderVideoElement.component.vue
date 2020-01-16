@@ -20,6 +20,7 @@
                 <render-transcription-selector-component
                     v-if="transcriptions && transcriptions.length"
                     :transcriptions="transcriptions"
+                    layout="column"
                     v-on:load-transcription="loadTranscription"
                 />
             </div>

@@ -3,7 +3,8 @@
         <el-radio-group
             v-model="selectedTranscription"
             @change="loadTranscription"
-            class="flex flex-row flex-wrap my-4"
+            class="flex flex-wrap my-4"
+            :class="{ 'flex-col': this.layout === 'column' }"
         >
             <el-radio
                 v-for="(transcription, idx) of transcriptions"
@@ -23,6 +24,9 @@ export default {
         transcriptions: {
             type: Array,
             required: true
+        },
+        layout: {
+            type: String
         }
     },
     data() {

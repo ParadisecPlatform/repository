@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
         <div class="flex flex-col md:flex-row my-3">
-            <div class="text-2xl" v-if="files.length">{{files[current].name}}</div>
+            <div class="text-xl" v-if="documents.length">{{documents[current].name}}</div>
             <div class="flex-grow"></div>
             <el-pagination
                 background
@@ -13,12 +13,14 @@
             ></el-pagination>
         </div>
         <pre class="style-file-view">
-        <code v-html="fileContent"></code>
-    </pre>
+            <code v-html="fileContent"></code>
+        </pre>
     </div>
 </template>
 
 <script>
+import { cloneDeep, compact, orderBy, groupBy } from "lodash";
+
 import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import Prism from "prismjs";
@@ -26,33 +28,52 @@ Prism.highlightAll();
 
 export default {
     props: {
-        files: {
-            type: Array | undefined,
+        data: {
+            type: Object,
             required: true
         }
     },
     data() {
         return {
+            documents: [],
             pagerCount: window.innerWidth < 500 ? 5 : 7,
             total: 0,
             current: 0,
-            fileContent: ""
+            fileContent: "",
+            loading: false
         };
     },
     mounted() {
-        this.total = this.files.length;
-        this.highlight();
+        this.loadDocuments();
     },
     methods: {
+        loadDocuments() {
+            let documents = this.data.objectifiedCrate.hasPart.filter(
+                file => file.encodingFormat === "application/xml"
+            );
+
+            const datafiles = cloneDeep(this.data.datafiles);
+            documents = documents.map(d => {
+                if (!datafiles[d.name]) return undefined;
+
+                return {
+                    ...d,
+                    path: datafiles[d.name].pop().path
+                };
+            });
+            documents = compact(documents);
+            this.documents = documents;
+            this.total = this.documents.length;
+            if (this.total) this.highlight();
+        },
         async highlight() {
-            let file = this.files[this.current];
+            let file = this.documents[this.current];
             let data = await load({ file });
             this.fileContent = Prism.highlight(
                 data,
                 Prism.languages.xml,
                 "xml"
             );
-
             async function load({ file }) {
                 try {
                     return await dataLoader.loadFile({ file });

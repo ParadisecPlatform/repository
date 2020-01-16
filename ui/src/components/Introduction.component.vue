@@ -5,9 +5,11 @@
         </div>
         <div class="flex flex-col mt-5">
             <p>
-                This application is a Proof of Concept demonstrating a single page application operating
-                over an OCFL on-disk repository with search capability provided via Elastic Search. Read
-                <router-link to="/about">the about page</router-link>&nbsp;to find out more.
+                This application is a Proof of Concept demonstrating a single
+                page application operating over an OCFL on-disk repository with
+                search capability provided via Elastic Search. Read
+                <router-link to="/about">the about page</router-link>&nbsp;to
+                find out more.
             </p>
             <introduction-stats-component class="hidden md:block" />
         </div>
@@ -18,22 +20,32 @@
         <div class="my-4 flex flex-col justify-center">
             <div>Or navigate directly to a collection:</div>
             <div class="flex flex-row flex-wrap justify-center">
-                <el-tag v-for="(collection, idx) of collections" :key="idx" class="m-2">
-                    <router-link :to="route(collection)">/paradisec.org.au/{{collection}}</router-link>
+                <el-tag
+                    v-for="(collection, idx) of paradisec.collections"
+                    :key="idx"
+                    class="m-2"
+                >
+                    <router-link :to="route(collection)">{{
+                        collection
+                    }}</router-link>
                 </el-tag>
             </div>
             <div class="mt-4">Or an item:</div>
             <div class="flex flex-row flex-wrap justify-center">
-                <el-tag v-for="(item , idx) of items" :key="idx" class="m-2">
-                    <router-link :to="route(item)">/paradisec.org.au/{{item}}</router-link>
+                <el-tag
+                    v-for="(item, idx) of paradisec.items"
+                    :key="idx"
+                    class="m-2"
+                >
+                    <router-link :to="route(item)">{{ item }}</router-link>
                 </el-tag>
             </div>
         </div>
         <div class="m-4 text-center">
             <strong>
                 Note that only the items listed above have content loaded.
-                <br />For all other items only the metadata
-                is available in this demonstrator.
+                <br />For all other items only the metadata is available in this
+                demonstrator.
             </strong>
         </div>
     </div>
@@ -48,22 +60,24 @@ export default {
     },
     data() {
         return {
-            collections: ["AC1", "NT1", "NT5"],
-            items: [
-                "AC1/001",
-                "AC1/002",
-                "NT1/98007",
-                "NT1/2004",
-                "NT1/20003",
-                "NT3/nafakoron",
-                "NT3/SESAKE",
-                "NT5/TokelauOf",
-                "NT6/2005V001",
-                "PAMBU/DOC1014",
-                "SN1/MM20130708Museum",
-                "WDVA1/MIR_07",
-                "WDVA1/TJILK05"
-            ]
+            paradisec: {
+                collections: ["AC1", "NT1", "NT5"],
+                items: [
+                    "AC1/001",
+                    "AC1/002",
+                    "NT1/98007",
+                    "NT1/2004",
+                    "NT1/20003",
+                    "NT3/nafakoron",
+                    "NT3/SESAKE",
+                    "NT5/TokelauOf",
+                    "NT6/2005V001",
+                    "PAMBU/DOC1014",
+                    "SN1/MM20130708Museum",
+                    "WDVA1/MIR_07",
+                    "WDVA1/TJILK05"
+                ]
+            }
         };
     },
     computed: {
@@ -75,8 +89,8 @@ export default {
         }
     },
     methods: {
-        route(collection) {
-            return `/paradisec.org.au/${collection}`;
+        route(target) {
+            return `/view/${target}`;
         }
     }
 };

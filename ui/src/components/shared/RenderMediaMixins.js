@@ -1,5 +1,8 @@
 "use strict";
 
+import { DataLoader } from "src/services/data-loader.service";
+const dataLoader = new DataLoader();
+
 import RenderTranscriptionsComponent from "./RenderTranscriptions.component.vue";
 import RenderTranscriptionSelectorComponent from "./RenderTranscriptionSelector.component.vue";
 
@@ -20,28 +23,19 @@ export let mixin = {
         transcriptions: {
             type: Array | undefined,
             required: true
-        },
-        isActive: {
-            type: Boolean,
-            required: true
         }
     },
     data() {
         return {
-            watchers: {},
             currentTime: 0,
             selectedTranscription: undefined
         };
     },
     mounted() {
-        this.watchers.isActive = this.$watch("isActive", this.stopVideo);
         this.selectedTranscription =
             this.transcriptions && this.transcriptions.length
                 ? this.transcriptions[0]
                 : undefined;
-    },
-    beforeDestroy() {
-        this.watchers.isActive();
     },
     methods: {
         playFrom({ start, end }) {
@@ -55,10 +49,7 @@ export let mixin = {
             if (this.$refs.mediaElement)
                 this.currentTime = this.$refs.mediaElement.currentTime;
         },
-        stopVideo() {
-            if (!this.isActive) this.$refs.mediaElement.pause();
-        },
-        loadTranscription(transcription) {
+        async loadTranscription(transcription) {
             this.selectedTranscription = transcription;
         }
     }

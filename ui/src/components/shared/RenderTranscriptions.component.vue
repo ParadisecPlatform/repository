@@ -25,7 +25,10 @@
             <div
                 v-if="!transcription.segments || !transcription.segments.length"
                 class="text-center"
-            >There was an error loading that file. This is typically due to the XML not being well-formed.</div>
+            >
+                There was an error loading that file. This is typically due to
+                the XML not being well-formed.
+            </div>
         </div>
     </div>
 </template>
@@ -78,12 +81,14 @@ export default {
     methods: {
         async loadTranscription() {
             if (!this.selectedTranscription) return;
-            let transcription = this.transcriptions.filter(
-                t => t.id === this.selectedTranscription.id
-            )[0];
+            let transcription = { ...this.selectedTranscription };
             try {
                 this.transcription = {
                     ...transcription,
+                    displayName: (transcription.displayName = transcription.name
+                        .split(".")
+                        .slice(0, -1)
+                        .join(".")),
                     ...(await dataLoader.loadTranscription({
                         transcription
                     }))
@@ -92,7 +97,7 @@ export default {
                     this.$scrollTo(`#${transcription.displayName}`, 300, {
                         container: `#${transcription.displayName}`
                     });
-                }, 200);
+                }, 1000);
             } catch (error) {
                 console.log(error);
             }
