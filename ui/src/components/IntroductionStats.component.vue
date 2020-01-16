@@ -25,7 +25,7 @@ export default {
         return {
             chartWidth: window.innerWidth <= 1024 ? 200 : 300,
             show: false,
-            content: ["types", "domains", "authors", "publishers"],
+            content: ["types", "domains", "publishers"],
             chart: []
         };
     },
@@ -63,5 +63,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
