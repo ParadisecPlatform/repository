@@ -5,7 +5,7 @@
         </div>
         <div
             @click="loadVersion(v)"
-            class="cursor-pointer bg-gray-400 mx-1 p-1 rounded style-version-selector"
+            class="cursor-pointer bg-gray-400 mx-1 px-2 py-1 rounded style-version-selector"
             v-for="(v, idx) of versions"
             :key="idx"
             :class="{
