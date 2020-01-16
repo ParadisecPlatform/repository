@@ -3,16 +3,11 @@
         <div v-if="error">The item is currently unavailable.</div>
         <div v-if="componentFile">
             <div class="flex flex-row text-sm">
-                <div class="mx-2">Version: {{ocflObject.version}};</div>
-                <div>OCFL Object versions:</div>
-                <el-pagination
-                    :small="true"
-                    :background="true"
-                    layout="prev, pager, next"
-                    :page-size="1"
-                    :total="ocflObject.versions.length"
-                    @current-change="update"
-                ></el-pagination>
+                <version-selection-component
+                    :selected-version="ocflObject.version"
+                    :versions="[...ocflObject.versions].reverse()"
+                    v-on:load-version="update"
+                />
             </div>
             <component v-bind:is="componentFile" :data="ocflObject"></component>
         </div>
@@ -23,8 +18,13 @@
 import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 
+import VersionSelectionComponent from "./VersionSelection.component.vue";
+
 import renderers from "./renderers";
 export default {
+    components: {
+        VersionSelectionComponent
+    },
     data() {
         return {
             itemIdentifier: null,
@@ -100,9 +100,8 @@ export default {
                 this.viewComponent = viewComponent;
             });
         },
-        update(version) {
-            version = this.ocflObject.versions[version - 1].version;
-            this.loadViewer({ version });
+        update(v) {
+            this.loadViewer({ version: v.version });
         }
     }
 };
