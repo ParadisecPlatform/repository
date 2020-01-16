@@ -90,18 +90,22 @@ export class DataLoader {
     async load({ identifier, version, configuration }) {
         identifier = this.hash(identifier);
         let path = pairtree.path(identifier);
-        let inventoryPath;
-        if (version) {
-            inventoryPath = `${this.repository}${path}${version}/inventory.json`;
-        } else {
-            inventoryPath = `${this.repository}${path}inventory.json`;
-        }
+        // always get latest inventory and extract versions
+        let inventoryPath = `${this.repository}${path}inventory.json`;
         let response = await fetch(inventoryPath);
         if (!response.ok) throw response;
 
         let inventory = await response.json();
-
         const versions = this.getObjectVersions({ inventory });
+
+        // if requesting specific version - get that and load the rest
+        if (version) {
+            inventoryPath = `${this.repository}${path}${version}/inventory.json`;
+            let response = await fetch(inventoryPath);
+            if (!response.ok) throw response;
+            inventory = await response.json();
+        }
+
         let ocflObject = {
             inventory,
             versions,
