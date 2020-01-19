@@ -5,20 +5,22 @@
         <div class="flex flex-col">
             <div class="flex flex-row xl:px-8">
                 <div class="flex flex-col w-3/4 px-2">
-                    <div class="my-4 text-3xl">{{ data.objectifiedCrate.name }}</div>
-                    <div>collection: {{collectionIdentifier}}</div>
+                    <div class="my-4 text-3xl">
+                        {{ data.objectifiedCrate.name }}
+                    </div>
+                    <div>collection: {{ collectionIdentifier }}</div>
                     <div class="h-2"></div>
                     <div>
                         Contributors:
                         <ul class="px-6">
                             <li
                                 class="list-disc"
-                                v-for="(contributor, idx) of data.objectifiedCrate
-                                    .contributor"
+                                v-for="(contributor, idx) of data
+                                    .objectifiedCrate.contributor"
                                 :key="idx"
                             >
                                 {{ contributor.contributor.name }} ({{
-                                contributor.name
+                                    contributor.name
                                 }})
                             </li>
                         </ul>
@@ -29,22 +31,45 @@
                             :description="data.objectifiedCrate.description"
                         />
                     </div>
+                    <render-collection-information-component :data="data" />
                     <div class="flex flex-row flex-wrap">
                         <div
                             v-for="(item, idx) of data.objectifiedCrate
                                 .hasMember"
                             :key="idx"
                         >
-                            <el-tag type="warning" effect="dark" class="mx-1 my-1">
-                                <router-link :to="itemLink(item)">{{itemLabel(item)}}</router-link>
+                            <el-tag
+                                type="warning"
+                                effect="dark"
+                                class="mx-1 my-1"
+                            >
+                                <router-link :to="itemLink(item)">{{
+                                    itemLabel(item)
+                                }}</router-link>
                             </el-tag>
                         </div>
                     </div>
                 </div>
                 <div class="hidden lg:block">
                     <render-location-component
-                        :top-left="JSON.parse(`[${data.objectifiedCrate.contentLocation.geo.box.split(' ')[0]}]`)"
-                        :bottom-right="JSON.parse(`[${data.objectifiedCrate.contentLocation.geo.box.split(' ')[1]}]`)"
+                        :top-left="
+                            JSON.parse(
+                                `[${
+                                    data.objectifiedCrate.contentLocation.geo.box.split(
+                                        ' '
+                                    )[0]
+                                }]`
+                            )
+                        "
+                        :bottom-right="
+                            JSON.parse(
+                                `[${
+                                    data.objectifiedCrate.contentLocation.geo.box.split(
+                                        ' '
+                                    )[1]
+                                }]`
+                            )
+                        "
                     />
                 </div>
             </div>
@@ -54,6 +79,7 @@
 
 <script>
 import RenderLocationComponent from "components/shared/RenderLocation.component.vue";
+import RenderCollectionInformationComponent from "./RenderCollectionInformation.component.vue";
 import RenderDescriptionComponent from "components/shared/RenderDescription.component.vue";
 import DataDisplayComponent from "components/shared/DataDisplay.component.vue";
 import { id } from "date-fns/locale";
@@ -61,6 +87,7 @@ import { id } from "date-fns/locale";
 export default {
     components: {
         RenderLocationComponent,
+        RenderCollectionInformationComponent,
         RenderDescriptionComponent,
         DataDisplayComponent
     },

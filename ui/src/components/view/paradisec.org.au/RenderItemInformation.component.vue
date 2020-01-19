@@ -1,14 +1,17 @@
 <template>
     <div>
         <el-button
-            type="text"
+            size="mini"
             @click="showItemInformation = !showItemInformation"
         >
             <span v-show="showItemInformation">hide</span>
             <span v-show="!showItemInformation">show</span>
-            item information</el-button
+            item metadata
+        </el-button>
+        <div
+            class="flex flex-col my-2 bg-yellow-300 p-4 rounded-lg"
+            v-if="showItemInformation"
         >
-        <div class="flex flex-col" v-if="showItemInformation">
             <div
                 v-for="(field, idx) of fields"
                 :key="idx"
@@ -18,7 +21,7 @@
                     {{ field.label }}: &nbsp;
                 </div>
                 <div
-                    class="text-gray-700 font-hairline"
+                    class="text-gray-700 font-normal tracking-wide"
                     v-if="field.prop && field.prop.length"
                 >
                     {{ field.prop }}
@@ -32,7 +35,7 @@
 </template>
 
 <script>
-import { date } from "src/filters";
+import { date, toBoolean } from "src/filters";
 export default {
     props: {
         data: {
@@ -54,9 +57,11 @@ export default {
                 },
                 {
                     label: "Born Digital",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/bornDigital"
-                    ]
+                    prop: toBoolean(
+                        this.data.objectifiedCrate[
+                            "http://paradisec.org.au/bornDigital"
+                        ]
+                    )
                 },
                 {
                     label: "Cite As",
@@ -86,9 +91,11 @@ export default {
                 },
                 {
                     label: "External",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/external"
-                    ]
+                    prop: toBoolean(
+                        this.data.objectifiedCrate[
+                            "http://paradisec.org.au/external"
+                        ]
+                    )
                 },
                 {
                     label: "Ingest Notes",
@@ -116,9 +123,11 @@ export default {
                 },
                 {
                     label: "Private",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/private"
-                    ]
+                    prop: toBoolean(
+                        this.data.objectifiedCrate[
+                            "http://paradisec.org.au/private"
+                        ]
+                    )
                 },
                 {
                     label: "Received On",
