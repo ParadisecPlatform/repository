@@ -19,6 +19,10 @@ import App from "components/app.vue";
 import { router } from "./routes";
 import { store } from "store";
 
+import * as filters from "./filters";
+const filterNames = Object.keys(filters);
+filterNames.forEach(filter => Vue.filter(filter, filters[filter]));
+
 (async () => {
     await store.dispatch("initialise");
     const configuration = store.state.configuration;
