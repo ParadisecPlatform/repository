@@ -64,10 +64,10 @@ export default {
                 console.debug(`Loading: ${identifier}: ${version}`);
                 try {
                     let params;
-                    if (version) {
+                    if (version || this.$route.query.version) {
                         params = {
                             identifier,
-                            version,
+                            version: version || this.$route.query.version,
                             configuration: this.$store.state.configuration
                         };
                     } else {
@@ -84,6 +84,14 @@ export default {
                 }
                 let { domain, additionalType } = this.ocflObject;
 
+                if (
+                    !this.$route.query.version ||
+                    this.$route.query.version !== this.ocflObject.version
+                )
+                    this.$router.replace({
+                        path: this.$route.path,
+                        query: { version: this.ocflObject.version }
+                    });
                 let viewComponent;
                 if (
                     domain &&
