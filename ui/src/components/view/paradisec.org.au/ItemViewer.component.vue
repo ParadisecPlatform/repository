@@ -5,11 +5,17 @@
         <div class="flex flex-col">
             <div class="flex flex-row xl:px-8">
                 <div class="w-3/4">
-                    <div class="my-4 text-3xl">{{ data.objectifiedCrate.name }}</div>
-                    <div>Item: {{collectionIdentifier}} / {{itemIdentifier}}</div>
+                    <div class="my-4 text-3xl">
+                        {{ data.objectifiedCrate.name }}
+                    </div>
+                    <div>
+                        Item: {{ collectionIdentifier }} / {{ itemIdentifier }}
+                    </div>
                     <div>
                         Collection:
-                        <router-link :to="collectionLink()">{{collectionIdentifier}}</router-link>
+                        <router-link :to="collectionLink()">{{
+                            collectionIdentifier
+                        }}</router-link>
                     </div>
                     <div class="h-2"></div>
                     <div>
@@ -17,12 +23,12 @@
                         <ul class="px-6">
                             <li
                                 class="list-disc"
-                                v-for="(contributor, idx) of data.objectifiedCrate
-                                    .contributor"
+                                v-for="(contributor, idx) of data
+                                    .objectifiedCrate.contributor"
                                 :key="idx"
                             >
                                 {{ contributor.contributor.name }} ({{
-                                contributor.name
+                                    contributor.name
                                 }})
                             </li>
                         </ul>
@@ -35,10 +41,29 @@
                 </div>
                 <div class="hidden lg:block">
                     <render-location-component
-                        :top-left="JSON.parse(`[${data.objectifiedCrate.contentLocation.geo.box.split(' ')[0]}]`)"
-                        :bottom-right="JSON.parse(`[${data.objectifiedCrate.contentLocation.geo.box.split(' ')[1]}]`)"
+                        :top-left="
+                            JSON.parse(
+                                `[${
+                                    data.objectifiedCrate.contentLocation.geo.box.split(
+                                        ' '
+                                    )[0]
+                                }]`
+                            )
+                        "
+                        :bottom-right="
+                            JSON.parse(
+                                `[${
+                                    data.objectifiedCrate.contentLocation.geo.box.split(
+                                        ' '
+                                    )[1]
+                                }]`
+                            )
+                        "
                     />
                 </div>
+            </div>
+            <div class="my-4">
+                <render-item-information-component :data="data" />
             </div>
             <div class="mt-4">
                 <render-content-component :data="data" />
@@ -49,6 +74,7 @@
 
 <script>
 import RenderContentComponent from "./RenderContent.component.vue";
+import RenderItemInformationComponent from "./RenderItemInformation.component.vue";
 import RenderLocationComponent from "src/components/shared/RenderLocation.component.vue";
 import RenderDescriptionComponent from "src/components/shared/RenderDescription.component.vue";
 import DataDisplayComponent from "src/components/shared/DataDisplay.component.vue";
@@ -56,6 +82,7 @@ import DataDisplayComponent from "src/components/shared/DataDisplay.component.vu
 export default {
     components: {
         RenderContentComponent,
+        RenderItemInformationComponent,
         RenderDescriptionComponent,
         RenderLocationComponent,
         DataDisplayComponent
