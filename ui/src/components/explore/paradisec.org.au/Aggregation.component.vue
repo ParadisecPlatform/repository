@@ -1,13 +1,14 @@
 <template>
     <div>
-        <div class="underline">{{name}}</div>
+        <div class="underline">{{ name }}</div>
         <div class="flex flex-col text-base">
             <ol>
-                <li v-for="(agg, idx) of aggregations.slice(0,5)" :key="idx">
+                <li v-for="(agg, idx) of aggregations.slice(0, 5)" :key="idx">
                     <a
                         class="text-sm style-filter-selection"
                         @click.stop.prevent="applyAggregation(agg)"
-                    >{{agg.key}} ({{agg.doc_count}})</a>
+                        >{{ agg.key }} ({{ agg.doc_count }})</a
+                    >
                 </li>
             </ol>
         </div>
@@ -16,7 +17,8 @@
             @click.stop.prevent="showMore"
             class="hidden md:block text-xs"
             v-if="displayShowMoreToggle"
-        >show more</a>
+            >show more</a
+        >
 
         <el-drawer
             :title="setDrawerTitle()"
@@ -30,7 +32,8 @@
                         <a
                             class="text-sm style-filter-selection"
                             @click.stop.prevent="applyAggregation(agg)"
-                        >{{agg.key}} ({{agg.doc_count}})</a>
+                            >{{ agg.key }} ({{ agg.doc_count }})</a
+                        >
                     </li>
                 </ol>
             </div>
@@ -56,7 +59,8 @@ export default {
                     "author",
                     "type",
                     "publisher",
-                    "contentType"
+                    "contentType",
+                    "hasContent"
                 ].includes(val)
         }
     },
@@ -113,6 +117,11 @@ export default {
                     break;
                 case "contentType":
                     aggregations = await this.search.aggregateContentTypes({
+                        size
+                    });
+                    break;
+                case "hasContent":
+                    aggregations = await this.search.aggregateHasContent({
                         size
                     });
                     break;

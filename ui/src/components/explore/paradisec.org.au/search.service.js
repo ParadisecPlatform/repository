@@ -92,6 +92,9 @@ export class SearchService {
                 case "type":
                     term = constructTypeQuery({ filter });
                     break;
+                case "hasContent":
+                    term = constructHasContentQuery({ filter });
+                    break;
                 case "publisher":
                     term = constructPublisherQuery({ filter });
                     break;
@@ -160,6 +163,12 @@ export class SearchService {
         function constructTypeQuery({ filter }) {
             return {
                 term: { additionalType: filter.value }
+            };
+        }
+
+        function constructHasContentQuery({ filter }) {
+            return {
+                term: { hasContent: filter.value }
             };
         }
 
@@ -377,6 +386,29 @@ export class SearchService {
                 type: {
                     terms: {
                         field: "additionalType",
+                        size
+                    }
+                }
+            }
+        };
+        let filters = [...this.store.state.search.filters];
+        let q = this.assembleQuery({ filters });
+        query = {
+            query: q,
+            ...query
+        };
+        let response = await this.execute({ query });
+        let types = response.aggregations.type.buckets;
+        return types;
+    }
+
+    async aggregateHasContent({ size = numberOfAggregations }) {
+        let query = {
+            size: 0,
+            aggs: {
+                type: {
+                    terms: {
+                        field: "hasContent",
                         size
                     }
                 }

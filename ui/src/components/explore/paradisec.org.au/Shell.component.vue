@@ -14,6 +14,11 @@
                             field="type"
                             class="mb-4"
                         />
+                        <aggregation-component
+                            name="Has Content"
+                            field="hasContent"
+                            class="mb-4"
+                        />
                         <filter-by-contributor-component class="mb-4" />
                         <aggregation-component
                             name="Publisher"
