@@ -10,15 +10,17 @@
                 Item
             </span>
         </div>
-        <router-link :to="{ path: itemContent.identifier }">
-            <div class="text-lg">{{itemContent.name}}</div>
+        <router-link :to="{ path: mashIdentifier(itemContent.identifier) }">
+            <div class="text-lg">{{ itemContent.name }}</div>
         </router-link>
         <div class="text-base">
-            {{itemContent.description.text}}
+            {{ itemContent.description.text }}
             <span v-if="itemContent.description.truncated">...</span>
         </div>
-        <router-link :to="{ path: itemContent.identifier }">
-            <div class="text-sm">{{itemContent.identifier}}</div>
+        <router-link :to="{ path: mashIdentifier(itemContent.identifier) }">
+            <div class="text-sm">
+                {{ mashIdentifier(itemContent.identifier) }}
+            </div>
         </router-link>
     </div>
 </template>
@@ -54,9 +56,18 @@ export default {
             domain: item.identifier.filter(i => i.name === "domain")[0].value,
             identifier: item.identifier.filter(i => i.name === "id")[0].value
         };
+    },
+    methods: {
+        mashIdentifier(identifier) {
+            const domain = this.$store.state.configuration.domain;
+            if (!identifier) return;
+            if (domain) {
+                identifier = identifier.replace(`/${domain}/`, "");
+            }
+            return `/view/${identifier}`;
+        }
     }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

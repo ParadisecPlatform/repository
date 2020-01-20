@@ -2,18 +2,19 @@
     <div>
         <div class="underline">Date</div>
         <el-radio-group v-model="field" @change="loadDates">
-            <el-radio label="schema:dateCreated">created</el-radio>
-            <el-radio label="schema:dateModified">modified</el-radio>
+            <el-radio label="dateCreated">created</el-radio>
+            <el-radio label="dateModified">modified</el-radio>
         </el-radio-group>
         <el-date-picker
             type="monthrange"
             size="small"
             v-model="selectedDateRange"
             unlink-panels
-            range-separator="To"
+            range-separator="-"
             start-placeholder="Start date"
             end-placeholder="End date"
-            :clearable="false"
+            format="MMM yyyy"
+            :clearable="true"
             :picker-options="pickerOptions"
             @change="validateDateSelection"
             @onPick="validateDateSelection"
@@ -31,7 +32,7 @@ export default {
             dates: [],
             selectedDateRange: {},
             dateBounds: {},
-            field: "schema:dateCreated",
+            field: "dateCreated",
             pickerOptions: {
                 shortcuts: [
                     {
@@ -98,21 +99,28 @@ export default {
             this.selectedDateRange = [this.dateBounds.min, this.dateBounds.max];
         },
         validateDateSelection(date) {
-            if (isBefore(date[0], parseISO(this.dateBounds.min))) {
-                this.selectedDateRange[0] = parseISO(this.dateBounds.min);
-            }
-            if (isAfter(date[1], parseISO(this.dateBounds.max))) {
-                this.selectedDateRange[1] = parseISO(this.dateBounds.max);
-            }
-            this.search.applyFilter({
-                filter: {
-                    field: this.field,
-                    dateRange: {
-                        min: this.selectedDateRange[0].toISOString(),
-                        max: this.selectedDateRange[1].toISOString()
-                    }
+            if (!date) {
+                this.selectedDateRange = [
+                    parseISO(this.dateBounds.min),
+                    parseISO(this.dateBounds.max)
+                ];
+            } else {
+                if (isBefore(date[0], parseISO(this.dateBounds.min))) {
+                    this.selectedDateRange[0] = parseISO(this.dateBounds.min);
                 }
-            });
+                if (isAfter(date[1], parseISO(this.dateBounds.max))) {
+                    this.selectedDateRange[1] = parseISO(this.dateBounds.max);
+                }
+                this.search.applyFilter({
+                    filter: {
+                        field: this.field,
+                        dateRange: {
+                            min: this.selectedDateRange[0].toISOString(),
+                            max: this.selectedDateRange[1].toISOString()
+                        }
+                    }
+                });
+            }
         }
     }
 };

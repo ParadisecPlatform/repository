@@ -1,4 +1,3 @@
-
 <template>
     <div class="flex flex-col">
         <el-pagination
@@ -26,12 +25,13 @@
             @current-change="update"
             v-if="results.total"
         ></el-pagination>
-        <div v-if="!results.total" class="text-center">There are no results matching those filters.</div>
+        <div v-if="!results.total" class="text-center">
+            There are no results matching those filters.
+        </div>
     </div>
 </template>
 
 <script>
-import { SearchService } from "./search.service";
 import RenderSearchResultComponent from "./RenderSearchResult.component.vue";
 
 export default {
@@ -49,9 +49,6 @@ export default {
             return this.$store.state.search.results;
         }
     },
-    mounted() {
-        this.search = new SearchService({ store: this.$store });
-    },
     methods: {
         update(page) {
             this.page = page - 1;
@@ -61,5 +58,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

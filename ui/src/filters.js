@@ -2,25 +2,27 @@
 
 import { format, parseISO } from "date-fns";
 
-export function date(value, fmt) {
-    if (typeof value === "string") value = parseISO(value);
+export function date(date, fmt) {
+    if (!date || typeof date === "object") return "";
+    if (typeof date === "string") date = parseISO(date);
     if (fmt) {
-        return format(value, fmt);
+        return format(date, fmt);
     }
-    return format(value, "dd/MM/yyyy");
+    return format(date, "dd/MM/yyyy");
 }
 
 export function toBoolean(string) {
+    if (!string || typeof string === "object") return "";
     switch (string.toLowerCase().trim()) {
         case "true":
         case "yes":
         case "1":
-            return "True";
+            return "Yes";
         case "false":
         case "no":
         case "0":
         case null:
-            return "False";
+            return "No";
         default:
             return String(Boolean(string));
     }

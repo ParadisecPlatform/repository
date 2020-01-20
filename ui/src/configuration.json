@@ -16,5 +16,6 @@
     "service": {
         "search": "http://localhost:9200",
         "api": null
-    }
+    },
+    "exploreComponent": "./paradisec.org.au/Shell.component.vue"
 }
