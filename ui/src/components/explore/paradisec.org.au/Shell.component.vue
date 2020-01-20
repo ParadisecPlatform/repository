@@ -42,7 +42,10 @@
                         class="h-32 overflow-scroll"
                         v-if="notPhone"
                     />
-                    <search-results-component class="p-4" />
+                    <search-results-component
+                        class="p-4"
+                        v-on:update-search="updateSearch"
+                    />
                 </div>
             </div>
         </div>
@@ -89,6 +92,11 @@ export default {
         });
         this.search = new SearchService({ store: this.$store });
         this.search.search({ page: 0 });
+    },
+    methods: {
+        updateSearch(params) {
+            this.search.search(params);
+        }
     }
 };
 </script>

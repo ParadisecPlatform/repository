@@ -52,7 +52,7 @@ export default {
     methods: {
         update(page) {
             this.page = page - 1;
-            this.search.search({ page: this.page });
+            this.$emit("update-search", { page: this.page });
         }
     }
 };
