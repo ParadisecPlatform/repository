@@ -1,5 +1,6 @@
 <template>
     <div>
+        <license-component :data="data" />
         <data-display-component :data="data" />
 
         <div class="flex flex-col">
@@ -82,6 +83,7 @@ import RenderLocationComponent from "components/shared/RenderLocation.component.
 import RenderCollectionInformationComponent from "./RenderCollectionInformation.component.vue";
 import RenderDescriptionComponent from "components/shared/RenderDescription.component.vue";
 import DataDisplayComponent from "components/shared/DataDisplay.component.vue";
+import LicenseComponent from "./License.component.vue";
 import { id } from "date-fns/locale";
 
 export default {
@@ -89,7 +91,8 @@ export default {
         RenderLocationComponent,
         RenderCollectionInformationComponent,
         RenderDescriptionComponent,
-        DataDisplayComponent
+        DataDisplayComponent,
+        LicenseComponent
     },
     props: {
         data: {
