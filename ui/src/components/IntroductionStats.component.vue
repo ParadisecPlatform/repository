@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { SearchService } from "./explore/search.service";
+// import { SearchService } from "./explore/search.service";
 import VueApexCharts from "vue-apexcharts";
 
 export default {

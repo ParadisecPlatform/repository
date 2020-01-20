@@ -11,7 +11,7 @@
                 <router-link to="/about">the about page</router-link>&nbsp;to
                 find out more.
             </p>
-            <introduction-stats-component class="hidden md:block" />
+            <!-- <introduction-stats-component class="hidden md:block" /> -->
         </div>
         <div class="mt-4 inline">
             Search the catalog via
