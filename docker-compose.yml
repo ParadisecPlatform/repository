@@ -16,7 +16,7 @@ services:
         mem_limit: 1024M
         volumes:
             - $PWD/ui:/srv/ui:cached
-            - $PWD/ocfl-repository:/srv/ui/dist/repository:cached
+            - $PWD/../data/ocfl-repository:/srv/ui/dist/repository:cached
             - ui-modules:/srv/ui/node_modules:delegated
         working_dir: /srv/ui
         command: ["npm", "run", "develop"]
