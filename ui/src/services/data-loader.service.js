@@ -136,10 +136,13 @@ export class DataLoader {
                 skipExpansion: true
             }
         );
-        if (isPlainObject(ocflObject.objectifiedCrate.hasPart))
-            ocflObject.objectifiedCrate.hasPart = [
-                ocflObject.objectifiedCrate.hasPart
-            ];
+        const ensureArray = ["hasPart", "contributor"];
+        for (let item of ensureArray) {
+            if (isPlainObject(ocflObject.objectifiedCrate[item]))
+                ocflObject.objectifiedCrate[item] = [
+                    ocflObject.objectifiedCrate[item]
+                ];
+        }
 
         ocflObject.domain = ocflObject.objectifiedCrate.identifier.filter(
             i => i.name === "domain"
