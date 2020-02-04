@@ -14,7 +14,7 @@ import ViewComponent from "components/view/Shell.component.vue";
 import SupportComponent from "components/support/Shell.component.vue";
 
 export function router({ configuration }) {
-    const routes = [
+    let routes = [
         { path: "*", name: "404", component: BadRequestComponent },
         {
             name: "HealthCheck",
@@ -50,6 +50,10 @@ export function router({ configuration }) {
             ]
         }
     ];
+    if (configuration.domain) {
+        let { router } = require(`./${configuration.domain}`);
+        routes = router({ routes });
+    }
 
     const router = new VueRouter({
         mode: "history",

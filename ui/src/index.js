@@ -16,7 +16,7 @@ Vue.use(VueScrollTo);
 Vue.use(infiniteScroll);
 Vue.use(VueMasonryPlugin);
 import App from "components/app.vue";
-import { router } from "./routes";
+import { router } from "./routes/";
 import { store } from "store";
 
 import * as filters from "./filters";
