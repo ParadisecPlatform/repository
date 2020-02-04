@@ -14,7 +14,8 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.footerComponent) return;
-            return () => import(`src/components/${this.footerComponent}`);
+            return () =>
+                import(`src/components/domain/${this.footerComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;

@@ -14,7 +14,8 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.introductionComponent) return;
-            return () => import(`src/components/${this.introductionComponent}`);
+            return () =>
+                import(`src/components/domain/${this.introductionComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;
