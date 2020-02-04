@@ -18,7 +18,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.12.0",
         "@fortawesome/fontawesome-svg-core": "^1.2.26",
-        "apexcharts": "^3.15.0",
+        "apexcharts": "^3.15.5",
         "babel-plugin-prismjs": "^1.1.1",
         "core-js": "^3.6.4",
         "date-fns": "^2.9.0",
@@ -39,15 +39,15 @@
         "vue-apexcharts": "^1.5.2",
         "vue-infinite-scroll": "^2.0.2",
         "vue-masonry": "^0.11.7",
-        "vue-router": "^3.1.4",
+        "vue-router": "^3.1.5",
         "vue-scrollto": "^2.17.1",
         "vuex": "^3.1.2"
     },
     "devDependencies": {
-        "@babel/cli": "^7.8.3",
-        "@babel/core": "^7.8.3",
+        "@babel/cli": "^7.8.4",
+        "@babel/core": "^7.8.4",
         "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-        "@babel/preset-env": "^7.8.3",
+        "@babel/preset-env": "^7.8.4",
         "babel-jest": "^24.9.0",
         "babel-loader": "^8.0.5",
         "clean-webpack-plugin": "^0.1.19",
@@ -63,7 +63,7 @@
         "jsdom-global": "^3.0.2",
         "koa-connect": "^2.0.1",
         "mini-css-extract-plugin": "^0.4.5",
-        "node-sass": "^4.13.0",
+        "node-sass": "^4.13.1",
         "optimize-css-assets-webpack-plugin": "^5.0.1",
         "postcss-loader": "^3.0.0",
         "raw-loader": "^0.5.1",
@@ -72,8 +72,8 @@
         "uglifyjs-webpack-plugin": "^2.1.1",
         "vue-loader": "^15.8.3",
         "vue-template-compiler": "^2.6.11",
-        "webpack": "4.28.0",
+        "webpack": "4.28.4",
         "webpack-cli": "^3.3.10",
-        "webpack-dev-server": "^3.10.1"
+        "webpack-dev-server": "^3.10.2"
     }
 }
