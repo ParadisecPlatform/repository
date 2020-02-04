@@ -33,22 +33,13 @@ You probably don't want to change this.
 you should leave as `http://localhost:9200` whilst in prod it's likely to be something like `/search` (assuming
 you've set up a proxy path via your nginx server to elastic - which you absolutely should do)
 
-## exploreComponent
-The `exploreComponent` configuration option tells the app which component to use for the explore 
-route. If a component is not defined then the `explore/SimpleSearch.component` is loaded in to the 
-view. So, if your deployment requires a specific explore component you can use this option to tell the app to use that as the default.
+## introductionComponent, exploreComponent, headerComponent, footerComponent
+These configuration options tell the app which component to use for that specific
+view. In the absence of this property or am empty definition the shell component will 
+try to load a generic view.
 
 **IMPORTANT** Given the way the renderer components are loaded you `MUST` define it 
-as a path relative to the `explore` folder. Defining it any other way will result 
-in the component failing to load.
-
-## introductionComponent
-
-The `introductionComponent` configuration option tells the app which component to use for the 
-introduction route. If a component is not defined then the `introduction/GenericIntroduction.component` is loaded in to the view. So, if your deployment requires a specific introduction component you can use this option to tell the app to use that as the default.
-
-**IMPORTANT** Given the way the renderer components are loaded you `MUST` define it 
-as a path relative to the `introduction` folder. Defining it any other way will result 
+as a path `relative to the relevant folder`. Defining it any other way will result 
 in the component failing to load.
 
 ## renderers
