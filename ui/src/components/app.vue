@@ -3,7 +3,7 @@
         <header class="fixed z-10 top-0 py-1 px-4 style-background w-full">
             <header-component></header-component>
         </header>
-        <div id="content" class="w-full xl:w-3/4 xxl:w-4/6 py-4 px-4 m-auto mt-8 pb-16">
+        <div id="content" class="w-full xl:w-3/4 xxl:w-4/6 py-4 px-4 m-auto mt-10 pb-16">
             <router-view></router-view>
         </div>
         <div

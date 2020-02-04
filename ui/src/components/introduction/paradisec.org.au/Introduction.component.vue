@@ -2,7 +2,7 @@
     <div>
         <div class="flex flex-col lg:flex-row">
             <div class="flex flex-col w-full lg:w-2/4 mr-1">
-                <div class="my-4 text-center text-lg">
+                <div class="text-center text-lg my-3 lg:my-6">
                     Welcome to the catalog of the
                     <span class="font-bold">PARADISEC</span> collection.
                 </div>
