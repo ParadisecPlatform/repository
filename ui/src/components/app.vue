@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import HeaderComponent from "./Header.component.vue";
-import FooterComponent from "./Footer.component.vue";
+import HeaderComponent from "./header/Shell.component.vue";
+import FooterComponent from "./footer/Shell.component.vue";
 
 export default {
     el: "#app",

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row w-full xl:w-3/4 xxl:w-4/6 m-auto py-4">
+    <div class="flex flex-row w-full xl:w-3/4 xxl:w-4/6 m-auto py-2 text-sm">
         <router-link to="/" class="px-5">
             <i class="fas fa-home"></i>
             <span class="hidden md:inline">Home</span>
@@ -17,7 +17,7 @@
             <span class="hidden md:inline">Support</span>
         </router-link>-->
         <div class="flex-grow"></div>
-        <div>OCFL Catalog Viewer</div>
+        <!-- <div>OCFL Catalog Viewer</div> -->
     </div>
 </template>
 
