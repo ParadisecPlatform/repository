@@ -25,10 +25,9 @@ export default {
     },
     methods: {
         loadHeader() {
-            let { headerComponent } = this.configuration;
-            if (!headerComponent)
-                headerComponent = "./GenericHeader.component.vue";
-            this.headerComponent = headerComponent;
+            let { header } = this.configuration;
+            if (!header) header = "./GenericHeader.component.vue";
+            this.headerComponent = header;
         }
     }
 };

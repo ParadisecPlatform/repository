@@ -17,8 +17,10 @@
         "search": "http://localhost:9200",
         "api": null
     },
-    "exploreComponent": "./paradisec.org.au/Shell.component.vue",
-    "introductionComponent": "./paradisec.org.au/Introduction.component.vue",
+    "explore": "./paradisec.org.au/Shell.component.vue",
+    "introduction": "./paradisec.org.au/Introduction.component.vue",
+    "header": "./paradisec.org.au/Header.component.vue",
+    "footer": "./paradisec.org.au/Footer.component.vue",
     "renderers": {
         "paradisec.org.au": {
             "item": "./paradisec.org.au/ItemViewer.component.vue",

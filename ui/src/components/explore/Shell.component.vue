@@ -25,10 +25,9 @@ export default {
     },
     methods: {
         loadExplorer() {
-            let { exploreComponent } = this.configuration;
-            if (!exploreComponent)
-                exploreComponent = "./SimpleSearch.component.vue";
-            this.exploreComponent = exploreComponent;
+            let { explore } = this.configuration;
+            if (!explore) explore = "./SimpleSearch.component.vue";
+            this.exploreComponent = explore;
         }
     }
 };

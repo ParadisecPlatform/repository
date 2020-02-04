@@ -25,10 +25,9 @@ export default {
     },
     methods: {
         loadFooter() {
-            let { footerComponent } = this.configuration;
-            if (!footerComponent)
-                footerComponent = "./GenericFooter.component.vue";
-            this.footerComponent = footerComponent;
+            let { footer } = this.configuration;
+            if (!footer) footer = "./GenericFooter.component.vue";
+            this.footerComponent = footer;
         }
     }
 };

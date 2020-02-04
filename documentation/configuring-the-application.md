@@ -33,7 +33,7 @@ You probably don't want to change this.
 you should leave as `http://localhost:9200` whilst in prod it's likely to be something like `/search` (assuming
 you've set up a proxy path via your nginx server to elastic - which you absolutely should do)
 
-## introductionComponent, exploreComponent, headerComponent, footerComponent
+## introduction, explore, header, footer
 These configuration options tell the app which component to use for that specific
 view. In the absence of this property or am empty definition the shell component will 
 try to load a generic view.

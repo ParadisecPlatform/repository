@@ -25,10 +25,10 @@ export default {
     },
     methods: {
         loadIntroduction() {
-            let { introductionComponent } = this.configuration;
-            if (!introductionComponent)
-                introductionComponent = "./GenericIntroduction.component.vue";
-            this.introductionComponent = introductionComponent;
+            let { introduction } = this.configuration;
+            if (!introduction)
+                introduction = "./GenericIntroduction.component.vue";
+            this.introductionComponent = introduction;
         }
     }
 };
