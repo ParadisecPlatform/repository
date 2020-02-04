@@ -51,8 +51,12 @@ export function router({ configuration }) {
         }
     ];
     if (configuration.domain) {
-        let { router } = require(`./${configuration.domain}`);
-        routes = router({ routes });
+        try {
+            let { router } = require(`./${configuration.domain}`);
+            routes = router({ routes });
+        } catch (error) {
+            // do nothing - likely no custom routing for that domain
+        }
     }
 
     const router = new VueRouter({
