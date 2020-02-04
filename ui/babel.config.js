@@ -18,6 +18,7 @@ module.exports = {
                 theme: "okaidia",
                 css: true
             }
-        ]
+        ],
+        "@babel/plugin-syntax-dynamic-import"
     ]
 };

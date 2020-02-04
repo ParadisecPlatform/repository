@@ -14,7 +14,12 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.headerComponent) return;
-            return () => import(`${this.headerComponent}`);
+            return () => ({
+                component: import(
+                    /* webpackChunkName: "header" */
+                    `src/components/${this.headerComponent}`
+                )
+            });
         },
         configuration: function() {
             return this.$store.state.configuration;

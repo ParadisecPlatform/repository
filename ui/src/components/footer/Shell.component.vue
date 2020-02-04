@@ -14,7 +14,12 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.footerComponent) return;
-            return () => import(`${this.footerComponent}`);
+            return () =>
+                import(
+                    /* webpackChunkName: "footer" */
+
+                    `src/components/${this.footerComponent}`
+                );
         },
         configuration: function() {
             return this.$store.state.configuration;

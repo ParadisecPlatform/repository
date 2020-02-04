@@ -1,5 +1,8 @@
 {
-    "domain": "paradisec.org.au",
+    "service": {
+        "search": "http://localhost:9200",
+        "api": null
+    },
     "imageFormats": ["image/jpg", "image/jpeg"],
     "audioFormats": ["audio/mpeg"],
     "videoFormats": ["video/quicktime", "video/mp4"],
@@ -13,18 +16,15 @@
         "pptx"
     ],
     "transcriptionFileExtensions": ["eaf", "trs", "ixt"],
-    "service": {
-        "search": "http://localhost:9200",
-        "api": null
-    },
-    "explore": "./paradisec.org.au/Shell.component.vue",
-    "introduction": "./paradisec.org.au/Introduction.component.vue",
-    "header": "./paradisec.org.au/Header.component.vue",
-    "footer": "./paradisec.org.au/Footer.component.vue",
+    "domain": "paradisec.org.au",
+    "explore": "paradisec.org.au/explore/Shell.component.vue",
+    "introduction": "paradisec.org.au/introduction/Shell.component.vue",
+    "header": "paradisec.org.au/header/Shell.component.vue",
+    "footer": "paradisec.org.au/footer/Shell.component.vue",
     "renderers": {
         "paradisec.org.au": {
-            "item": "./paradisec.org.au/ItemViewer.component.vue",
-            "collection": "./paradisec.org.au/CollectionViewer.component.vue"
+            "item": "paradisec.org.au/renderers/ItemViewer.component.vue",
+            "collection": "paradisec.org.au/renderers/CollectionViewer.component.vue"
         }
     }
 }

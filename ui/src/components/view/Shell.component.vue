@@ -44,7 +44,7 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.viewComponent) return;
-            return () => import(`${this.viewComponent}`);
+            return () => import(`src/components/${this.viewComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;

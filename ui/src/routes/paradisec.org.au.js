@@ -1,6 +1,6 @@
 "use strict";
 
-import AdvancedSearchComponent from "../components/paradisec.org.au/AdvancedSearch/Shell.component.vue";
+import AdvancedSearchComponent from "../components/paradisec.org.au/advancedSearch/Shell.component.vue";
 export function router({ routes }) {
     routes = routes.map(route => {
         if (route.path === "/") {

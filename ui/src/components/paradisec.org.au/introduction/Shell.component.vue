@@ -6,35 +6,37 @@
                     Welcome to the catalog of the
                     <span class="font-bold">PARADISEC</span> collection.
                 </div>
-                <div class="my-1 bg-gray-200 p-4 rounded">
-                    <p>Who runs this site?</p>
+                <div class="my-2 px-6 text-center">
                     <p class="text-sm">
-                        PARADISEC has been developed since 2003 by a consortium of
-                        Australian researchers from the University of Sydney,
-                        the University of Melbourne and the Australian National University.
-                        See the
-                        <a
-                            href="www.paradisec.org.au"
-                            target="_blank"
-                        >PARADISEC</a>
+                        PARADISEC has been developed since 2003 by a consortium
+                        of Australian researchers from the University of Sydney,
+                        the University of Melbourne and the Australian National
+                        University.
+                    </p>
+                    <p class="text-sm my-2 mx-4">
+                        See thew
+                        <a href="www.paradisec.org.au" target="_blank"
+                            >PARADISEC</a
+                        >
                         website for further details.
                     </p>
                 </div>
 
                 <div class="my-1 bg-orange-200 p-4 rounded">
                     <p class="text-sm">
-                        This installation is a Proof of Concept demonstrating a new generation
-                        catalog operating as a single
-                        page application interacting with an OCFL on-disk repository.
-                        Search capability is provided provided via Elastic Search. Read
-                        <router-link to="/about">the about page</router-link>&nbsp;to
-                        find out more.
+                        This installation is a Proof of Concept demonstrating a
+                        new generation catalog operating as a single page
+                        application interacting with an OCFL on-disk repository.
+                        Search capability is provided provided via Elastic
+                        Search. Read
+                        <router-link to="/about">the about page</router-link
+                        >&nbsp;to find out more.
                     </p>
                 </div>
                 <div class="my-1 bg-gray-400 rounded">
                     <item-jumper-component />
                 </div>
-                <div class="my-1 bg-gray-400 rounded">
+                <div class="my-1 bg-gray-200 rounded">
                     <item-browser-component />
                 </div>
             </div>
