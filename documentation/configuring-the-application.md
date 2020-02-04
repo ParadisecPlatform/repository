@@ -38,7 +38,26 @@ The `exploreComponent` configuration option tells the app which component to use
 route. If a component is not defined then the `explore/SimpleSearch.component` is loaded in to the 
 view. So, if your deployment requires a specific explore component you can use this option to tell the app to use that as the default.
 
+**IMPORTANT** Given the way the renderer components are loaded you `MUST` define it 
+as a path relative to the `explore` folder. Defining it any other way will result 
+in the component failing to load.
+
 ## introductionComponent
+
 The `introductionComponent` configuration option tells the app which component to use for the 
 introduction route. If a component is not defined then the `introduction/GenericIntroduction.component` is loaded in to the view. So, if your deployment requires a specific introduction component you can use this option to tell the app to use that as the default.
 
+**IMPORTANT** Given the way the renderer components are loaded you `MUST` define it 
+as a path relative to the `introduction` folder. Defining it any other way will result 
+in the component failing to load.
+
+## renderers
+
+The renderers configuration option allows you to define how the content will be rendered.
+You can match on the `domain` of the data or the `domain` and `additionalType` of the data.
+In the absence of a specific renderer for a given piece of data the application will load
+the `GenericViewer.component` to display the basic metadata.
+
+**IMPORTANT** Given the way the renderer components are loaded you `MUST` define them 
+as paths relative to the view folder. Defining them any other way will result in 
+the component failing to load.

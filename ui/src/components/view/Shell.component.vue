@@ -20,7 +20,6 @@ const dataLoader = new DataLoader();
 
 import VersionSelectionComponent from "./VersionSelection.component.vue";
 
-import renderers from "./renderers";
 export default {
     components: {
         VersionSelectionComponent
@@ -54,59 +53,58 @@ export default {
     methods: {
         async loadViewer({ version }) {
             this.viewComponent = undefined;
-            this.$nextTick(async () => {
-                let identifier;
-                if (this.configuration.domain) {
-                    identifier = `/${this.configuration.domain}${this.$route.params.pathMatch}`;
+            let identifier;
+            if (this.configuration.domain) {
+                identifier = `/${this.configuration.domain}${this.$route.params.pathMatch}`;
+            } else {
+                identifier = this.$route.params.pathMatch;
+            }
+            console.debug(`Loading: ${identifier}: ${version}`);
+            try {
+                let params;
+                if (version || this.$route.query.version) {
+                    params = {
+                        identifier,
+                        version: version || this.$route.query.version,
+                        configuration: this.$store.state.configuration
+                    };
                 } else {
-                    identifier = this.$route.params.pathMatch;
+                    params = {
+                        identifier,
+                        configuration: this.$store.state.configuration
+                    };
                 }
-                console.debug(`Loading: ${identifier}: ${version}`);
-                try {
-                    let params;
-                    if (version || this.$route.query.version) {
-                        params = {
-                            identifier,
-                            version: version || this.$route.query.version,
-                            configuration: this.$store.state.configuration
-                        };
-                    } else {
-                        params = {
-                            identifier,
-                            configuration: this.$store.state.configuration
-                        };
-                    }
-                    this.ocflObject = await dataLoader.load({ ...params });
-                } catch (error) {
-                    this.error = true;
-                    this.errorMsg = error;
-                    return;
-                }
-                let { domain, additionalType } = this.ocflObject;
+                this.ocflObject = await dataLoader.load({ ...params });
+            } catch (error) {
+                this.error = true;
+                this.errorMsg = error;
+                return;
+            }
+            let { domain, additionalType } = this.ocflObject;
 
-                if (
-                    !this.$route.query.version ||
-                    this.$route.query.version !== this.ocflObject.version
-                )
-                    this.$router.replace({
-                        path: this.$route.path,
-                        query: { version: this.ocflObject.version }
-                    });
-                let viewComponent;
-                if (
-                    domain &&
-                    additionalType &&
-                    renderers[domain] &&
-                    renderers[domain][additionalType]
-                ) {
-                    viewComponent = renderers[domain][additionalType];
-                } else if (domain && renderers[domain]) {
-                    viewComponent = renderers[domain];
-                } else {
-                    viewComponent = "./GenericViewer.component.vue";
-                }
-                this.viewComponent = viewComponent;
-            });
+            if (
+                !this.$route.query.version ||
+                this.$route.query.version !== this.ocflObject.version
+            )
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: { version: this.ocflObject.version }
+                });
+            let viewComponent;
+            let renderers = this.configuration.renderers;
+            if (
+                domain &&
+                additionalType &&
+                renderers[domain] &&
+                renderers[domain][additionalType]
+            ) {
+                viewComponent = renderers[domain][additionalType];
+            } else if (domain && renderers[domain]) {
+                viewComponent = renderers[domain];
+            } else {
+                viewComponent = "./GenericViewer.component.vue";
+            }
+            this.viewComponent = viewComponent;
         },
         update(v) {
             this.loadViewer({ version: v.version });
