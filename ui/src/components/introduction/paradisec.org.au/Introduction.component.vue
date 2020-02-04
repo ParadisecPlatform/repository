@@ -1,98 +1,67 @@
 <template>
     <div>
-        <div class="flex justify-center">
-            <div class="text-3xl style-heading">OCFL Catalog Viewer</div>
-        </div>
-        <div class="flex flex-col mt-5">
-            <p>
-                This application is a Proof of Concept demonstrating a single
-                page application operating over an OCFL on-disk repository with
-                search capability provided via Elastic Search. Read
-                <router-link to="/about">the about page</router-link>&nbsp;to
-                find out more.
-            </p>
-            <!-- <introduction-stats-component class="hidden md:block" /> -->
-        </div>
-        <div class="mt-4 inline">
-            Search the catalog via
-            <router-link to="/explore" class="inline">explore</router-link>.
-        </div>
-        <div class="my-4 flex flex-col justify-center">
-            <div>Or navigate directly to a collection:</div>
-            <div class="flex flex-row flex-wrap justify-center">
-                <el-tag
-                    v-for="(collection, idx) of paradisec.collections"
-                    :key="idx"
-                    class="m-2"
-                >
-                    <router-link :to="route(collection)">{{
-                        collection
-                    }}</router-link>
-                </el-tag>
+        <div class="flex flex-col lg:flex-row">
+            <div class="flex flex-col w-full lg:w-2/4 mr-1">
+                <div class="my-4 text-center text-lg">
+                    Welcome to the catalog of the
+                    <span class="font-bold">PARADISEC</span> collection.
+                </div>
+                <div class="my-1 bg-gray-200 p-4 rounded">
+                    <p>Who runs this site?</p>
+                    <p class="text-sm">
+                        PARADISEC has been developed since 2003 by a consortium of
+                        Australian researchers from the University of Sydney,
+                        the University of Melbourne and the Australian National University.
+                        See the
+                        <a
+                            href="www.paradisec.org.au"
+                            target="_blank"
+                        >PARADISEC</a>
+                        website for further details.
+                    </p>
+                </div>
+
+                <div class="my-1 bg-orange-200 p-4 rounded">
+                    <p class="text-sm">
+                        This installation is a Proof of Concept demonstrating a new generation
+                        catalog operating as a single
+                        page application interacting with an OCFL on-disk repository.
+                        Search capability is provided provided via Elastic Search. Read
+                        <router-link to="/about">the about page</router-link>&nbsp;to
+                        find out more.
+                    </p>
+                </div>
+                <div class="my-1 bg-gray-400 rounded">
+                    <item-jumper-component />
+                </div>
+                <div class="my-1 bg-gray-400 rounded">
+                    <item-browser-component />
+                </div>
             </div>
-            <div class="mt-4">Or an item:</div>
-            <div class="flex flex-row flex-wrap justify-center">
-                <el-tag
-                    v-for="(item, idx) of paradisec.items"
-                    :key="idx"
-                    class="m-2"
-                >
-                    <router-link :to="route(item)">{{ item }}</router-link>
-                </el-tag>
+            <div class="flex flex-col w-full lg:w-2/4 ml-1">
+                <div class="p-4 text-center">Recently Updated Content</div>
             </div>
-        </div>
-        <div class="m-4 text-center">
-            <strong>
-                Note that only the items listed above have content loaded.
-                <br />For all other items only the metadata is available in this
-                demonstrator.
-            </strong>
         </div>
     </div>
 </template>
 
 <script>
 import IntroductionStatsComponent from "./IntroductionStats.component.vue";
+import ItemJumperComponent from "./ItemJumper.component.vue";
+import ItemBrowserComponent from "./ItemBrowser.component.vue";
 
 export default {
     components: {
-        IntroductionStatsComponent
+        IntroductionStatsComponent,
+        ItemJumperComponent,
+        ItemBrowserComponent
     },
     data() {
         return {
-            paradisec: {
-                collections: ["AC1", "NT1", "NT5"],
-                items: [
-                    "AC1/001",
-                    "AC1/002",
-                    "NT1/98007",
-                    "NT1/2004",
-                    "NT1/20003",
-                    "NT3/nafakoron",
-                    "NT3/SESAKE",
-                    "NT5/TokelauOf",
-                    "NT6/2005V001",
-                    "PAMBU/DOC1014",
-                    "SN1/MM20130708Museum",
-                    "WDVA1/MIR_07",
-                    "WDVA1/TJILK05"
-                ]
-            }
+            paradisec: {}
         };
     },
-    computed: {
-        status: function() {
-            return this.$store.state.status;
-        },
-        configuration: function() {
-            return this.$store.state.configuration;
-        }
-    },
-    methods: {
-        route(target) {
-            return `/view/${target}`;
-        }
-    }
+    computed: {}
 };
 </script>
 
