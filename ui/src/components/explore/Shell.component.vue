@@ -14,10 +14,7 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.exploreComponent) return;
-            return () =>
-                import(
-                    /* webpackChunkName: "explore" */ `src/components/${this.exploreComponent}`
-                );
+            return () => import(`src/components/${this.exploreComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;

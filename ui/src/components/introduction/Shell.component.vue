@@ -14,10 +14,7 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.introductionComponent) return;
-            return () =>
-                import(
-                    /* webpackChunkName: "introduction" */ `src/components/${this.introductionComponent}`
-                );
+            return () => import(`src/components/${this.introductionComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;
