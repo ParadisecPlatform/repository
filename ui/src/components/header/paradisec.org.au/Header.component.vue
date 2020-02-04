@@ -5,9 +5,14 @@
             <span class="hidden md:inline">Home</span>
         </router-link>
         <router-link to="/explore" class="px-5">
-            <i class="fas fa-search"></i>
+            <i class="fas fa-project-diagram"></i>
             <span class="hidden md:inline">Explore</span>
         </router-link>
+        <router-link to="advanced-search" class="px-5">
+            <i class="fas fa-search"></i>
+            <span class="hidden md:inline">Advanced Search</span>
+        </router-link>
+        <div class="flex-grow"></div>
         <router-link to="/about" class="px-5 hidden md:block">
             <i class="fas fa-info-circle"></i>
             <span class="hidden md:inline">About</span>
@@ -16,7 +21,6 @@
             <i class="fas fa-question-circle"></i>
             <span class="hidden md:inline">Support</span>
         </router-link>-->
-        <div class="flex-grow"></div>
         <!-- <div>OCFL Catalog Viewer</div> -->
     </div>
 </template>
