@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { SearchService } from "./search.service";
+import { SearchService } from "../search.service";
 import { parseISO, isBefore, isAfter, subDays, subMonths } from "date-fns";
 export default {
     data() {
@@ -126,5 +126,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

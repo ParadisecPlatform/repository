@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { SearchService } from "./search.service";
+import { SearchService } from "../search.service";
 
 export default {
     props: {

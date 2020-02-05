@@ -4,10 +4,10 @@
             <i class="fas fa-home"></i>
             <span class="hidden md:inline">Home</span>
         </router-link>
-        <router-link to="/explore" class="px-5">
+        <!-- <router-link to="/explore" class="px-5">
             <i class="fas fa-project-diagram"></i>
             <span class="hidden md:inline">Explore</span>
-        </router-link>
+        </router-link> -->
         <router-link to="advanced-search" class="px-5">
             <i class="fas fa-search"></i>
             <span class="hidden md:inline">Advanced Search</span>
@@ -33,5 +33,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -1,4 +1,3 @@
-
 <template>
     <div class="flex flex-col border-solid border-b-2 border-gray-200 p-4">
         <div class="flex flex-row mb-2 text-sm">
@@ -38,7 +37,7 @@
 </template>
 
 <script>
-import { SearchService } from "./search.service";
+import { SearchService } from "../search.service";
 import { format, parseISO } from "date-fns";
 import SearchFilterTextComponent from "./SearchFilterText.component.vue";
 
@@ -74,5 +73,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

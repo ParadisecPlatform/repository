@@ -1,7 +1,7 @@
 <template>
     <div class="py-4 px-2">
         <div class="flex flex-row">
-            <div class="w-32 text-right mr-2">View Collection</div>
+            <div class="w-32 text-right text-sm mr-2">View Collection:</div>
             <el-input
                 class="w-32"
                 v-model="collectionId"
@@ -9,13 +9,23 @@
                 placeholder="collection id"
                 @change="viewCollection"
             ></el-input>
-            <el-button type="success" size="mini" @click="viewCollection" class="mx-1">
+            <el-button
+                type="success"
+                size="mini"
+                @click="viewCollection"
+                class="mx-1"
+            >
                 <i class="fas fa-arrow-right fa-fw"></i>
             </el-button>
         </div>
         <div class="flex flex-row mt-2">
-            <div class="w-32 text-right mr-2">View Item:</div>
-            <el-input class="w-32" v-model="collectionId" size="mini" placeholder="collection id"></el-input>
+            <div class="w-32 text-right text-sm mr-2">View Item:</div>
+            <el-input
+                class="w-32"
+                v-model="collectionId"
+                size="mini"
+                placeholder="collection id"
+            ></el-input>
             <div class="mx-2">/</div>
             <el-input
                 class="w-40"
@@ -24,12 +34,19 @@
                 placeholder="item id"
                 @change="viewItem"
             ></el-input>
-            <el-button type="success" size="mini" @click="viewItem" class="mx-1">
+            <el-button
+                type="success"
+                size="mini"
+                @click="viewItem"
+                class="mx-1"
+            >
                 <i class="fas fa-arrow-right"></i>
             </el-button>
         </div>
         <div v-if="message" class="mt-3">
-            <el-alert type="warning" size="mini" :closable="false">{{message}}</el-alert>
+            <el-alert type="warning" size="mini" :closable="false">{{
+                message
+            }}</el-alert>
         </div>
     </div>
 </template>
@@ -63,5 +80,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

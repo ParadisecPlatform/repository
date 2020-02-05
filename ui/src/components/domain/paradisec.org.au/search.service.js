@@ -425,36 +425,92 @@ export class SearchService {
         return types;
     }
 
-    // async search({ text }) {
-    //     let query = {
-    //         query: {
-    //             multi_match: {
-    //                 query: text,
-    //                 fields: ["name", "description"]
-    //             }
-    //         }
-    //     };
-    //     let response = await this.execute({ query });
-    //     const total = response.hits.total.value;
-    //     let documents = response.hits.hits.map(hit => {
-    //         return {
-    //             id: hit._source.identifier.filter(i => i.name === "id")[0]
-    //                 .value,
-    //             name: hit._source.name,
-    //             type: hit._source["schema:additionalType"]
-    //         };
-    //     });
-    //     return { documents, total };
-    // }
+    async textSearch({ text, fields }) {
+        const allowedFields = [
+            "name",
+            "description",
+            "subjectLanguages",
+            "contentLanguages",
+            "contributor"
+        ];
+        fields.forEach(f => {
+            if (!allowedFields.includes(f))
+                throw new Error(`${f} is not an accepted search field`);
+        });
+
+        let wildcard = false;
+        if (text.match(/\?|\*/g)) {
+            wildcard = true;
+        }
+        const lookups = {
+            name: this.queryBuilder({ wildcard, field: "name", value: text }),
+            description: this.queryBuilder({
+                wildcard,
+                field: "description",
+                value: text
+            }),
+            subjectLanguages: this.queryBuilder({
+                type: "nested",
+                wildcard,
+                path: "subjectLanguages",
+                field: "name",
+                value: text
+            }),
+            contentLanguages: this.queryBuilder({
+                type: "nested",
+                wildcard,
+                path: "contentLanguages",
+                field: "name",
+                value: text
+            }),
+            contributor: this.queryBuilder({
+                type: "nested",
+                wildcard,
+                path: "contributor",
+                field: "name",
+                value: text
+            })
+        };
+
+        let query = {
+            size: 20,
+            query: {
+                bool: {
+                    should: fields.map(f => lookups[f])
+                }
+            }
+        };
+        // console.log(JSON.stringify(query, null, 2));
+        let response = await this.execute({ query });
+        const total = response.hits.total.value;
+        let documents = response.hits.hits.map(hit => {
+            return {
+                id: hit._source.identifier
+                    .filter(i => i.name === "id")[0]
+                    .value.replace(
+                        this.store.state.configuration.domain,
+                        "view"
+                    ),
+                name: hit._source.name,
+                description: hit._source.description,
+                type: hit._source["additionalType"]
+            };
+        });
+
+        return { documents, total };
+    }
 
     async execute({ query }) {
         // console.log(`${this.service}/_search`);
         // console.log(JSON.stringify(query, null, 2));
-        let response = await fetch(`${this.service}/_search`, {
-            method: "POST",
-            headers: this.headers,
-            body: JSON.stringify(query)
-        });
+        let response = await fetch(
+            `${this.service}/${this.store.state.configuration.domain}/_search`,
+            {
+                method: "POST",
+                headers: this.headers,
+                body: JSON.stringify(query)
+            }
+        );
         if (response.status !== 200) {
             console.log((await response.json()).error);
             // console.log(
@@ -463,5 +519,30 @@ export class SearchService {
             return {};
         }
         return await response.json();
+    }
+
+    queryBuilder({ type, wildcard, path, field, value }) {
+        if (type === "nested") {
+            return {
+                nested: {
+                    path,
+                    query: wildcard
+                        ? { wildcard: { [`${path}.${field}`]: value } }
+                        : {
+                              match: {
+                                  [`${path}.${field}`]: { query: value }
+                              }
+                          }
+                }
+            };
+        } else {
+            return wildcard
+                ? { wildcard: { [field]: value } }
+                : {
+                      match: {
+                          [field]: { query: value }
+                      }
+                  };
+        }
     }
 }

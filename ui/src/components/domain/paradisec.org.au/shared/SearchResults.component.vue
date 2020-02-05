@@ -38,16 +38,17 @@ export default {
     components: {
         RenderSearchResultComponent
     },
+    props: {
+        results: {
+            type: Array,
+            required: true
+        }
+    },
     data() {
         return {
             page: 0,
             size: 10
         };
-    },
-    computed: {
-        results: function() {
-            return this.$store.state.search.results;
-        }
     },
     methods: {
         update(page) {
