@@ -25,7 +25,7 @@ services:
             - ./nginx/mime.types:/etc/nginx/mime.types
             - ./ui/dist:/usr/share/nginx/html:delegated
             - ./nginx/configuration.json:/usr/share/nginx/html/configuration.json
-            - ./data/ocfl-repository:/srv/repository:delegated
+            - ../data/ocfl-repository:/srv/repository:delegated
             - ui-modules:/srv/ui/node_modules:delegated
         ports:
             - 80:80
