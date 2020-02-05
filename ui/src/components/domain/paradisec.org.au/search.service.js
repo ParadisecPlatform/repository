@@ -587,7 +587,7 @@ export class SearchService {
                                 terms: { field: `${path}.${field}`, size }
                             },
                             count: {
-                                value_count: { field: `${path}.${field}` }
+                                cardinality: { field: `${path}.${field}` }
                             }
                         }
                     }
@@ -600,7 +600,7 @@ export class SearchService {
                     [field]: {
                         terms: { field, size }
                     },
-                    count: { value_count: { field } }
+                    count: { cardinality: { field } }
                 }
             };
         }
