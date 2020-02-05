@@ -207,10 +207,36 @@ export class SearchService {
     }
 
     async getStats() {
-        let domains = await this.aggregateDomains({});
-        let publishers = await this.aggregatePublishers({});
-        let types = await this.aggregateTypes({});
-        return { domains, publishers, types };
+        let data = {};
+
+        const typeAggregation = this.aggregationBuilder({
+            field: "additionalType",
+            size: 10
+        });
+
+        let response = await this.execute({ query: typeAggregation });
+        const types = response.aggregations.additionalType.buckets;
+        types.forEach(t => (data[t.key] = t.doc_count));
+
+        const publisherAggregation = this.aggregationBuilder({
+            type: "nested",
+            path: "publisher",
+            field: "name",
+            size: 1
+        });
+        response = await this.execute({ query: publisherAggregation });
+        data.publishers = response.aggregations.publisher.count.value;
+
+        const contributorAggregation = this.aggregationBuilder({
+            type: "nested",
+            path: "contributor",
+            field: "name.raw",
+            size: 1
+        });
+        response = await this.execute({ query: contributorAggregation });
+        data.contributors = response.aggregations.contributor.count.value;
+
+        return data;
     }
 
     async getDateRange({ field = "dateCreated" }) {
@@ -397,6 +423,7 @@ export class SearchService {
             query: q,
             ...query
         };
+        // console.log(JSON.stringify(query, null, 2));
         let response = await this.execute({ query });
         let types = response.aggregations.type.buckets;
         return types;
@@ -543,6 +570,39 @@ export class SearchService {
                           [field]: { query: value }
                       }
                   };
+        }
+    }
+
+    aggregationBuilder({ type, path, field, size }) {
+        if (type === "nested") {
+            return {
+                size: 0,
+                aggs: {
+                    [path]: {
+                        nested: {
+                            path
+                        },
+                        aggs: {
+                            values: {
+                                terms: { field: `${path}.${field}`, size }
+                            },
+                            count: {
+                                value_count: { field: `${path}.${field}` }
+                            }
+                        }
+                    }
+                }
+            };
+        } else {
+            return {
+                size: 0,
+                aggs: {
+                    [field]: {
+                        terms: { field, size }
+                    },
+                    count: { value_count: { field } }
+                }
+            };
         }
     }
 }
