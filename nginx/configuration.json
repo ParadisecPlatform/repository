@@ -1,6 +1,6 @@
 {
     "service": {
-        "search": "http://localhost:9200",
+        "search": "/search",
         "api": null
     },
     "imageFormats": ["image/jpg", "image/jpeg"],
