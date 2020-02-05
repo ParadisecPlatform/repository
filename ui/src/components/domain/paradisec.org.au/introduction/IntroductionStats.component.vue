@@ -1,20 +1,26 @@
 <template>
-    <div class="my-4">
-        <div class="flex flex-row flex-wrap my-5 justify-center" v-if="show">
-            <apex-chart
-                :width="chartWidth"
-                type="donut"
-                v-for="(chart, idx) of chart"
-                :key="idx"
-                :options="chart"
-                :series="chart.series"
-            ></apex-chart>
+    <div class="flex flex-row justify-around my-4 text-center">
+        <div class="flex flex-col">
+            <div>Collections</div>
+            <div class="text-5xl text-orange-500">{{ stats.collection }}</div>
+        </div>
+        <div class="flex flex-col">
+            <div>Items</div>
+            <div class="text-5xl text-orange-500">{{ stats.item }}</div>
+        </div>
+        <div class="flex flex-col">
+            <div>Publishers</div>
+            <div class="text-5xl text-orange-500">{{ stats.publishers }}</div>
+        </div>
+        <div class="flex flex-col">
+            <div>Contributors</div>
+            <div class="text-5xl text-orange-500">{{ stats.contributors }}</div>
         </div>
     </div>
 </template>
 
 <script>
-// import { SearchService } from "./explore/search.service";
+import { SearchService } from "../search.service";
 import VueApexCharts from "vue-apexcharts";
 
 export default {
@@ -23,38 +29,15 @@ export default {
     },
     data() {
         return {
-            chartWidth: window.innerWidth <= 1024 ? 200 : 300,
+            chartWidth: 200,
             show: false,
-            content: ["types", "domains", "publishers"],
-            chart: []
+            stats: {}
         };
     },
     async mounted() {
         try {
             const search = new SearchService({ store: this.$store });
-            let stats = await search.getStats();
-            for (let c of this.content) {
-                this.chart.push({
-                    labels: stats[c].map(d => {
-                        return `${d.key} (${d.doc_count})`;
-                    }),
-                    chart: {
-                        type: "donut"
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    legend: {
-                        position: "bottom",
-                        floating: true
-                    },
-                    title: {
-                        text: c.toUpperCase(),
-                        align: "center"
-                    },
-                    series: stats[c].map(d => d.doc_count)
-                });
-            }
+            this.stats = await search.getStats();
             this.show = true;
         } catch (error) {
             // do nothing

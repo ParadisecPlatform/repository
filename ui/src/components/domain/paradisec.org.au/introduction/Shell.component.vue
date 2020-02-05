@@ -49,6 +49,9 @@
                 </el-card>
             </div>
             <div class="flex flex-col w-full lg:w-2/4 lg:ml-1">
+                <div class="">
+                    <introduction-stats-component />
+                </div>
                 <div class="my-1 bg-gray-500 rounded">
                     <item-jumper-component />
                 </div>
@@ -68,17 +71,17 @@
 </template>
 
 <script>
-import IntroductionStatsComponent from "./IntroductionStats.component.vue";
 import ItemJumperComponent from "./ItemJumper.component.vue";
 import ItemBrowserComponent from "./ItemBrowser.component.vue";
 import SimpleSearchComponent from "../shared/SimpleSearch.component.vue";
+import IntroductionStatsComponent from "./IntroductionStats.component.vue";
 
 export default {
     components: {
-        IntroductionStatsComponent,
         ItemJumperComponent,
         ItemBrowserComponent,
-        SimpleSearchComponent
+        SimpleSearchComponent,
+        IntroductionStatsComponent
     },
     data() {
         return {
