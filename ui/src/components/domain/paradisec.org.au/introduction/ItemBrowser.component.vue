@@ -1,5 +1,5 @@
 <template>
-    <div class="py-4 px-2">
+    <div class="p-4">
         <div class="text-center">sample items in this demonstrator</div>
         <div class="my-4 flex flex-col">
             <div class="flex flex-col">

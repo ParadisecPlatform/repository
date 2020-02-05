@@ -13,7 +13,7 @@
                         the University of Melbourne and the Australian National
                         University.
                     </p>
-                    <p>
+                    <p class="text-center">
                         See the
                         <a href="www.paradisec.org.au" target="_blank"
                             >PARADISEC</a
@@ -49,14 +49,14 @@
                 </el-card>
             </div>
             <div class="flex flex-col w-full lg:w-2/4 lg:ml-1">
-                <div class="my-1 bg-gray-400 rounded">
+                <div class="my-1 bg-gray-500 rounded">
                     <item-jumper-component />
                 </div>
-                <div class="my-1 bg-gray-300 rounded p-4">
+                <div class="my-1 bg-gray-400 rounded p-4">
                     <div class="text-sm">Simple Search</div>
                     <simple-search-component :autofocus="false" class="mt-2" />
                 </div>
-                <div class="my-1 bg-gray-200 rounded">
+                <div class="my-1 bg-gray-300 rounded">
                     <item-browser-component />
                 </div>
             </div>
