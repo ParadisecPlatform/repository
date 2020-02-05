@@ -43,7 +43,7 @@
                             >{{ field.label }}</el-checkbox
                         >
                     </div>
-                    <div class="text-xs text-gray-600 mt-2">
+                    <div class="text-xs mt-2 text-black">
                         Simple wildcard searches are supported. Try adding '*'
                         to match zero or more characters or '?' to match a
                         single character.
