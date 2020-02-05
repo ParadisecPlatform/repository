@@ -54,7 +54,7 @@
                 </div>
                 <div class="my-1 bg-gray-300 rounded p-4">
                     <div class="text-sm">Simple Search</div>
-                    <simple-search-component class="mt-2" />
+                    <simple-search-component :autofocus="false" class="mt-2" />
                 </div>
                 <div class="my-1 bg-gray-200 rounded">
                     <item-browser-component />

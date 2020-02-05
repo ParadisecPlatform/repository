@@ -34,13 +34,13 @@
                         </template>
                     </el-autocomplete>
 
-                    <div class="flex flex-col mt-2">
+                    <div class="flex flex-row flex-wrap mt-2">
                         <el-checkbox
                             class="my-0 mx-2"
-                            v-model="fields[field]"
-                            v-for="(field, idx) of Object.keys(fields)"
+                            v-for="(field, idx) of fields"
                             :key="idx"
-                            >{{ field }}</el-checkbox
+                            v-model="field.enabled"
+                            >{{ field.label }}</el-checkbox
                         >
                     </div>
                     <div class="text-xs text-gray-600 mt-2">
@@ -56,19 +56,31 @@
 
 <script>
 import { SearchService } from "../search.service";
-import { compact } from "lodash";
 
 export default {
+    props: {
+        autofocus: {
+            type: Boolean
+        }
+    },
     data() {
         return {
             text: "",
-            fields: {
-                name: true,
-                description: true,
-                subjectLanguages: false,
-                contentLanguages: false,
-                contributor: true
-            },
+            fields: [
+                { label: "Name", field: "name", enabled: true },
+                { label: "Description", field: "description", enabled: true },
+                { label: "Contributor", field: "contributor", enabled: true },
+                {
+                    label: "Subject Language",
+                    field: "subjectLanguages",
+                    enabled: false
+                },
+                {
+                    label: "Content Language",
+                    field: "contentLanguages",
+                    enabled: false
+                }
+            ],
             form: {},
             results: {
                 documents: [],
@@ -78,15 +90,12 @@ export default {
     },
     async mounted() {
         this.searchService = new SearchService({ store: this.$store });
-        this.$refs.autocomplete.$refs.input.focus();
+        if (this.autofocus) this.$refs.autocomplete.$refs.input.focus();
     },
     methods: {
         async querySearch(queryString, cb) {
-            let fields = Object.keys(this.fields);
-            fields = fields.map(f => {
-                if (this.fields[f]) return f;
-            });
-            fields = compact(fields);
+            let fields = this.fields.filter(f => f.enabled);
+            fields = fields.map(f => f.field);
 
             if (queryString.length < 3) return cb([]);
             const results = await this.searchService.textSearch({
