@@ -2,19 +2,19 @@
     <div class="flex flex-row justify-around my-4 text-center">
         <div class="flex flex-col">
             <div class="text-sm">Collections</div>
-            <div class="text-5xl text-orange-500">{{ stats.collection }}</div>
+            <div class="text-5xl text-orange-500">{{ format(stats.collection) }}</div>
         </div>
         <div class="flex flex-col">
             <div class="text-sm">Items</div>
-            <div class="text-5xl text-orange-500">{{ stats.item }}</div>
+            <div class="text-5xl text-orange-500">{{ format(stats.item) }}</div>
         </div>
         <div class="flex flex-col">
-            <div class="text-sm">Publishers</div>
-            <div class="text-5xl text-orange-500">{{ stats.publishers }}</div>
+            <div class="text-sm">Universities</div>
+            <div class="text-5xl text-orange-500">{{ format(stats.publishers) }}</div>
         </div>
         <div class="flex flex-col">
             <div class="text-sm">Contributors</div>
-            <div class="text-5xl text-orange-500">{{ stats.contributors }}</div>
+            <div class="text-5xl text-orange-500">{{ format(stats.contributors)}}</div>
         </div>
     </div>
 </template>
@@ -22,6 +22,7 @@
 <script>
 import { SearchService } from "../search.service";
 import VueApexCharts from "vue-apexcharts";
+import numeral from "numeral";
 
 export default {
     components: {
@@ -41,6 +42,11 @@ export default {
             this.show = true;
         } catch (error) {
             // do nothing
+        }
+    },
+    methods: {
+        format(number) {
+            return numeral(number).format("0,0");
         }
     }
 };
