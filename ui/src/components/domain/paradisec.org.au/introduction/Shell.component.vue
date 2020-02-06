@@ -6,9 +6,9 @@
                     Welcome to the catalog of the
                     <span class="font-bold">PARADISEC</span> collection.
                 </div>
-                <div class="bg-teal-200 p-4 mb-4 rounded-full">
+                <!-- <div class="bg-teal-200 p-4 mb-4 rounded-full">
                     <introduction-stats-component />
-                </div>
+                </div>-->
                 <el-card class="box-card text-sm text-justify bg-white">
                     <p>
                         PARADISEC has been developed since 2003 by a consortium
@@ -18,9 +18,7 @@
                     </p>
                     <p class="text-center">
                         See the
-                        <a href="www.paradisec.org.au" target="_blank"
-                            >PARADISEC</a
-                        >
+                        <a href="www.paradisec.org.au" target="_blank">PARADISEC</a>
                         website for further details.
                     </p>
                 </el-card>
@@ -46,8 +44,7 @@
                         application interacting with an OCFL on-disk repository.
                         Search capability is provided provided via Elastic
                         Search. Read
-                        <router-link to="/about">the about page</router-link
-                        >&nbsp;to find out more.
+                        <router-link to="/about">the about page</router-link>&nbsp;to find out more.
                     </p>
                 </el-card>
             </div>
@@ -65,7 +62,9 @@
             </div>
         </div>
         <div class="flex flex-row">
-            <div class="p-4 text-center">Recently Updated Content</div>
+            <div class="p-4 text-center">
+                <recently-updated-component />
+            </div>
         </div>
     </div>
 </template>
@@ -75,13 +74,15 @@ import ItemJumperComponent from "./ItemJumper.component.vue";
 import ItemBrowserComponent from "./ItemBrowser.component.vue";
 import SimpleSearchComponent from "../shared/SimpleSearch.component.vue";
 import IntroductionStatsComponent from "./IntroductionStats.component.vue";
+import RecentlyUpdatedComponent from "./RecentlyUpdated.component.vue";
 
 export default {
     components: {
         ItemJumperComponent,
         ItemBrowserComponent,
         SimpleSearchComponent,
-        IntroductionStatsComponent
+        IntroductionStatsComponent,
+        RecentlyUpdatedComponent
     },
     data() {
         return {

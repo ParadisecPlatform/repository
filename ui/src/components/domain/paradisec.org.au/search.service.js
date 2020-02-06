@@ -206,39 +206,6 @@ export class SearchService {
         }
     }
 
-    async getStats() {
-        let data = {};
-
-        const typeAggregation = this.aggregationBuilder({
-            field: "additionalType",
-            size: 10
-        });
-
-        let response = await this.execute({ query: typeAggregation });
-        const types = response.aggregations.additionalType.buckets;
-        types.forEach(t => (data[t.key] = t.doc_count));
-
-        const publisherAggregation = this.aggregationBuilder({
-            type: "nested",
-            path: "publisher",
-            field: "name",
-            size: 1
-        });
-        response = await this.execute({ query: publisherAggregation });
-        data.publishers = response.aggregations.publisher.count.value;
-
-        const contributorAggregation = this.aggregationBuilder({
-            type: "nested",
-            path: "contributor",
-            field: "name.raw",
-            size: 1
-        });
-        response = await this.execute({ query: contributorAggregation });
-        data.contributors = response.aggregations.contributor.count.value;
-
-        return data;
-    }
-
     async getDateRange({ field = "dateCreated" }) {
         let query = {
             size: 0,
@@ -452,6 +419,54 @@ export class SearchService {
         return types;
     }
 
+    async getStats() {
+        let data = {};
+
+        const typeAggregation = this.aggregationBuilder({
+            field: "additionalType",
+            size: 10
+        });
+
+        let response = await this.execute({ query: typeAggregation });
+        const types = response.aggregations.additionalType.buckets;
+        types.forEach(t => (data[t.key] = t.doc_count));
+
+        const publisherAggregation = this.aggregationBuilder({
+            type: "nested",
+            path: "publisher",
+            field: "name",
+            size: 1
+        });
+        response = await this.execute({ query: publisherAggregation });
+        data.publishers = response.aggregations.publisher.count.value;
+
+        const contributorAggregation = this.aggregationBuilder({
+            type: "nested",
+            path: "contributor",
+            field: "name.raw",
+            size: 1
+        });
+        response = await this.execute({ query: contributorAggregation });
+        data.contributors = response.aggregations.contributor.count.value;
+
+        return data;
+    }
+
+    async getRecentlyUpdatedItems({ size = 5 }) {
+        const query = {
+            size,
+            sort: [{ dateModified: "desc" }],
+            query: {
+                match_all: {}
+            }
+        };
+        let response = await this.execute({ query });
+        let documents = response.hits.hits.map(hit =>
+            this.getItemMetadata({ item: hit })
+        );
+        return { documents };
+    }
+
     async textSearch({ text, fields }) {
         const allowedFields = [
             "name",
@@ -510,20 +525,9 @@ export class SearchService {
         // console.log(JSON.stringify(query, null, 2));
         let response = await this.execute({ query });
         const total = response.hits.total.value;
-        let documents = response.hits.hits.map(hit => {
-            return {
-                id: hit._source.identifier
-                    .filter(i => i.name === "id")[0]
-                    .value.replace(
-                        this.store.state.configuration.domain,
-                        "view"
-                    ),
-                name: hit._source.name,
-                description: hit._source.description,
-                type: hit._source["additionalType"]
-            };
-        });
-
+        let documents = response.hits.hits.map(hit =>
+            this.getItemMetadata({ item: hit })
+        );
         return { documents, total };
     }
 
@@ -603,6 +607,69 @@ export class SearchService {
                     count: { cardinality: { field } }
                 }
             };
+        }
+    }
+
+    getItemMetadata({ item }) {
+        const configuration = this.store.state.configuration;
+        return {
+            id: item._source.identifier
+                .filter(i => i.name === "id")[0]
+                .value.replace(this.store.state.configuration.domain, "view"),
+            name: item._source.name,
+            description: item._source.description,
+            type: item._source["additionalType"],
+            contentTypes: getDataTypes({ configuration, item })
+        };
+
+        function getDataTypes({ configuration, item }) {
+            const types = {
+                images: [],
+                audio: [],
+                video: [],
+                documents: [],
+                transcriptions: []
+            };
+            item._source.hasPart.forEach(part => {
+                types.images.push(
+                    checkIncludes(
+                        configuration.imageFormats,
+                        part.encodingFormat
+                    )
+                );
+                types.audio.push(
+                    checkIncludes(
+                        configuration.audioFormats,
+                        part.encodingFormat
+                    )
+                );
+                types.video.push(
+                    checkIncludes(
+                        configuration.videoFormats,
+                        part.encodingFormat
+                    )
+                );
+                types.documents.push(
+                    checkIncludes(
+                        configuration.documentFileExtensions,
+                        part.name.split(".").pop()
+                    )
+                );
+                types.transcriptions.push(
+                    checkIncludes(
+                        configuration.transcriptionFileExtensions,
+                        part.name.split(".").pop()
+                    )
+                );
+            });
+            for (let type of Object.keys(types)) {
+                types[type] = types[type].includes(true) ? true : false;
+            }
+            return types;
+        }
+
+        function checkIncludes(struct, thing) {
+            return struct.includes(thing) ? true : false;
         }
     }
 }
