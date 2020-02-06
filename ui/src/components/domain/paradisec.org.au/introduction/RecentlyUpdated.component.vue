@@ -1,10 +1,15 @@
 <template>
     <div>
-        <div class="underline my-2">Recently Updated Content</div>
+        <div class="my-2 text-xl">Recently Updated Content</div>
 
         <div class="flex flex-row flex-wrap justify-around">
-            <div v-for="(item, idx) of items" :key="idx" @click="$router.push(item.id)">
-                <el-card class="w-64 m-1 hover:bg-orange-200 cursor-pointer">
+            <div
+                v-for="(item, idx) of items"
+                :key="idx"
+                @click="$router.push(item.id)"
+                class="w-1/2 lg:w-1/3 cursor-pointer"
+            >
+                <el-card class="m-2 hover:bg-orange-200">
                     <div slot="header">{{ item.name }}</div>
                     <div>{{trimDescription(item.description)}}</div>
                     <div class="flex flex-row text-3xl text-orange-600">
@@ -47,7 +52,7 @@ export default {
     methods: {
         async loadRecentlyUpdatedItems() {
             const response = await this.ss.getRecentlyUpdatedItems({
-                size: 10
+                size: 12
             });
             this.items = response.documents;
         },

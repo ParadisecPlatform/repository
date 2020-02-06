@@ -11,21 +11,14 @@
                         class="m-1"
                         size="small"
                     >
-                        <router-link :to="route(collection)">
-                            {{ collection }}
-                        </router-link>
+                        <router-link :to="route(collection)">{{ collection }}</router-link>
                     </el-tag>
                 </div>
             </div>
             <div class="flex flex-col mt-2">
                 <div class="underline">Items</div>
                 <div class="flex flex-row flex-wrap">
-                    <el-tag
-                        v-for="(item, idx) of items"
-                        :key="idx"
-                        class="m-1"
-                        size="small"
-                    >
+                    <el-tag v-for="(item, idx) of items" :key="idx" class="m-1" size="small">
                         <router-link :to="route(item)">{{ item }}</router-link>
                     </el-tag>
                 </div>
