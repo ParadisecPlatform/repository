@@ -1,43 +1,34 @@
 <template>
-    <el-tabs type="border-card" tab-position="top" v-model="activeTab">
+    <el-tabs type="border-card" tab-position="top" v-model="activeTab" v-if="activeTab">
         <el-tab-pane label="Images" name="images" v-if="data.dataTypes.images">
-            <span slot="label"> <i class="fas fa-images"></i> Images </span>
-            <render-images-component
-                :data="data"
-                v-if="activeTab === 'images'"
-            />
+            <span slot="label">
+                <i class="fas fa-images"></i> Images
+            </span>
+            <render-images-component :data="data" v-if="activeTab === 'images'" />
         </el-tab-pane>
         <el-tab-pane label="Audio" name="audio" v-if="data.dataTypes.audio">
-            <span slot="label"> <i class="fas fa-volume-up"></i> Audio </span>
+            <span slot="label">
+                <i class="fas fa-volume-up"></i> Audio
+            </span>
             <render-audio-component :data="data" v-if="activeTab === 'audio'" />
         </el-tab-pane>
         <el-tab-pane label="Video" name="video" v-if="data.dataTypes.video">
-            <span slot="label"> <i class="fas fa-video"></i> Video </span>
+            <span slot="label">
+                <i class="fas fa-video"></i> Video
+            </span>
             <render-video-component :data="data" v-if="activeTab === 'video'" />
         </el-tab-pane>
-        <el-tab-pane
-            label="Documents"
-            name="documents"
-            v-if="data.dataTypes.documents"
-        >
+        <el-tab-pane label="Documents" name="documents" v-if="data.dataTypes.documents">
             <span slot="label">
                 <i class="fas fa-file-pdf"></i> Documents
             </span>
-            <render-documents-component
-                :data="data"
-                v-if="activeTab === 'documents'"
-            />
+            <render-documents-component :data="data" v-if="activeTab === 'documents'" />
         </el-tab-pane>
-        <el-tab-pane
-            label="XML Files"
-            name="xmlFiles"
-            v-if="data.dataTypes.xmlFiles"
-        >
-            <span slot="label"> <i class="fas fa-file"></i> XML Files </span>
-            <render-xml-component
-                :data="data"
-                v-if="activeTab === 'xmlFiles'"
-            />
+        <el-tab-pane label="XML Files" name="xmlFiles" v-if="data.dataTypes.xmlFiles">
+            <span slot="label">
+                <i class="fas fa-file"></i> XML Files
+            </span>
+            <render-xml-component :data="data" v-if="activeTab === 'xmlFiles'" />
         </el-tab-pane>
     </el-tabs>
 </template>
