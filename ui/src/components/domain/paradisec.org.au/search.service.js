@@ -1,6 +1,6 @@
 "use strict";
 
-import { uniqBy } from "lodash";
+import { uniqBy, isPlainObject } from "lodash";
 
 const numberOfAggregations = 5;
 
@@ -460,10 +460,7 @@ export class SearchService {
                 match_all: {}
             }
         };
-        let response = await this.execute({ query });
-        let documents = response.hits.hits.map(hit =>
-            this.getItemMetadata({ item: hit })
-        );
+        let { documents, total } = await this.execute({ query });
         return { documents };
     }
 
@@ -480,34 +477,26 @@ export class SearchService {
                 throw new Error(`${f} is not an accepted search field`);
         });
 
-        let wildcard = false;
-        if (text.match(/\?|\*/g)) {
-            wildcard = true;
-        }
         const lookups = {
-            name: this.queryBuilder({ wildcard, field: "name", value: text }),
+            name: this.queryBuilder({ field: "name", value: text }),
             description: this.queryBuilder({
-                wildcard,
                 field: "description",
                 value: text
             }),
             subjectLanguages: this.queryBuilder({
                 type: "nested",
-                wildcard,
                 path: "subjectLanguages",
                 field: "name",
                 value: text
             }),
             contentLanguages: this.queryBuilder({
                 type: "nested",
-                wildcard,
                 path: "contentLanguages",
                 field: "name",
                 value: text
             }),
             contributor: this.queryBuilder({
                 type: "nested",
-                wildcard,
                 path: "contributor",
                 field: "name",
                 value: text
@@ -523,11 +512,7 @@ export class SearchService {
             }
         };
         // console.log(JSON.stringify(query, null, 2));
-        let response = await this.execute({ query });
-        const total = response.hits.total.value;
-        let documents = response.hits.hits.map(hit =>
-            this.getItemMetadata({ item: hit })
-        );
+        let { total, documents } = await this.execute({ query });
         return { documents, total };
     }
 
@@ -549,10 +534,19 @@ export class SearchService {
             // );
             return {};
         }
-        return await response.json();
+        response = await response.json();
+        const total = response.hits.total.value;
+        const documents = response.hits.hits.map(hit =>
+            this.getItemMetadata({ item: hit })
+        );
+        return { total, documents };
     }
 
-    queryBuilder({ type, wildcard, path, field, value }) {
+    queryBuilder({ type, path, field, value }) {
+        let wildcard = false;
+        if (value.match(/\?|\*/g)) {
+            wildcard = true;
+        }
         if (type === "nested") {
             return {
                 nested: {
@@ -616,10 +610,13 @@ export class SearchService {
             id: item._source.identifier
                 .filter(i => i.name === "id")[0]
                 .value.replace(this.store.state.configuration.domain, "view"),
+            domain: item._source.identifier.filter(i => i.name === "domain")[0]
+                .value,
             name: item._source.name,
             description: item._source.description,
             type: item._source["additionalType"],
-            contentTypes: getDataTypes({ configuration, item })
+            contentTypes: getDataTypes({ configuration, item }),
+            source: item._source
         };
 
         function getDataTypes({ configuration, item }) {
@@ -630,7 +627,9 @@ export class SearchService {
                 documents: [],
                 transcriptions: []
             };
-            item._source.hasPart.forEach(part => {
+            let parts = item._source.hasPart ? item._source.hasPart : [];
+            if (isPlainObject(parts)) parts = [parts];
+            parts.forEach(part => {
                 types.images.push(
                     checkIncludes(
                         configuration.imageFormats,
