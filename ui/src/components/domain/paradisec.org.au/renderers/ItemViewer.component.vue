@@ -6,17 +6,15 @@
         <div class="flex flex-col">
             <div class="flex flex-row xl:px-8">
                 <div class="w-3/4">
-                    <div class="my-4 text-3xl">
-                        {{ data.objectifiedCrate.name }}
-                    </div>
-                    <div>
-                        Item: {{ collectionIdentifier }} / {{ itemIdentifier }}
-                    </div>
+                    <div class="my-4 text-3xl">{{ data.objectifiedCrate.name }}</div>
+                    <div>Item: {{ collectionIdentifier }} / {{ itemIdentifier }}</div>
                     <div>
                         Collection:
-                        <router-link :to="collectionLink()">{{
+                        <router-link :to="collectionLink()">
+                            {{
                             collectionIdentifier
-                        }}</router-link>
+                            }}
+                        </router-link>
                     </div>
                     <div class="h-2"></div>
                     <div>
@@ -29,7 +27,7 @@
                                 :key="idx"
                             >
                                 {{ contributor.contributor.name }} ({{
-                                    contributor.name
+                                contributor.name
                                 }})
                             </li>
                         </ul>
