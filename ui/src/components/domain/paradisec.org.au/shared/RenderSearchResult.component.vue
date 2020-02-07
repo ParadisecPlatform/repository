@@ -33,28 +33,28 @@ export default {
     },
     data() {
         return {
-            itemContent: {
-                description: {}
-            },
             descriptionMaxLength: 200
         };
     },
-    mounted() {
-        let item = { ...this.item };
-        this.itemContent = {
-            identifier: item.id,
-            type: item.type,
-            name: item.name,
-            description: {
-                text: item.description.slice(0, this.descriptionMaxLength),
-                truncated:
-                    item.description.length > this.descriptionMaxLength
-                        ? true
-                        : false
-            },
-            domain: item.domain
-        };
+    computed: {
+        itemContent: function() {
+            let item = { ...this.item };
+            return {
+                identifier: item.id,
+                type: item.type,
+                name: item.name,
+                description: {
+                    text: item.description.slice(0, this.descriptionMaxLength),
+                    truncated:
+                        item.description.length > this.descriptionMaxLength
+                            ? true
+                            : false
+                },
+                domain: item.domain
+            };
+        }
     },
+    mounted() {},
     methods: {
         mashIdentifier(identifier) {
             const domain = this.$store.state.configuration.domain;
