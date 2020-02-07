@@ -18,9 +18,7 @@
             <span v-if="itemContent.description.truncated">...</span>
         </div>
         <router-link :to="{ path: mashIdentifier(itemContent.identifier) }">
-            <div class="text-sm">
-                {{ mashIdentifier(itemContent.identifier) }}
-            </div>
+            <div class="text-sm">{{ mashIdentifier(itemContent.identifier) }}</div>
         </router-link>
     </div>
 </template>
@@ -42,9 +40,10 @@ export default {
         };
     },
     mounted() {
-        let item = { ...this.item._source };
+        let item = { ...this.item };
         this.itemContent = {
-            type: item["schema:additionalType"],
+            identifier: item.id,
+            type: item.type,
             name: item.name,
             description: {
                 text: item.description.slice(0, this.descriptionMaxLength),
@@ -53,8 +52,7 @@ export default {
                         ? true
                         : false
             },
-            domain: item.identifier.filter(i => i.name === "domain")[0].value,
-            identifier: item.identifier.filter(i => i.name === "id")[0].value
+            domain: item.domain
         };
     },
     methods: {
@@ -64,7 +62,7 @@ export default {
             if (domain) {
                 identifier = identifier.replace(`/${domain}/`, "");
             }
-            return `/view/${identifier}`;
+            return `${identifier}`;
         }
     }
 };
