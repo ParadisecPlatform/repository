@@ -484,19 +484,22 @@ export class SearchService {
                 value: text
             }),
             subjectLanguages: this.queryBuilder({
-                type: "nested",
+                type: "text",
+                nested: "true",
                 path: "subjectLanguages",
                 field: "name",
                 value: text
             }),
             contentLanguages: this.queryBuilder({
-                type: "nested",
+                type: "text",
+                nested: true,
                 path: "contentLanguages",
                 field: "name",
                 value: text
             }),
             contributor: this.queryBuilder({
-                type: "nested",
+                type: "text",
+                nested: true,
                 path: "contributor",
                 field: "name",
                 value: text
@@ -543,32 +546,52 @@ export class SearchService {
         return { total, documents, aggregations };
     }
 
-    queryBuilder({ type, path, field, value }) {
+    queryBuilder({ type, nested = false, path, field, value }) {
         let wildcard = false;
-        if (value.match(/\?|\*/g)) {
+        if (typeof value === "string" && value.match(/\?|\*/g)) {
             wildcard = true;
         }
-        if (type === "nested") {
-            return {
-                nested: {
-                    path,
-                    query: wildcard
-                        ? { wildcard: { [`${path}.${field}`]: value } }
-                        : {
-                              match: {
-                                  [`${path}.${field}`]: { query: value }
+        console.log(type, nested);
+        if (nested) {
+            if (type === "text")
+                return {
+                    nested: {
+                        path,
+                        query: wildcard
+                            ? { wildcard: { [`${path}.${field}`]: value } }
+                            : {
+                                  match: {
+                                      [`${path}.${field}`]: { query: value }
+                                  }
                               }
-                          }
-                }
-            };
+                    }
+                };
+            if (type === "date")
+                return {
+                    nested: {
+                        path,
+                        query: {
+                            range: {
+                                [field]: { gte: value[0], lte: value[1] }
+                            }
+                        }
+                    }
+                };
         } else {
-            return wildcard
-                ? { wildcard: { [field]: value } }
-                : {
-                      match: {
-                          [field]: { query: value }
-                      }
-                  };
+            if (type === "text")
+                return wildcard
+                    ? { wildcard: { [field]: value } }
+                    : {
+                          match: {
+                              [field]: { query: value }
+                          }
+                      };
+            if (type === "date")
+                return {
+                    range: {
+                        [field]: { gte: value[0], lte: value[1] }
+                    }
+                };
         }
     }
 
