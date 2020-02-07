@@ -1,5 +1,16 @@
 # Configuring the application
 
+- [Configuring the application](#configuring-the-application)
+  - [Configuration options](#configuration-options)
+  - [domain](#domain)
+  - [Data Formats](#data-formats)
+    - [imageFormats, audioFormats, videoFormats](#imageformats-audioformats-videoformats)
+    - [documentFileExtensions](#documentfileextensions)
+    - [transcriptionFileExtensions](#transcriptionfileextensions)
+  - [service.search and service.api](#servicesearch-and-serviceapi)
+  - [introduction, explore, header, footer](#introduction-explore-header-footer)
+  - [renderers](#renderers)
+
 The application takes a single configuration file -  `configuration.json` - which defines how it will behave.
 The master configuration file is at `./src/configuration.json`. In production, you will need to create that
 file and place it into the document root of the webserver. Have a look at the configuration of the ui container
@@ -45,7 +56,7 @@ in the component failing to load.
 ## renderers
 
 The renderers configuration option allows you to define how the content will be rendered.
-You can match on the `domain` of the data or the `domain` and `additionalType` of the data.
+You can match on the `domain` of the data or the `domain` and `type` and / or `additionalType` of the data.
 In the absence of a specific renderer for a given piece of data the application will load
 the `GenericViewer.component` to display the basic metadata.
 

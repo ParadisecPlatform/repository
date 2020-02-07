@@ -1,9 +1,15 @@
 # Extending the application for specific domains
 
+- [Extending the application for specific domains](#extending-the-application-for-specific-domains)
+  - [Data specific view components](#data-specific-view-components)
+    - [Adding a data specific renderer](#adding-a-data-specific-renderer)
+    - [Getting started with your own renderer](#getting-started-with-your-own-renderer)
+  - [Domain specific introduction, header, footer, explore etc components.](#domain-specific-introduction-header-footer-explore-etc-components)
+  
 This application is designed to be extensible to specific domains. That is, if you want to
 use the application for a deployment with only one set of data (e.g. paradisec data) you can provide
 the components that are suited for that type of data and tell the application to use only those
-components. The way to configure this is defined in [Configuring the application]('./configuring-the-application.md').
+components. The way to configure this is defined in [Configuring the application]('configuring-the-application.md').
 
 ## Data specific view components
 
@@ -13,9 +19,9 @@ The UI has been designed to be extensible to various incoming data formats. Spec
 
 A renderer can be added as follows:
 
--   Create a folder named as the domain in `ui/src/components/view/`.
+-   Create a folder named as the domain in `ui/src/components/domain/`.
 -   Create the component in that folder.
--   Add a mapping for that component in to the renderes property in the main configuration file. You can load a renderer based on the `domain` of the data or the `domain` and `additionalType`. Using PARADISEC as an example the domain is paradisec.org.au and the additionalType is one of item or collection.
+-   Add a mapping for that component in to the renderers property in the main configuration file. You can load a renderer based on the `domain` of the data or the `domain` and `type` and / or `additionalType`. Using PARADISEC as an example the domain is paradisec.org.au and the additionalType is one of item or collection.
 
 When instantiated the component will be passed a data object with a signature as follows:
 
@@ -56,7 +62,7 @@ export default {
 
 Check out `view/paradisec.org.au/ItemViewer.component.vue` as well as `view/paradisec.org.au/RenderContent.component.vue`.
 
-## Domain specific introduction, explore etc components.
+## Domain specific introduction, header, footer, explore etc components.
 
 As with the data specific view components, you can build your own introduction and explore components and tell
 the app to load those. The repo layout is the same as it is for view. Create a folder named as your domain
