@@ -11,7 +11,7 @@
             >
                 <el-card class="m-2 hover:bg-orange-200">
                     <div slot="header">{{ item.name }}</div>
-                    <div>{{trimDescription(item.description)}}</div>
+                    <div v-if="item.description.length">{{trimDescription(item.description)}}</div>
                     <div class="flex flex-row text-3xl text-orange-600">
                         <div v-if="item.contentTypes.images" class="mx-2">
                             <i class="far fa-file-image"></i>
