@@ -1,25 +1,20 @@
 <template>
     <div class="flex flex-row">
         <div class="flex flex-col w-1/2">
-            <matcher-component
-                type="must"
-                label="Must"
-                @update="updateQuery"
-                class="bg-green-300 m-1"
-            />
+            <matcher-component type="must" label="Must" @update="updateQuery" class="bg-green-300" />
             <matcher-component
                 type="should"
                 label="Should"
                 @update="updateQuery"
-                class="bg-orange-300 m-1"
+                class="bg-orange-300"
             />
             <matcher-component
                 type="mustNot"
                 label="Must not"
                 @update="updateQuery"
-                class="bg-red-300 m-1"
+                class="bg-red-300"
             />
-            <div class="flex flex-row m-1">
+            <div class="flex flex-row mt-1">
                 <div class="flex-grow">
                     <el-button type="success" @click="search" size="small" class="float-right">
                         <i class="fas fa-search"></i>
