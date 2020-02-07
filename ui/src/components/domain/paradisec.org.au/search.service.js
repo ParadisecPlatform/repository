@@ -480,6 +480,7 @@ export class SearchService {
         const lookups = {
             name: this.queryBuilder({ field: "name", value: text }),
             description: this.queryBuilder({
+                type: "text",
                 field: "description",
                 value: text
             }),
@@ -551,7 +552,6 @@ export class SearchService {
         if (typeof value === "string" && value.match(/\?|\*/g)) {
             wildcard = true;
         }
-        console.log(type, nested);
         if (nested) {
             if (type === "text")
                 return {
