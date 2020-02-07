@@ -6,9 +6,9 @@
                     Welcome to the catalog of the
                     <span class="font-bold">PARADISEC</span> collection.
                 </div>
-                <!-- <div class="bg-teal-200 p-4 mb-4 rounded-full">
+                <div class="bg-teal-200 p-4 mb-4 rounded-full">
                     <introduction-stats-component />
-                </div>-->
+                </div>
                 <el-card class="box-card text-sm text-justify bg-white">
                     <p>
                         PARADISEC has been developed since 2003 by a consortium
