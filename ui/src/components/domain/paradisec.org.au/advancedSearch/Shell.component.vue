@@ -31,8 +31,8 @@
                 <pre>{{query.query.bool}}</pre>
             </div>
         </div>
-        <div class="p-4 px-8 w-1/2">
-            <search-results-component :results="results" />
+        <div class="pl-16 p-4 px-8 w-1/2">
+            <search-results-component :results="results" @update-search="search" />
         </div>
     </div>
 </template>
@@ -69,15 +69,16 @@ export default {
     },
     mounted() {
         this.ss = new SearchService({ store: this.$store });
-        this.search();
+        this.search({});
     },
     methods: {
         updateQuery(data) {
             this.query.query.bool[data.type] = compact(data.filters);
-            this.search();
+            this.search({});
         },
-        async search() {
-            this.results = await this.ss.execute({ query: this.query });
+        async search({ page = 0, size = 10 }) {
+            const query = { ...this.query, from: page * size, size: size };
+            this.results = await this.ss.execute({ query });
         }
     }
 };
