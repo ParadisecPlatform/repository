@@ -16,8 +16,7 @@
             </el-select>
         </div>
         <div v-for="(field , idx) of fields" :key="idx" class="flex-grow" v-else>
-            <div class="flex flex-row" v-if="field.field === select">
-                <div class="w-32">{{field.label}}</div>
+            <div class="flex flex-col" v-if="field.field === select">
                 <div v-if="field.elementType === 'input'" class="w-full">
                     <el-input
                         :type="field.type"
@@ -26,6 +25,19 @@
                         size="small"
                     ></el-input>
                 </div>
+                <div v-if="field.elementType === 'date'" class="w-full">
+                    <el-date-picker
+                        v-model="field.value"
+                        type="monthrange"
+                        range-separator="-"
+                        start-placeholder="Start month"
+                        end-placeholder="End month"
+                        size="small"
+                        align="center"
+                        @change="emitSelection(field)"
+                    ></el-date-picker>
+                </div>
+                <div class="text-xs w-full pr-2">{{field.label}}</div>
             </div>
         </div>
     </div>
@@ -52,6 +64,48 @@ export default {
                 {
                     label: "Description",
                     field: "description",
+                    elementType: "input",
+                    type: "text"
+                },
+                {
+                    label: "Date Created",
+                    field: "dateCreated",
+                    elementType: "date",
+                    type: "date"
+                },
+                {
+                    label: "Date Modified",
+                    field: "dateModified",
+                    elementType: "date",
+                    type: "date"
+                },
+                {
+                    label: "Comments",
+                    field: "comments",
+                    elementType: "input",
+                    type: "text"
+                },
+                {
+                    label: "Ingest Notes",
+                    field: "ingestNotes",
+                    elementType: "input",
+                    type: "text"
+                },
+                {
+                    label: "Language As Given",
+                    field: "languageAsGiven",
+                    elementType: "input",
+                    type: "text"
+                },
+                {
+                    label: "Originated On",
+                    field: "originatedOn",
+                    elementType: "date",
+                    type: "date"
+                },
+                {
+                    label: "Originated On Narrative",
+                    field: "originatedOnNarrative",
                     elementType: "input",
                     type: "text"
                 }
