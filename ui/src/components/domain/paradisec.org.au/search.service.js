@@ -536,10 +536,11 @@ export class SearchService {
         }
         response = await response.json();
         const total = response.hits.total.value;
+        const aggregations = response.aggregations;
         const documents = response.hits.hits.map(hit =>
             this.getItemMetadata({ item: hit })
         );
-        return { total, documents };
+        return { total, documents, aggregations };
     }
 
     queryBuilder({ type, path, field, value }) {
