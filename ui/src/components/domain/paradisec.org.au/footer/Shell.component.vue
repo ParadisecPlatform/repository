@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row w-full xl:w-3/4 xxl:w-4/6 m-auto h-4">
+    <div class="flex flex-row h-4">
         <router-link to="/health-check">
             <i class="fas fa-heartbeat"></i> Health Check
         </router-link>

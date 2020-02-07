@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row w-full xl:w-3/4 xxl:w-4/6 m-auto py-2 text-sm">
+    <div class="flex flex-row py-2 text-sm">
         <router-link to="/" class="px-5">
             <i class="fas fa-home"></i>
             <span class="hidden md:inline">Home</span>
