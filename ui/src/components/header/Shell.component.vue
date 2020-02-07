@@ -14,8 +14,13 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.headerComponent) return;
+            const path = this.headerComponent.match(
+                "GenericHeader.component.vue"
+            )
+                ? ""
+                : "/domain";
             return () =>
-                import(`src/components/domain/${this.headerComponent}`);
+                import(`src/components${path}/${this.headerComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;
@@ -27,7 +32,7 @@ export default {
     methods: {
         loadHeader() {
             let { header } = this.configuration;
-            if (!header) header = "./GenericHeader.component.vue";
+            if (!header) header = "header/GenericHeader.component.vue";
             this.headerComponent = header;
         }
     }

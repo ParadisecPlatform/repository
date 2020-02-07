@@ -14,8 +14,13 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.footerComponent) return;
+            const path = this.footerComponent.match(
+                "GenericFooter.component.vue"
+            )
+                ? ""
+                : "/domain";
             return () =>
-                import(`src/components/domain/${this.footerComponent}`);
+                import(`src/components${path}/${this.footerComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;
@@ -27,7 +32,7 @@ export default {
     methods: {
         loadFooter() {
             let { footer } = this.configuration;
-            if (!footer) footer = "./GenericFooter.component.vue";
+            if (!footer) footer = "footer/GenericFooter.component.vue";
             this.footerComponent = footer;
         }
     }

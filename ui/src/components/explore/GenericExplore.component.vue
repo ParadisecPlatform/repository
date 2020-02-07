@@ -1,7 +1,5 @@
 <template>
-    <div>
-        simple search component
-    </div>
+    <div>explore component</div>
 </template>
 
 <script>

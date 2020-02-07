@@ -14,8 +14,13 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.exploreComponent) return;
+            const path = this.exploreComponent.match(
+                "GenericExplore.component.vue"
+            )
+                ? ""
+                : "/domain";
             return () =>
-                import(`src/components/domain/${this.exploreComponent}`);
+                import(`src/components${path}/${this.exploreComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;
@@ -27,7 +32,7 @@ export default {
     methods: {
         loadExplorer() {
             let { explore } = this.configuration;
-            if (!explore) explore = "./SimpleSearch.component.vue";
+            if (!explore) explore = "explore/GenericExplore.component.vue";
             this.exploreComponent = explore;
         }
     }

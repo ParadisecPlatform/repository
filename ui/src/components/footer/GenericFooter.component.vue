@@ -7,12 +7,12 @@
             <i class="fas fa-info-circle"></i> About
         </router-link>
         <div class="flex-grow"></div>
-        <div>
+        <!-- <div>
             <a href="https://language-archives.services" target="_blank">
                 CoEDL Labs
                 <i class="fas fa-external-link-alt"></i>
             </a>
-        </div>
+        </div>-->
     </div>
 </template>
 

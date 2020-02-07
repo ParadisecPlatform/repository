@@ -14,8 +14,13 @@ export default {
     computed: {
         componentFile: function() {
             if (!this.introductionComponent) return;
+            const path = this.introductionComponent.match(
+                "GenericIntroduction.component.vue"
+            )
+                ? ""
+                : "/domain";
             return () =>
-                import(`src/components/domain/${this.introductionComponent}`);
+                import(`src/components${path}/${this.introductionComponent}`);
         },
         configuration: function() {
             return this.$store.state.configuration;
@@ -28,7 +33,7 @@ export default {
         loadIntroduction() {
             let { introduction } = this.configuration;
             if (!introduction)
-                introduction = "./GenericIntroduction.component.vue";
+                introduction = "introduction/GenericIntroduction.component.vue";
             this.introductionComponent = introduction;
         }
     }
