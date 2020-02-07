@@ -1,24 +1,33 @@
 <template>
     <div class="flex flex-row p-4 text-sm">
         <!-- must match -->
-        <div class="w-30 m-2 pr-2 border-r border-black">{{label}} match</div>
+        <div class="w-30 pr-2 border-r border-black">{{label}} match</div>
         <div class="flex flex-col flex-grow p-1">
             <div v-for="(entry,idx) of clause" :key="entry.id">
-                <div class="flex flew-row my-1">
-                    <div class="flex-grow">
-                        <field-selector-component @selected-field="addFieldData" :id="entry.id" />
+                <div class="flex flex-col">
+                    <div class="flex flew-row flex-grow">
+                        <div class="flex-grow">
+                            <field-selector-component
+                                @selected-field="addFieldData"
+                                :id="entry.id"
+                            />
+                        </div>
+                        <div class="ml-1">
+                            <el-button
+                                type="danger"
+                                @click="removeClause({ id: entry.id })"
+                                size="small"
+                            >
+                                <i class="fas fa-fw fa-trash-alt"></i>
+                            </el-button>
+                        </div>
                     </div>
-                    <div>
-                        <el-button @click="removeClause({ id: entry.id })" size="small">
-                            <i class="fas fa-trash-alt"></i>
-                        </el-button>
-                    </div>
-                    <div class="w-2 text-right leading-loose">
-                        <span v-if="idx !== clause.length-1">&nbsp;&&nbsp;</span>
+                    <div class="text-center">
+                        <span v-if="idx !== clause.length-1">and</span>
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="border-t border-black p-1">
                 <el-button @click="addClause" size="small">
                     <i class="fas fa-plus"></i>
                 </el-button>
@@ -79,6 +88,7 @@ export default {
                 try {
                     return this.ss.queryBuilder(e);
                 } catch (error) {
+                    console.log(error);
                     // ignore errors - usually arises from missing data
                 }
             });
