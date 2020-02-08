@@ -1,12 +1,14 @@
 <template>
     <div>
-        <license-component :data="data" />
-        <data-display-component :data="data" />
+        <!-- <data-display-component :data="data" /> -->
 
         <div class="flex flex-col">
-            <div class="flex flex-row xl:px-8">
-                <div class="w-3/4">
+            <div class="flex flex-row">
+                <div class="w-3/4 mr-4">
                     <div class="my-4 text-3xl">{{ data.objectifiedCrate.name }}</div>
+                    <div class="mb-2">
+                        <license-component :data="data" />
+                    </div>
                     <div>Item: {{ collectionIdentifier }} / {{ itemIdentifier }}</div>
                     <div>
                         Collection:
@@ -16,7 +18,6 @@
                             }}
                         </router-link>
                     </div>
-                    <div class="h-2"></div>
                     <div>
                         Contributors:
                         <ul class="px-6">
@@ -76,7 +77,6 @@ import RenderContentComponent from "./RenderContent.component.vue";
 import RenderItemInformationComponent from "./RenderItemInformation.component.vue";
 import RenderLocationComponent from "src/components/shared/RenderLocation.component.vue";
 import RenderDescriptionComponent from "src/components/shared/RenderDescription.component.vue";
-import DataDisplayComponent from "src/components/shared/DataDisplay.component.vue";
 import LicenseComponent from "./License.component.vue";
 
 export default {
@@ -85,7 +85,6 @@ export default {
         RenderItemInformationComponent,
         RenderDescriptionComponent,
         RenderLocationComponent,
-        DataDisplayComponent,
         LicenseComponent
     },
     props: {
