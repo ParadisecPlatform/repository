@@ -1,14 +1,17 @@
 <template>
     <div>
         <div v-if="error">The item is currently unavailable.</div>
-        <div v-if="componentFile">
+        <div v-if="componentFile" class="flex flex-col">
+            <data-display-component :data="ocflObject" class="float-right" />
             <div class="flex flex-row text-sm">
                 <version-selection-component
                     :selected-version="ocflObject.version"
                     :versions="[...ocflObject.versions].reverse()"
                     v-on:load-version="update"
                 />
+                <div class="flex-grow"></div>
             </div>
+            <div class="border-b border-black pb-2"></div>
             <component v-bind:is="componentFile" :data="ocflObject"></component>
         </div>
     </div>
@@ -19,10 +22,12 @@ import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 
 import VersionSelectionComponent from "./VersionSelection.component.vue";
+import DataDisplayComponent from "../shared/DataDisplay.component.vue";
 
 export default {
     components: {
-        VersionSelectionComponent
+        VersionSelectionComponent,
+        DataDisplayComponent
     },
     data() {
         return {

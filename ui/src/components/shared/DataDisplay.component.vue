@@ -1,7 +1,7 @@
 <template>
     <div class="hidden lg:block flex flex-col">
         <div>
-            <div class="flex flex-row flex-wrap my-4">
+            <div class="flex flex-row flex-wrap mb-2">
                 <el-button
                     @click="toggle(idx)"
                     size="mini"
