@@ -1,17 +1,20 @@
 <template>
-    <div class="my-2">
+    <div>
         <div v-if="licenseDefined">
             <el-alert :type="type" :closable="false" effect="dark" :center="true">
-                <div class="text-lg text-center">{{ data.objectifiedCrate.license.name }}</div>
                 <div
-                    v-if="type === 'error'"
-                    class="text-sm"
+                    class="text-lg leading-tight text-center"
+                >{{ data.objectifiedCrate.license.name }}</div>
+                <div
+                    v-if="type === 'error' && data.objectifiedCrate.license.description.length"
                 >{{ data.objectifiedCrate.license.description }}</div>
             </el-alert>
         </div>
         <div v-else>
             <el-alert type="warning" :closable="false" effect="dark" :center="true">
-                <span class="text-lg">No license seems to be defined for this item</span>
+                <span
+                    class="text-lg leading-tight text-center"
+                >No license seems to be defined for this item</span>
             </el-alert>
         </div>
     </div>
