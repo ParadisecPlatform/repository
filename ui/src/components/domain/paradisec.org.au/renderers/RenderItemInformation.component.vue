@@ -1,31 +1,17 @@
 <template>
     <div>
-        <el-button
-            size="mini"
-            @click="showItemInformation = !showItemInformation"
-        >
+        <el-button size="mini" @click="showItemInformation = !showItemInformation">
             <span v-show="showItemInformation">hide</span>
             <span v-show="!showItemInformation">show</span>
             item metadata
         </el-button>
-        <div
-            class="flex flex-col my-2 bg-yellow-300 p-4 rounded-lg"
-            v-if="showItemInformation"
-        >
-            <div
-                v-for="(field, idx) of fields"
-                :key="idx"
-                class="flex flex-row"
-            >
-                <div class="text-orange-900 font-light">
-                    {{ field.label }}: &nbsp;
-                </div>
+        <div class="flex flex-col my-2 bg-yellow-300 p-4 rounded-lg" v-if="showItemInformation">
+            <div v-for="(field, idx) of fields" :key="idx" class="flex flex-row">
+                <div class="text-orange-900 font-light">{{ field.label }}: &nbsp;</div>
                 <div
                     class="text-gray-700 font-normal tracking-wide"
                     v-if="field.prop && field.prop.length"
-                >
-                    {{ field.prop }}
-                </div>
+                >{{ field.prop }}</div>
             </div>
 
             <!-- contentLanguages -->
@@ -57,83 +43,51 @@ export default {
                 },
                 {
                     label: "Born Digital",
-                    prop: toBoolean(
-                        this.data.objectifiedCrate[
-                            "http://paradisec.org.au/bornDigital"
-                        ]
-                    )
+                    prop: toBoolean(this.data.objectifiedCrate.bornDigital)
                 },
                 {
                     label: "Cite As",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/citeAs"
-                    ]
+                    prop: this.data.objectifiedCrate.citeAs
                 },
                 {
                     label: "Dialect",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/dialect"
-                    ]
+                    prop: this.data.objectifiedCrate.dialect
                 },
                 {
                     label: "Digitised On",
-                    prop: date(
-                        this.data.objectifiedCrate[
-                            "http://paradisec.org.au/digitisedOn"
-                        ]
-                    )
+                    prop: date(this.data.objectifiedCrate.digitisedOn)
                 },
                 {
                     label: "Discourse Type",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/discourseType"
-                    ]
+                    prop: this.data.objectifiedCrate.discourseType
                 },
                 {
                     label: "External",
-                    prop: toBoolean(
-                        this.data.objectifiedCrate[
-                            "http://paradisec.org.au/external"
-                        ]
-                    )
+                    prop: toBoolean(this.data.objectifiedCrate.external)
                 },
                 {
                     label: "Ingest Notes",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/ingestNotes"
-                    ]
+                    prop: this.data.objectifiedCrate.ingestNotes
                 },
                 {
                     label: "Language As Given",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/languageAsGiven"
-                    ]
+                    prop: this.data.objectifiedCrate.languageAsGiven
                 },
                 {
                     label: "Originated On",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/originatedOn"
-                    ]
+                    prop: this.data.objectifiedCrate.originatedOn
                 },
                 {
                     label: "Originated On Narrative",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/originatedOnNarrative"
-                    ]
+                    prop: this.data.objectifiedCrate.originatedOnNarrative
                 },
                 {
                     label: "Private",
-                    prop: toBoolean(
-                        this.data.objectifiedCrate[
-                            "http://paradisec.org.au/private"
-                        ]
-                    )
+                    prop: toBoolean(this.data.objectifiedCrate.private)
                 },
                 {
                     label: "Received On",
-                    prop: this.data.objectifiedCrate[
-                        "http://paradisec.org.au/receivedOn"
-                    ]
+                    prop: this.data.objectifiedCrate.receivedOn
                 }
             ]
         };
