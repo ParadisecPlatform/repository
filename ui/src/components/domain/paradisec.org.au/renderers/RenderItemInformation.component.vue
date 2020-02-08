@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button size="mini" @click="showItemInformation = !showItemInformation">
+        <el-button type="primary" size="mini" @click="showItemInformation = !showItemInformation">
             <span v-show="showItemInformation">hide</span>
             <span v-show="!showItemInformation">show</span>
             item metadata

@@ -1,6 +1,10 @@
 <template>
     <div class="mb-4">
-        <el-button size="mini" @click="showCollectionInformation = !showCollectionInformation">
+        <el-button
+            type="primary"
+            size="mini"
+            @click="showCollectionInformation = !showCollectionInformation"
+        >
             <span v-show="showCollectionInformation">hide</span>
             <span v-show="!showCollectionInformation">show</span>
             collection metadata
