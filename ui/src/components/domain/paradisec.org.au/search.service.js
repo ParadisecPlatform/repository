@@ -473,7 +473,11 @@ export class SearchService {
         });
 
         const lookups = {
-            name: this.queryBuilder({ field: "name", value: text }),
+            name: this.queryBuilder({
+                type: "text",
+                field: "name",
+                value: text
+            }),
             description: this.queryBuilder({
                 type: "text",
                 field: "description",

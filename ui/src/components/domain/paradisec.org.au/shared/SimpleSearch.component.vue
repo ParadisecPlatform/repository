@@ -14,23 +14,15 @@
                         @select="handleSelect"
                     >
                         <template slot-scope="{ item }">
-                            <span
-                                class="style-collection-result"
-                                v-if="item.type === 'collection'"
-                            >
+                            <span class="style-collection-result" v-if="item.type === 'collection'">
                                 <i class="far fa-clone"></i>
                                 {{ item.name }}
                             </span>
-                            <span
-                                class="style-item-result"
-                                v-if="item.type === 'item'"
-                            >
+                            <span class="style-item-result" v-if="item.type === 'item'">
                                 <i class="fas fa-chevron-right"></i>
                                 {{ item.name }}
                             </span>
-                            <span class="text-gray-500"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;{{ item.id }}</span
-                            >
+                            <span class="text-gray-500">&nbsp;&nbsp;&nbsp;&nbsp;{{ item.id }}</span>
                         </template>
                     </el-autocomplete>
 
@@ -40,8 +32,7 @@
                             v-for="(field, idx) of fields"
                             :key="idx"
                             v-model="field.enabled"
-                            >{{ field.label }}</el-checkbox
-                        >
+                        >{{ field.label }}</el-checkbox>
                     </div>
                     <div class="text-xs mt-2 text-black">
                         Simple wildcard searches are supported. Try adding '*'
