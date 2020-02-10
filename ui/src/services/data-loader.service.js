@@ -136,6 +136,7 @@ export class DataLoader {
                 skipExpansion: true
             }
         );
+
         const ensureArray = ["hasPart", "contributor"];
         for (let item of ensureArray) {
             if (isPlainObject(ocflObject.objectifiedCrate[item]))
@@ -258,20 +259,6 @@ export class DataLoader {
         });
         return { type, segments };
     }
-
-    // enrichCollectionMembers({ collectionMembers }) {
-    //     let members = collectionMembers;
-    //     members = orderBy(members, "id");
-    //     if (isPlainObject(members)) members = [members];
-    //     members = members.map(member => {
-    //         let name = member.id.split("/");
-    //         return {
-    //             id: member.id,
-    //             name: name[3]
-    //         };
-    //     });
-    //     return members;
-    // }
 
     parseXML(src) {
         /* returns an XMLDocument, or null if `src` is malformed */
