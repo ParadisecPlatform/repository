@@ -1,85 +1,115 @@
 <template>
-    <div class="flex flex-row">
-        <div class="flex flex-col w-1/2">
-            <div class="text-xs mt-2 bg-teal-200 text-black p-2 text-center">
-                Simple wildcard searches are supported. Try adding '*'
-                to match zero or more characters or '?' to match a
-                single character.
-            </div>
-            <matcher-component type="must" label="Must" @update="updateQuery" class="bg-green-300" />
-            <matcher-component
-                type="should"
-                label="Should"
-                @update="updateQuery"
-                class="bg-orange-300"
-            />
-            <matcher-component
-                type="mustNot"
-                label="Must not"
-                @update="updateQuery"
-                class="bg-red-300"
-            />
-            <div class="flex flex-row mt-1">
-                <div class="flex-grow">
-                    <el-button type="success" @click="search" size="small" class="float-right">
-                        <i class="fas fa-search"></i>
-                        Search
-                    </el-button>
-                </div>
-            </div>
-            <div class="flex flex-col p-4">
-                <pre>{{query.query.bool}}</pre>
-            </div>
-        </div>
-        <div class="pl-16 p-4 px-8 w-1/2">
-            <search-results-component :results="results" @update-search="search" />
-        </div>
+    <div>
+        <advanced-search-component :fields="fields" />
     </div>
 </template>
 
 <script>
-import FieldSelectorComponent from "./FieldSelector.component.vue";
-import SearchResultsComponent from "../shared/SearchResults.component.vue";
-import MatcherComponent from "./Matcher.component.vue";
-import { SearchService } from "../search.service";
-import { uniqBy, compact } from "lodash";
+import AdvancedSearchComponent from "components/shared/advancedSearch/Shell.component.vue";
 
 export default {
     components: {
-        FieldSelectorComponent,
-        SearchResultsComponent,
-        MatcherComponent
+        AdvancedSearchComponent
     },
     data() {
         return {
-            query: {
-                size: 10,
-                query: {
-                    bool: {
-                        must: [],
-                        should: [],
-                        mustNot: []
+            fields: [
+                {
+                    label: "Name",
+                    field: "name",
+                    type: "text"
+                },
+                {
+                    label: "Description",
+                    field: "description",
+                    type: "text"
+                },
+                {
+                    label: "Type",
+                    field: "additionalType",
+                    type: "select",
+                    aggregate: {
+                        field: "additionalType"
+                    }
+                },
+                {
+                    label: "Contributor",
+                    nested: true,
+                    path: "contributor",
+                    field: "contributor",
+                    type: "multi",
+                    subFields: ["name", "role"]
+                },
+                {
+                    label: "License",
+                    nested: true,
+                    path: "license",
+                    field: "license",
+                    type: "multi",
+                    subFields: ["name", "description"]
+                },
+                {
+                    label: "Date Created",
+                    field: "dateCreated",
+                    type: "date"
+                },
+                {
+                    label: "Date Modified",
+                    field: "dateModified",
+                    type: "date"
+                },
+                {
+                    label: "Comments",
+                    field: "comments",
+                    type: "text"
+                },
+                {
+                    label: "Ingest Notes",
+                    field: "ingestNotes",
+                    type: "text"
+                },
+                {
+                    label: "Language As Given",
+                    field: "languageAsGiven",
+                    type: "text"
+                },
+                {
+                    label: "Originated On",
+                    field: "originatedOn",
+                    type: "date"
+                },
+                {
+                    label: "Originated On Narrative",
+                    field: "originatedOnNarrative",
+                    type: "text"
+                },
+                {
+                    label: "Orthographic Notes",
+                    field: "orthographicNotes",
+                    type: "text"
+                },
+                {
+                    label: "University",
+                    nested: true,
+                    path: "publisher",
+                    field: "publisher",
+                    type: "multi",
+                    subFields: ["name"]
+                },
+                {
+                    label: "Data Format",
+                    nested: true,
+                    path: "hasPart",
+                    field: "hasPart",
+                    type: "select",
+                    aggregate: {
+                        nested: true,
+                        path: "hasPart",
+                        field: "encodingFormat"
                     }
                 }
-            },
-            results: {},
-            must: [],
-            mustNot: []
+            ]
         };
-    },
-    mounted() {
-        this.ss = new SearchService({ store: this.$store });
-        this.search({});
-    },
-    methods: {
-        updateQuery(data) {
-            this.query.query.bool[data.type] = compact(data.filters);
-            this.search({});
-        },
-        async search({ page = 0, size = 10 }) {
-            const query = { ...this.query, from: page * size, size: size };
-            this.results = await this.ss.execute({ query });
-        }
     }
 };
 </script>

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { SearchService } from "../search.service";
+import { SearchService } from "components/shared/search.service";
 import { format, parseISO } from "date-fns";
 import SearchFilterTextComponent from "./SearchFilterText.component.vue";
 

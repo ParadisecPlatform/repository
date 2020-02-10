@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { SearchService } from "../search.service";
+import { SearchService } from "components/shared/search.service";
 import { parseISO, isBefore, isAfter, subDays, subMonths } from "date-fns";
 export default {
     data() {

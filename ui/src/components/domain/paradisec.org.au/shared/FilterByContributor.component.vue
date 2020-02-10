@@ -3,11 +3,7 @@
         <div class="underline">Contributors</div>
         <div class="flex flex-col text-base">
             <ol>
-                <li
-                    v-for="(agg, idx) of aggregations.slice(0, 5)"
-                    :key="idx"
-                    class="mb-2"
-                >
+                <li v-for="(agg, idx) of aggregations.slice(0, 5)" :key="idx" class="mb-2">
                     role: {{ agg.role }}
                     <div class="flex flex-col">
                         <a
@@ -20,8 +16,7 @@
                                     person: person.key
                                 })
                             "
-                            >{{ person.key }} ({{ person.doc_count }})</a
-                        >
+                        >{{ person.key }} ({{ person.doc_count }})</a>
                     </div>
                 </li>
             </ol>
@@ -30,8 +25,7 @@
             @click.stop.prevent="showMore"
             class="hidden md:block text-xs"
             v-if="displayShowMoreToggle"
-            >show more</a
-        >
+        >show more</a>
 
         <el-drawer
             title="Filter By Contributor"
@@ -41,11 +35,7 @@
         >
             <div class="style-drawer-content overflow-scroll">
                 <ol class="px-12 text-sm">
-                    <li
-                        v-for="(agg, idx) of aggregations"
-                        :key="idx"
-                        class="mb-4"
-                    >
+                    <li v-for="(agg, idx) of aggregations" :key="idx" class="mb-4">
                         <span class="text-xl">role: {{ agg.role }}</span>
                         <div class="flex flex-col">
                             <a
@@ -58,8 +48,7 @@
                                         person: person.key
                                     })
                                 "
-                                >{{ person.key }} ({{ person.doc_count }})</a
-                            >
+                            >{{ person.key }} ({{ person.doc_count }})</a>
                         </div>
                     </li>
                 </ol>
@@ -69,7 +58,7 @@
 </template>
 
 <script>
-import { SearchService } from "../search.service";
+import { SearchService } from "components/shared/search.service";
 
 export default {
     data() {

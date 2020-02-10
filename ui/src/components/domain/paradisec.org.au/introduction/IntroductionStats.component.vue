@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { SearchService } from "../search.service";
+import { SearchService } from "components/shared/search.service";
 import VueApexCharts from "vue-apexcharts";
 import numeral from "numeral";
 

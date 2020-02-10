@@ -1,14 +1,15 @@
 <template>
     <div class="flex flex-row p-4 text-sm">
         <!-- must match -->
-        <div class="w-30 pr-2 border-r border-black">{{label}} match</div>
+        <div class="w-30 pr-2 border-r border-black">{{ label }} match</div>
         <div class="flex flex-col flex-grow p-1">
-            <div v-for="(entry,idx) of clause" :key="entry.id">
+            <div v-for="(entry, idx) of clause" :key="entry.id">
                 <div class="flex flex-col">
                     <div class="flex flew-row flex-grow">
                         <div class="flex-grow">
                             <field-selector-component
                                 @selected-field="addFieldData"
+                                :fields="fields"
                                 :id="entry.id"
                             />
                         </div>
@@ -23,7 +24,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <span v-if="idx !== clause.length-1">and</span>
+                        <span v-if="idx !== clause.length - 1">and</span>
                     </div>
                 </div>
             </div>
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import { SearchService } from "../search.service";
+import { SearchService } from "components/shared/search.service";
 import FieldSelectorComponent from "./FieldSelector.component.vue";
 import { uniqBy, compact } from "lodash";
 
@@ -53,6 +54,10 @@ export default {
         },
         label: {
             type: String,
+            required: true
+        },
+        fields: {
+            type: Array,
             required: true
         }
     },

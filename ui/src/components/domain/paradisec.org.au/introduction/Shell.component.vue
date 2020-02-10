@@ -18,7 +18,9 @@
                     </p>
                     <p class="text-center">
                         See the
-                        <a href="www.paradisec.org.au" target="_blank">PARADISEC</a>
+                        <a href="www.paradisec.org.au" target="_blank"
+                            >PARADISEC</a
+                        >
                         website for further details.
                     </p>
                 </el-card>
@@ -44,7 +46,8 @@
                         application interacting with an OCFL on-disk repository.
                         Search capability is provided provided via Elastic
                         Search. Read
-                        <router-link to="/about">the about page</router-link>&nbsp;to find out more.
+                        <router-link to="/about">the about page</router-link
+                        >&nbsp;to find out more.
                     </p>
                 </el-card>
             </div>
@@ -54,7 +57,11 @@
                 </div>
                 <div class="my-1 bg-gray-400 rounded p-4">
                     <div class="text-sm">Simple Search</div>
-                    <simple-search-component :autofocus="false" class="mt-2" />
+                    <simple-search-component
+                        :fields="fields"
+                        :autofocus="false"
+                        class="mt-2"
+                    />
                 </div>
                 <div class="my-1 bg-gray-300 rounded">
                     <item-browser-component />
@@ -72,7 +79,7 @@
 <script>
 import ItemJumperComponent from "./ItemJumper.component.vue";
 import ItemBrowserComponent from "./ItemBrowser.component.vue";
-import SimpleSearchComponent from "../shared/SimpleSearch.component.vue";
+import SimpleSearchComponent from "components/shared/SimpleSearch.component.vue";
 import IntroductionStatsComponent from "./IntroductionStats.component.vue";
 import RecentlyUpdatedComponent from "./RecentlyUpdated.component.vue";
 
@@ -86,10 +93,42 @@ export default {
     },
     data() {
         return {
-            paradisec: {}
+            paradisec: {},
+            fields: [
+                { type: "text", label: "Name", field: "name", enabled: true },
+                {
+                    type: "text",
+                    label: "Description",
+                    field: "description",
+                    enabled: true
+                },
+                {
+                    type: "text",
+                    label: "Contributor",
+                    path: "contributor",
+                    field: "name",
+                    nested: true,
+                    enabled: true
+                },
+                {
+                    type: "text",
+                    label: "Subject Language",
+                    path: "subjectLanguages",
+                    field: "name",
+                    nested: true,
+                    enabled: false
+                },
+                {
+                    type: "text",
+                    label: "Content Language",
+                    path: "contentLanguages",
+                    field: "name",
+                    nested: true,
+                    enabled: false
+                }
+            ]
         };
-    },
-    computed: {}
+    }
 };
 </script>
 

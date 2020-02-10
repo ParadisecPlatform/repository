@@ -1,14 +1,12 @@
 <template>
     <div class="flex flex-col">
         <div>The following authors have been found:</div>
-        <div v-for="(author, idx) of authors" :key="idx">
-            {{ author.key }} ({{ author.doc_count }})
-        </div>
+        <div v-for="(author, idx) of authors" :key="idx">{{ author.key }} ({{ author.doc_count }})</div>
     </div>
 </template>
 
 <script>
-import { SearchService } from "../search.service";
+import { SearchService } from "components/shared/search.service";
 
 export default {
     data() {

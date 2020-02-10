@@ -7,8 +7,7 @@
                     <a
                         class="text-sm style-filter-selection"
                         @click.stop.prevent="applyAggregation(agg)"
-                        >{{ agg.key }} ({{ agg.doc_count }})</a
-                    >
+                    >{{ agg.key }} ({{ agg.doc_count }})</a>
                 </li>
             </ol>
         </div>
@@ -17,8 +16,7 @@
             @click.stop.prevent="showMore"
             class="hidden md:block text-xs"
             v-if="displayShowMoreToggle"
-            >show more</a
-        >
+        >show more</a>
 
         <el-drawer
             :title="setDrawerTitle()"
@@ -32,8 +30,7 @@
                         <a
                             class="text-sm style-filter-selection"
                             @click.stop.prevent="applyAggregation(agg)"
-                            >{{ agg.key }} ({{ agg.doc_count }})</a
-                        >
+                        >{{ agg.key }} ({{ agg.doc_count }})</a>
                     </li>
                 </ol>
             </div>
@@ -42,7 +39,7 @@
 </template>
 
 <script>
-import { SearchService } from "../search.service";
+import { SearchService } from "components/shared/search.service";
 
 export default {
     props: {

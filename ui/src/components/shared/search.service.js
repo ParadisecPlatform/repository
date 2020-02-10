@@ -1,6 +1,13 @@
 "use strict";
 
-import { uniqBy, isPlainObject, isString, isArray, compact } from "lodash";
+import {
+    uniqBy,
+    isPlainObject,
+    isString,
+    isArray,
+    compact,
+    difference
+} from "lodash";
 
 const numberOfAggregations = 5;
 
@@ -459,58 +466,17 @@ export class SearchService {
         return { documents };
     }
 
-    async textSearch({ text, fields }) {
-        const allowedFields = [
-            "name",
-            "description",
-            "subjectLanguages",
-            "contentLanguages",
-            "contributor"
-        ];
-        fields.forEach(f => {
-            if (!allowedFields.includes(f))
-                throw new Error(`${f} is not an accepted search field`);
-        });
-
-        const lookups = {
-            name: this.queryBuilder({
-                type: "text",
-                field: "name",
-                value: text
-            }),
-            description: this.queryBuilder({
-                type: "text",
-                field: "description",
-                value: text
-            }),
-            subjectLanguages: this.queryBuilder({
-                type: "text",
-                nested: "true",
-                path: "subjectLanguages",
-                field: "name",
-                value: text
-            }),
-            contentLanguages: this.queryBuilder({
-                type: "text",
-                nested: true,
-                path: "contentLanguages",
-                field: "name",
-                value: text
-            }),
-            contributor: this.queryBuilder({
-                type: "text",
-                nested: true,
-                path: "contributor",
-                field: "name",
-                value: text
-            })
-        };
-
+    async textSearch({ fields }) {
+        if (!this.verifyFields({ fields })) {
+            return { documents: [], total: 0 };
+        }
         let query = {
             size: 20,
             query: {
                 bool: {
-                    should: fields.map(f => lookups[f])
+                    should: fields.map(f => {
+                        return this.queryBuilder(f);
+                    })
                 }
             }
         };
@@ -761,5 +727,40 @@ export class SearchService {
         function checkIncludes(struct, thing) {
             return struct.includes(thing) ? true : false;
         }
+    }
+
+    verifyFields({ fields, disableFields = [] }) {
+        let properties = ["label", "field", "enabled"];
+        properties = difference(properties, disableFields);
+        let fieldDataVerifies = true;
+        for (let field of fields) {
+            if (
+                !field.type ||
+                !["text", "multi", "date", "select"].includes(field.type)
+            ) {
+                console.error(
+                    `Each field must have a property 'type' === 'text'`
+                );
+                fieldDataVerifies = false;
+                break;
+            }
+            for (let prop of properties) {
+                if (!(prop in field)) {
+                    console.error(`Each field must have a property '${prop}'`);
+                    fieldDataVerifies = false;
+                    break;
+                }
+            }
+            if ("nested" in field) {
+                if (!("path" in field)) {
+                    console.error(
+                        `Each nested field must have a property 'path'`
+                    );
+                    fieldDataVerifies = false;
+                    break;
+                }
+            }
+        }
+        return fieldDataVerifies;
     }
 }
