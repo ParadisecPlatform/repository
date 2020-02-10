@@ -2,10 +2,12 @@
     <div class="flex flex-col">
         <div class="flex-grow" v-if="!select">
             <el-select
+                ref="typeSelect"
                 v-model="select"
                 placeholder="Select a field to add to the query"
                 class="w-full"
                 size="small"
+                :filterable="true"
             >
                 <el-option
                     v-for="(field, idx) of fields"
@@ -88,6 +90,14 @@ export default {
                     subFields: ["name", "role"]
                 },
                 {
+                    label: "License",
+                    nested: true,
+                    path: "license",
+                    field: "license",
+                    type: "multi",
+                    subFields: ["name", "description"]
+                },
+                {
                     label: "Date Created",
                     field: "dateCreated",
                     type: "date"
@@ -121,12 +131,29 @@ export default {
                     label: "Originated On Narrative",
                     field: "originatedOnNarrative",
                     type: "text"
+                },
+                {
+                    label: "Orthographic Notes",
+                    field: "orthographicNotes",
+                    type: "text"
+                },
+                {
+                    label: "Publisher",
+                    nested: true,
+                    path: "publisher",
+                    field: "publisher",
+                    type: "multi",
+                    subFields: ["name"]
                 }
             ],
             aggregations: {}
         };
     },
+    mounted() {
+        this.$refs.typeSelect.$refs.reference.focus();
+    },
     methods: {
+        focusSelect() {},
         emitSelection(field) {
             field = { ...field, id: this.id };
             this.$emit("selected-field", field);
