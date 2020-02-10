@@ -144,6 +144,18 @@ export default {
                     field: "publisher",
                     type: "multi",
                     subFields: ["name"]
+                },
+                {
+                    label: "Data Format",
+                    nested: true,
+                    path: "hasPart",
+                    field: "hasPart",
+                    type: "select",
+                    aggregate: {
+                        nested: true,
+                        path: "hasPart",
+                        field: "encodingFormat"
+                    }
                 }
             ],
             aggregations: {}
