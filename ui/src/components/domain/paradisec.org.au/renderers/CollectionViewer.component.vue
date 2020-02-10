@@ -30,14 +30,13 @@
                             :description="data.objectifiedCrate.description"
                         />
                     </div>
-                    <div class="my-4">
+                    <div class>
                         <render-collection-information-component :data="data" />
                     </div>
-                    <div class="my-4">
+                    <div class="my-2">
                         <language-renderer-component
                             :languages="data.objectifiedCrate.contentLanguages"
                             name="Content Languages"
-                            class="mb-2"
                         />
                         <language-renderer-component
                             :languages="data.objectifiedCrate.subjectLanguages"
