@@ -15,36 +15,37 @@
                 ></el-option>
             </el-select>
         </div>
-        <div v-for="(field , idx) of fields" :key="idx" class="flex-grow" v-else>
-            <div class="flex flex-col" v-if="field.field === select">
-                <div v-if="field.elementType === 'input'" class="w-full">
-                    <el-input
-                        :type="field.type"
-                        v-model="field.value"
-                        @change="emitSelection(field)"
-                        size="small"
-                    ></el-input>
+        <div v-for="(f, idx) of fields" :key="idx" class="flex-grow" v-else>
+            <div class="flex flex-col" v-if="f.field === select">
+                <div v-if="f.type=== 'text'" class="w-full">
+                    <render-text-field-selector-component :field="f" @change="emitSelection" />
                 </div>
-                <div v-if="field.elementType === 'date'" class="w-full">
-                    <el-date-picker
-                        v-model="field.value"
-                        type="monthrange"
-                        range-separator="-"
-                        start-placeholder="Start month"
-                        end-placeholder="End month"
-                        size="small"
-                        align="center"
-                        @change="emitSelection(field)"
-                    ></el-date-picker>
+                <div v-if="f.type === 'date'" class="w-full">
+                    <render-date-field-selector-component :field="f" @change="emitSelection" />
                 </div>
-                <div class="text-xs w-full pr-2">{{field.label}}</div>
+                <div v-if="f.type === 'select'" class="w-full">
+                    <render-aggregation-field-selector-component
+                        :field="f"
+                        @change="emitSelection"
+                    />
+                </div>
+                <div class="text-xs w-full pr-2">{{f.label}}</div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import RenderTextFieldSelectorComponent from "./RenderTextFieldSelector.component.vue";
+import RenderDateFieldSelectorComponent from "./RenderDateFieldSelector.component.vue";
+import RenderAggregationFieldSelectorComponent from "./RenderAggregationFieldSelector.component.vue";
+
 export default {
+    components: {
+        RenderTextFieldSelectorComponent,
+        RenderDateFieldSelectorComponent,
+        RenderAggregationFieldSelectorComponent
+    },
     props: {
         id: {
             type: Number,
@@ -58,58 +59,68 @@ export default {
                 {
                     label: "Name",
                     field: "name",
-                    elementType: "input",
                     type: "text"
                 },
                 {
                     label: "Description",
                     field: "description",
-                    elementType: "input",
                     type: "text"
                 },
                 {
+                    label: "Type",
+                    field: "additionalType",
+                    type: "select",
+                    aggregate: {
+                        field: "additionalType"
+                    }
+                },
+                // {
+                //     label: "Contributor",
+                //     field: "contributor",
+                //     type: "select",
+                //     aggregate: {
+                //         nested: true,
+                //         path: "contributor",
+                //         field: "name.raw"
+                //     }
+                // },
+                {
                     label: "Date Created",
                     field: "dateCreated",
-                    elementType: "date",
                     type: "date"
                 },
                 {
                     label: "Date Modified",
                     field: "dateModified",
-                    elementType: "date",
                     type: "date"
                 },
                 {
                     label: "Comments",
                     field: "comments",
-                    elementType: "input",
                     type: "text"
                 },
                 {
                     label: "Ingest Notes",
                     field: "ingestNotes",
-                    elementType: "input",
                     type: "text"
                 },
                 {
                     label: "Language As Given",
                     field: "languageAsGiven",
-                    elementType: "input",
                     type: "text"
                 },
                 {
                     label: "Originated On",
                     field: "originatedOn",
-                    elementType: "date",
                     type: "date"
                 },
                 {
                     label: "Originated On Narrative",
                     field: "originatedOnNarrative",
-                    elementType: "input",
                     type: "text"
                 }
-            ]
+            ],
+            aggregations: {}
         };
     },
     methods: {

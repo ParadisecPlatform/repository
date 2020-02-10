@@ -396,27 +396,16 @@ export class SearchService {
         return types;
     }
 
-    async aggregateHasContent({ size = numberOfAggregations }) {
-        let query = {
-            size: 0,
-            aggs: {
-                type: {
-                    terms: {
-                        field: "hasContent",
-                        size
-                    }
-                }
-            }
-        };
-        let filters = [...this.store.state.search.filters];
-        let q = this.assembleQuery({ filters });
-        query = {
-            query: q,
-            ...query
-        };
-        let response = await this.execute({ query });
-        let types = response.aggregations.type.buckets;
-        return types;
+    async aggregateOverField({ type, path, field, size = 5 }) {
+        const aggregations = this.aggregationBuilder({
+            type,
+            path,
+            field,
+            size
+        });
+        let response = await this.execute({ query: aggregations });
+        let data = response.aggregations[field].buckets;
+        return { [field]: data };
     }
 
     async getStats() {

@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="border-t border-black p-1">
+            <div class="border-t border-black p-1 mt-2">
                 <el-button @click="addClause" size="small">
                     <i class="fas fa-plus"></i>
                 </el-button>
