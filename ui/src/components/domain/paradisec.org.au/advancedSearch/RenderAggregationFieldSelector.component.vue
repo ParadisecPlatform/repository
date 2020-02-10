@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-select
+            ref="dataSelect"
             v-model="value"
             placeholder="Select a field to add to the query"
             class="w-full"
@@ -43,17 +44,22 @@ export default {
     methods: {
         async loadAggregations(selection) {
             if (this.field.aggregate) {
-                this.aggregations = (
-                    await this.ss.aggregateOverField({
-                        ...this.field.aggregate,
-                        size: this.aggregationSize
-                    })
-                )[this.field.field];
+                const data = {
+                    ...this.field.aggregate,
+                    size: this.aggregationSize
+                };
+                let aggregations = await this.ss.aggregateOverField(data);
+                this.aggregations = this.field.aggregate.nested
+                    ? aggregations[this.field.aggregate.field]
+                    : aggregations[this.field.field];
             }
         },
         emitSelection() {
             this.$emit("change", {
                 ...this.field,
+                field: this.field.aggregate.nested
+                    ? this.field.aggregate.field
+                    : this.field.field,
                 value: this.value,
                 type: "text"
             });
