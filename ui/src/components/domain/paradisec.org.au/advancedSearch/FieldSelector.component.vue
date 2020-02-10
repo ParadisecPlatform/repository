@@ -138,7 +138,7 @@ export default {
                     type: "text"
                 },
                 {
-                    label: "Publisher",
+                    label: "University",
                     nested: true,
                     path: "publisher",
                     field: "publisher",

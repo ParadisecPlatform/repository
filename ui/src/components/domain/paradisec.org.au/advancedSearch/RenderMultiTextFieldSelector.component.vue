@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
         <div class="flex flex-row" v-for="(field, idx) of fields" :key="idx">
-            <div class="w-20 text-right mr-1">{{field.name}}</div>
+            <div class="w-20 text-right mr-2 leading-loose">{{field.name}}</div>
             <div class="flex-grow">
                 <el-input
                     ref="inputElement"
