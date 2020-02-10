@@ -29,6 +29,9 @@
                         @change="emitSelection"
                     />
                 </div>
+                <div v-if="f.type=== 'multi'" class="w-full">
+                    <render-multi-text-field-selector-component :field="f" @change="emitSelection" />
+                </div>
                 <div class="text-xs w-full pr-2">{{f.label}}</div>
             </div>
         </div>
@@ -39,12 +42,14 @@
 import RenderTextFieldSelectorComponent from "./RenderTextFieldSelector.component.vue";
 import RenderDateFieldSelectorComponent from "./RenderDateFieldSelector.component.vue";
 import RenderAggregationFieldSelectorComponent from "./RenderAggregationFieldSelector.component.vue";
+import RenderMultiTextFieldSelectorComponent from "./RenderMultiTextFieldSelector.component.vue";
 
 export default {
     components: {
         RenderTextFieldSelectorComponent,
         RenderDateFieldSelectorComponent,
-        RenderAggregationFieldSelectorComponent
+        RenderAggregationFieldSelectorComponent,
+        RenderMultiTextFieldSelectorComponent
     },
     props: {
         id: {
@@ -74,16 +79,14 @@ export default {
                         field: "additionalType"
                     }
                 },
-                // {
-                //     label: "Contributor",
-                //     field: "contributor",
-                //     type: "select",
-                //     aggregate: {
-                //         nested: true,
-                //         path: "contributor",
-                //         field: "name.raw"
-                //     }
-                // },
+                {
+                    label: "Contributor",
+                    nested: true,
+                    path: "contributor",
+                    field: "contributor",
+                    type: "multi",
+                    subFields: ["name", "role"]
+                },
                 {
                     label: "Date Created",
                     field: "dateCreated",
