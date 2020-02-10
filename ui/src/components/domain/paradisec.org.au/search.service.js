@@ -396,15 +396,21 @@ export class SearchService {
         return types;
     }
 
-    async aggregateOverField({ type, path, field, size = 5 }) {
+    async aggregateOverField({ type, nested, path, field, size = 5 }) {
         const aggregations = this.aggregationBuilder({
             type,
+            nested,
             path,
             field,
             size
         });
         let response = await this.execute({ query: aggregations });
-        let data = response.aggregations[field].buckets;
+        let data;
+        if (nested) {
+            data = response.aggregations[path].values.buckets;
+        } else {
+            data = response.aggregations[field].buckets;
+        }
         return { [field]: data };
     }
 
@@ -421,7 +427,7 @@ export class SearchService {
         types.forEach(t => (data[t.key] = t.doc_count));
 
         const publisherAggregation = this.aggregationBuilder({
-            type: "nested",
+            nested: true,
             path: "publisher",
             field: "name.raw",
             size: 1
@@ -430,7 +436,7 @@ export class SearchService {
         data.publishers = response.aggregations.publisher.count.value;
 
         const contributorAggregation = this.aggregationBuilder({
-            type: "nested",
+            nested: true,
             path: "contributor",
             field: "name.raw",
             size: 1
@@ -541,13 +547,13 @@ export class SearchService {
         let wildcard;
         // is it a nested query
         if (nested) {
-            query = constructNestedQuery({ type, path, field, value });
+            query = assembleNestedQuery({ type, path, field, value });
         } else {
-            query = constructSimpleQuery({ type, field, value });
+            query = assembleSimpleQuery({ type, field, value });
         }
         return query;
 
-        function constructSimpleQuery({ type, field, value }) {
+        function assembleSimpleQuery({ type, field, value }) {
             let wildcard = value.match(/\?|\*/g);
             if (type === "text") {
                 query = wildcard
@@ -568,7 +574,7 @@ export class SearchService {
             return query;
         }
 
-        function constructNestedQuery({ type, path, field, value }) {
+        function assembleNestedQuery({ type, path, field, value }) {
             let query, wildcard;
             if (["text", "multi"].includes(type)) {
                 query = {
@@ -641,8 +647,26 @@ export class SearchService {
         }
     }
 
-    aggregationBuilder({ type, path, field, size }) {
-        if (type === "nested") {
+    aggregationBuilder({ nested, path, field, size }) {
+        if (nested) {
+            return assembleNestedAggregation({ path, field, size });
+        } else {
+            return assembleSimpleAggregation({ field, size });
+        }
+
+        function assembleSimpleAggregation({ field, size }) {
+            return {
+                size: 0,
+                aggs: {
+                    [field]: {
+                        terms: { field, size }
+                    },
+                    count: { cardinality: { field } }
+                }
+            };
+        }
+
+        function assembleNestedAggregation({ path, field, size }) {
             return {
                 size: 0,
                 aggs: {
@@ -662,16 +686,6 @@ export class SearchService {
                             }
                         }
                     }
-                }
-            };
-        } else {
-            return {
-                size: 0,
-                aggs: {
-                    [field]: {
-                        terms: { field, size }
-                    },
-                    count: { cardinality: { field } }
                 }
             };
         }
