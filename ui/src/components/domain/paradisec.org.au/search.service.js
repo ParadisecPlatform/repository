@@ -423,7 +423,7 @@ export class SearchService {
         const publisherAggregation = this.aggregationBuilder({
             type: "nested",
             path: "publisher",
-            field: "name",
+            field: "name.raw",
             size: 1
         });
         response = await this.execute({ query: publisherAggregation });
