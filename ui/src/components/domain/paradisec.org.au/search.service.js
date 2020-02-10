@@ -1,6 +1,6 @@
 "use strict";
 
-import { uniqBy, isPlainObject } from "lodash";
+import { uniqBy, isPlainObject, isString, isArray, compact } from "lodash";
 
 const numberOfAggregations = 5;
 
@@ -537,50 +537,107 @@ export class SearchService {
     }
 
     queryBuilder({ type, nested = false, path, field, value }) {
-        let wildcard = false;
-        if (typeof value === "string" && value.match(/\?|\*/g)) {
-            wildcard = true;
-        }
+        let query = {};
+        let wildcard;
+        // is it a nested query
         if (nested) {
-            if (type === "text")
-                return {
-                    nested: {
-                        path,
-                        query: wildcard
-                            ? { wildcard: { [`${path}.${field}`]: value } }
-                            : {
-                                  match: {
-                                      [`${path}.${field}`]: { query: value }
-                                  }
-                              }
-                    }
-                };
-            if (type === "date")
-                return {
-                    nested: {
-                        path,
-                        query: {
-                            range: {
-                                [field]: { gte: value[0], lte: value[1] }
-                            }
-                        }
-                    }
-                };
+            query = constructNestedQuery({ type, path, field, value });
         } else {
-            if (type === "text")
-                return wildcard
+            query = constructSimpleQuery({ type, field, value });
+        }
+        return query;
+
+        function constructSimpleQuery({ type, field, value }) {
+            let wildcard = value.match(/\?|\*/g);
+            if (type === "text") {
+                query = wildcard
                     ? { wildcard: { [field]: value } }
                     : {
                           match: {
                               [field]: { query: value }
                           }
                       };
-            if (type === "date")
-                return {
+            }
+            if (type === "date") {
+                query = {
                     range: {
                         [field]: { gte: value[0], lte: value[1] }
                     }
                 };
+            }
+            return query;
+        }
+
+        function constructNestedQuery({ type, path, field, value }) {
+            let query, wildcard;
+            if (["text", "multi"].includes(type)) {
+                query = {
+                    nested: {
+                        path,
+                        query: {}
+                    }
+                };
+                if (isString(value)) {
+                    wildcard = value.match(/\?|\*/g);
+                    query.nested.query = wildcard
+                        ? {
+                              wildcard: {
+                                  [`${path}.${field}`]: value
+                              }
+                          }
+                        : {
+                              match: {
+                                  [`${path}.${field}`]: {
+                                      query: value
+                                  }
+                              }
+                          };
+                } else if (isArray(value)) {
+                    query.nested.query = {
+                        bool: {
+                            must: value.map(v => {
+                                if (v.name && v.value) {
+                                    wildcard = v.value.match(/\?|\*/g);
+                                    return wildcard
+                                        ? {
+                                              wildcard: {
+                                                  [`${path}.${v.name}`]: v.value
+                                              }
+                                          }
+                                        : {
+                                              match: {
+                                                  [`${path}.${v.name}`]: {
+                                                      query: v.value
+                                                  }
+                                              }
+                                          };
+                                }
+                            })
+                        }
+                    };
+                    query.nested.query.bool.must = compact(
+                        query.nested.query.bool.must
+                    );
+                }
+            }
+
+            if (type === "date") {
+                query = {
+                    nested: {
+                        path,
+                        query: {
+                            range: {
+                                [field]: {
+                                    gte: value[0],
+                                    lte: value[1]
+                                }
+                            }
+                        }
+                    }
+                };
+            }
+
+            return query;
         }
     }
 
