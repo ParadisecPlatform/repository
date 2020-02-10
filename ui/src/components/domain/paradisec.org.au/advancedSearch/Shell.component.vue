@@ -1,6 +1,11 @@
 <template>
     <div class="flex flex-row">
         <div class="flex flex-col w-1/2">
+            <div class="text-xs mt-2 bg-teal-200 text-black p-2 text-center">
+                Simple wildcard searches are supported. Try adding '*'
+                to match zero or more characters or '?' to match a
+                single character.
+            </div>
             <matcher-component type="must" label="Must" @update="updateQuery" class="bg-green-300" />
             <matcher-component
                 type="should"
