@@ -147,9 +147,11 @@ export class DataLoader {
         ocflObject.domain = ocflObject.objectifiedCrate.identifier.filter(
             i => i.name === "domain"
         )[0].value;
-        ocflObject.additionalType = ocflObject.objectifiedCrate.additionalType
-            ? ocflObject.objectifiedCrate.additionalType
-            : null;
+        ocflObject.type = [
+            ...[ocflObject.objectifiedCrate.additionalType],
+            ...[ocflObject.objectifiedCrate["@type"]]
+        ];
+        ocflObject.type = flattenDeep(ocflObject.type);
 
         ocflObject.dataTypes = this.determineDataTypes({
             crate: ocflObject.objectifiedCrate,

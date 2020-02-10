@@ -59,11 +59,16 @@ export default {
         async loadViewer({ version }) {
             this.viewComponent = undefined;
             let identifier;
+
+            // determine what to load based on the URL path
             if (this.configuration.domain) {
                 identifier = `/${this.configuration.domain}${this.$route.params.pathMatch}`;
             } else {
                 identifier = this.$route.params.pathMatch;
             }
+
+            // try to load the object directly from OCFL
+            //  not yet implemented: call to API if config says there is one
             console.debug(`Loading: ${identifier}: ${version}`);
             try {
                 let params;
@@ -85,8 +90,9 @@ export default {
                 this.errorMsg = error;
                 return;
             }
-            let { domain, additionalType } = this.ocflObject;
+            let { domain, type } = this.ocflObject;
 
+            //  set the version in the URL if not already defined
             if (
                 !this.$route.query.version ||
                 this.$route.query.version !== this.ocflObject.version
@@ -95,17 +101,25 @@ export default {
                     path: this.$route.path,
                     query: { version: this.ocflObject.version }
                 });
+
+            // determine which renderer to load by
+            //   - construct the type array containing the @type and additionalType properties
+            //   - iterate over the renderers in the configuration using the first that matches
+
             let viewComponent;
             let renderers = this.configuration.renderers;
-            if (
-                domain &&
-                additionalType &&
-                renderers[domain] &&
-                renderers[domain][additionalType]
-            ) {
-                viewComponent = renderers[domain][additionalType];
-            } else if (domain && renderers[domain]) {
-                viewComponent = renderers[domain];
+
+            if (domain && renderers[domain]) {
+                try {
+                    let renderer = renderers[domain]
+                        .filter(r => type.includes(r.type))
+                        .shift();
+                    viewComponent = renderer.component;
+                } catch (error) {
+                    console.error(
+                        `Something went wrong trying to find a renderer for ${domain} ${type}`
+                    );
+                }
             } else {
                 viewComponent = "./GenericViewer.component.vue";
             }

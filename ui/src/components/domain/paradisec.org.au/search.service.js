@@ -609,7 +609,10 @@ export class SearchService {
                                 terms: { field: `${path}.${field}`, size }
                             },
                             count: {
-                                cardinality: { field: `${path}.${field}` }
+                                cardinality: {
+                                    field: `${path}.${field}`
+                                    // precision_threshold: 30000
+                                }
                             }
                         }
                     }

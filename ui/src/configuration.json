@@ -22,9 +22,15 @@
     "header": "paradisec.org.au/header/Shell.component.vue",
     "footer": "paradisec.org.au/footer/Shell.component.vue",
     "renderers": {
-        "paradisec.org.au": {
-            "item": "paradisec.org.au/renderers/ItemViewer.component.vue",
-            "collection": "paradisec.org.au/renderers/CollectionViewer.component.vue"
-        }
+        "paradisec.org.au": [
+            {
+                "type": "item",
+                "component": "paradisec.org.au/renderers/ItemViewer.component.vue"
+            },
+            {
+                "type": "collection",
+                "component": "paradisec.org.au/renderers/CollectionViewer.component.vue"
+            }
+        ]
     }
 }

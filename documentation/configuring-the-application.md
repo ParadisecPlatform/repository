@@ -60,6 +60,8 @@ You can match on the `domain` of the data or the `domain` and `type` and / or `a
 In the absence of a specific renderer for a given piece of data the application will load
 the `GenericViewer.component` to display the basic metadata.
 
+The renderers property *must* be an array of objects keyed on `type` and `component`. The application will then iterate over that array and the first that matches the type of the ocflObject will be used as the renderer for that object. So, say you have a renderer for an `item` and a `Dataset` defined. You should define the item renderer before the Dataset renderer in the configuration as that is the more specific one,  ensure it will be used for items in preference to the (potentetially) more generic Dataset renderer.
+
 **IMPORTANT** Given the way the renderer components are loaded you `MUST` define them 
 as paths relative to the view folder. Defining them any other way will result in 
 the component failing to load.

@@ -60,7 +60,7 @@ export default {
 
 ### Getting started with your own renderer
 
-Check out `view/paradisec.org.au/ItemViewer.component.vue` as well as `view/paradisec.org.au/RenderContent.component.vue`.
+Check out `domain/paradisec.org.au/renderers/ItemViewer.component.vue` as well as `domain/paradisec.org.au/renderers/RenderContent.component.vue`.
 
 ## Domain specific introduction, header, footer, explore etc components.
 
