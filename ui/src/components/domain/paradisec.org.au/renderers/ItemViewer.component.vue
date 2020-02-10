@@ -65,6 +65,17 @@
             <div class="my-4">
                 <render-item-information-component :data="data" />
             </div>
+            <div class="my-4">
+                <language-renderer-component
+                    :languages="data.objectifiedCrate.contentLanguages"
+                    name="Content Languages"
+                    class="mb-2"
+                />
+                <language-renderer-component
+                    :languages="data.objectifiedCrate.subjectLanguages"
+                    name="Subject Languages"
+                />
+            </div>
             <div class="mt-4">
                 <render-content-component :data="data" />
             </div>
@@ -78,6 +89,7 @@ import RenderItemInformationComponent from "./RenderItemInformation.component.vu
 import RenderLocationComponent from "src/components/shared/RenderLocation.component.vue";
 import RenderDescriptionComponent from "src/components/shared/RenderDescription.component.vue";
 import LicenseComponent from "./License.component.vue";
+import LanguageRendererComponent from "./LanguageRenderer.component.vue";
 
 export default {
     components: {
@@ -85,7 +97,8 @@ export default {
         RenderItemInformationComponent,
         RenderDescriptionComponent,
         RenderLocationComponent,
-        LicenseComponent
+        LicenseComponent,
+        LanguageRendererComponent
     },
     props: {
         data: {

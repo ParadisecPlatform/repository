@@ -30,7 +30,20 @@
                             :description="data.objectifiedCrate.description"
                         />
                     </div>
-                    <render-collection-information-component :data="data" />
+                    <div class="my-4">
+                        <render-collection-information-component :data="data" />
+                    </div>
+                    <div class="my-4">
+                        <language-renderer-component
+                            :languages="data.objectifiedCrate.contentLanguages"
+                            name="Content Languages"
+                            class="mb-2"
+                        />
+                        <language-renderer-component
+                            :languages="data.objectifiedCrate.subjectLanguages"
+                            name="Subject Languages"
+                        />
+                    </div>
                     <div class="flex flex-row flex-wrap">
                         <div
                             v-for="(item, idx) of data.objectifiedCrate
@@ -79,6 +92,8 @@ import RenderLocationComponent from "components/shared/RenderLocation.component.
 import RenderCollectionInformationComponent from "./RenderCollectionInformation.component.vue";
 import RenderDescriptionComponent from "components/shared/RenderDescription.component.vue";
 import LicenseComponent from "./License.component.vue";
+import LanguageRendererComponent from "./LanguageRenderer.component.vue";
+
 import { id } from "date-fns/locale";
 
 export default {
@@ -86,7 +101,8 @@ export default {
         RenderLocationComponent,
         RenderCollectionInformationComponent,
         RenderDescriptionComponent,
-        LicenseComponent
+        LicenseComponent,
+        LanguageRendererComponent
     },
     props: {
         data: {
