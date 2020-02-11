@@ -466,7 +466,7 @@ export class SearchService {
         return { documents };
     }
 
-    async textSearch({ fields }) {
+    async textSearch({ fields, operator = "AND", phraseSearch = true }) {
         if (!this.verifyFields({ fields })) {
             return { documents: [], total: 0 };
         }
@@ -475,7 +475,11 @@ export class SearchService {
             query: {
                 bool: {
                     should: fields.map(f => {
-                        return this.queryBuilder(f);
+                        return this.queryBuilder({
+                            ...f,
+                            operator,
+                            phraseSearch
+                        });
                     })
                 }
             }
@@ -512,39 +516,66 @@ export class SearchService {
         return { total, documents, aggregations };
     }
 
-    queryBuilder({ type, nested = false, path, field, value }) {
+    queryBuilder({
+        type,
+        nested = false,
+        path,
+        field,
+        value,
+        operator = "OR",
+        phraseSearch = false
+    }) {
         let query = {};
-        let wildcard;
         // is it a nested query
         if (nested) {
-            query = assembleNestedQuery({ type, path, field, value });
+            query = assembleNestedQuery({
+                type,
+                path,
+                field,
+                value,
+                operator,
+                phraseSearch
+            });
         } else {
-            query = assembleSimpleQuery({ type, field, value });
+            query = assembleSimpleQuery({
+                type,
+                field,
+                value,
+                operator,
+                phraseSearch
+            });
         }
         return query;
 
-        function assembleSimpleQuery({ type, field, value }) {
+        function assembleSimpleQuery({
+            type,
+            field,
+            value,
+            operator,
+            phraseSearch
+        }) {
             let wildcard = value.match(/\?|\*/g);
             if (type === "text") {
                 query = wildcard
-                    ? { wildcard: { [field]: value } }
-                    : {
-                          match: {
-                              [field]: { query: value }
-                          }
-                      };
+                    ? assembleWildcardQuery({ field, value })
+                    : phraseSearch
+                    ? assembleMatchPhraseQuery({ field, value })
+                    : assembleMatchQuery({ field, value, operator });
             }
             if (type === "date") {
-                query = {
-                    range: {
-                        [field]: { gte: value[0], lte: value[1] }
-                    }
-                };
+                query = assembleRangeQuery({ field, value });
             }
             return query;
         }
 
-        function assembleNestedQuery({ type, path, field, value }) {
+        function assembleNestedQuery({
+            type,
+            path,
+            field,
+            value,
+            operator,
+            phraseSearch
+        }) {
             let query, wildcard;
             if (["text", "multi"].includes(type)) {
                 query = {
@@ -556,18 +587,15 @@ export class SearchService {
                 if (isString(value)) {
                     wildcard = value.match(/\?|\*/g);
                     query.nested.query = wildcard
-                        ? {
-                              wildcard: {
-                                  [`${path}.${field}`]: value
-                              }
-                          }
-                        : {
-                              match: {
-                                  [`${path}.${field}`]: {
-                                      query: value
-                                  }
-                              }
-                          };
+                        ? assembleWildcardQuery({ path, field, value })
+                        : phraseSearch
+                        ? assembleMatchPhraseQuery({ path, field, value })
+                        : assembleMatchQuery({
+                              path,
+                              field,
+                              value,
+                              operator
+                          });
                 } else if (isArray(value)) {
                     query.nested.query = {
                         bool: {
@@ -575,18 +603,22 @@ export class SearchService {
                                 if (v.name && v.value) {
                                     wildcard = v.value.match(/\?|\*/g);
                                     return wildcard
-                                        ? {
-                                              wildcard: {
-                                                  [`${path}.${v.name}`]: v.value
-                                              }
-                                          }
-                                        : {
-                                              match: {
-                                                  [`${path}.${v.name}`]: {
-                                                      query: v.value
-                                                  }
-                                              }
-                                          };
+                                        ? assembleWildcardQuery({
+                                              path,
+                                              field: v.name,
+                                              value: v.value
+                                          })
+                                        : phraseSearch
+                                        ? assembleMatchPhraseQuery({
+                                              path,
+                                              field: v.name,
+                                              value: v.value
+                                          })
+                                        : assembleMatchQuery({
+                                              path,
+                                              field: v.name,
+                                              value: v.value
+                                          });
                                 }
                             })
                         }
@@ -601,19 +633,57 @@ export class SearchService {
                 query = {
                     nested: {
                         path,
-                        query: {
-                            range: {
-                                [field]: {
-                                    gte: value[0],
-                                    lte: value[1]
-                                }
-                            }
-                        }
+                        query: assembleRangeQuery({ field, value })
                     }
                 };
             }
 
             return query;
+        }
+
+        function assembleMatchQuery({ path, field, value, operator }) {
+            return path
+                ? {
+                      match: {
+                          [`${path}.${field}`]: {
+                              query: value,
+                              operator
+                          }
+                      }
+                  }
+                : {
+                      match: { [field]: { query: value, operator } }
+                  };
+        }
+
+        function assembleMatchPhraseQuery({ path, field, value }) {
+            return path
+                ? {
+                      match_phrase: {
+                          [`${path}.${field}`]: { query: value }
+                      }
+                  }
+                : {
+                      match_phrase: {
+                          [field]: value
+                      }
+                  };
+        }
+
+        function assembleWildcardQuery({ path, field, value }) {
+            return path
+                ? {
+                      wildcard: { [`${path}.${field}`]: value }
+                  }
+                : { wildcard: { [field]: value } };
+        }
+
+        function assembleRangeQuery({ field, value }) {
+            return {
+                range: {
+                    [field]: { gte: value[0], lte: value[1] }
+                }
+            };
         }
     }
 
