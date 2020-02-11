@@ -484,7 +484,7 @@ export class SearchService {
                 }
             }
         };
-        // console.log(JSON.stringify(query, null, 2));
+        console.log(JSON.stringify(query, null, 2));
         let { total, documents } = await this.execute({ query });
         return { documents, total };
     }
@@ -554,8 +554,8 @@ export class SearchService {
             operator,
             phraseSearch
         }) {
-            let wildcard = value.match(/\?|\*/g);
             if (type === "text") {
+                let wildcard = value.match(/\?|\*/g);
                 query = wildcard
                     ? assembleWildcardQuery({ field, value })
                     : phraseSearch
