@@ -5,7 +5,7 @@ import shajs from "sha.js";
 import jsonld from "jsonld";
 import { flattenDeep, isPlainObject, orderBy, groupBy } from "lodash";
 
-import { EAFParser } from "./eaf-parser.service";
+import { EAFParser, SimpleEAFParser } from "./eaf-parser.service";
 import { IXTParser } from "./ixt-parser.service";
 import { TRSParser } from "./trs-parser.service";
 import { FlextextParser } from "./flextext-parser.service";
@@ -247,17 +247,24 @@ export class DataLoader {
         let response = await fetch(transcription.path);
         if (!response.ok) throw response;
         let xml = await response.text();
-        xml = this.parseXML(xml);
-        if (!xml) return [];
-        transcription = this.convertXmlToJson(xml);
-        let segments = parser[type].parse(transcription);
-        segments = segments.map(segment => {
-            return {
-                ...segment,
-                htmlId: `s${this.hash(segment.id)}`
-            };
-        });
-        return { type, segments };
+        let segments, tiers;
+        if (type === "eaf") {
+            let result = await parser.eaf.extract({ data: xml });
+            segments = result.segments;
+            tiers = result.tiers;
+        } else {
+            xml = this.parseXML(xml);
+            if (!xml) return [];
+            transcription = this.convertXmlToJson(xml);
+            segments = parser[type].parse(transcription);
+            segments = segments.map(segment => {
+                return {
+                    ...segment,
+                    htmlId: `s${this.hash(segment.id)}`
+                };
+            });
+        }
+        return { type, segments, tiers };
     }
 
     parseXML(src) {

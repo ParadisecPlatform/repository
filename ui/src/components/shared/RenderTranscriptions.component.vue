@@ -22,10 +22,7 @@
                 v-on:play-from="playFrom"
             />
 
-            <div
-                v-if="!transcription.segments || !transcription.segments.length"
-                class="text-center"
-            >
+            <div v-if="error" class="text-center">
                 There was an error loading that file. This is typically due to
                 the XML not being well-formed.
             </div>
@@ -62,6 +59,7 @@ export default {
     data() {
         return {
             watchers: {},
+            error: false,
             transcription: {
                 type: undefined,
                 segments: []
@@ -93,6 +91,8 @@ export default {
                         transcription
                     }))
                 };
+                if (!transcription.segments || !transcription.segments.length)
+                    this.error = true;
                 setTimeout(() => {
                     this.$scrollTo(`#${transcription.displayName}`, 300, {
                         container: `#${transcription.displayName}`
@@ -111,7 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 .style-transcription {
-    height: 400px;
+    height: 500px;
     overflow: scroll;
 }
 </style>

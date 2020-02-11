@@ -16,6 +16,7 @@ export let mixin = {
     data() {
         return {
             watchers: {},
+            highlightSegmentId: undefined,
             throttleScrollToSegment: throttle(this.scrollToSegment, 1000)
         };
     },
@@ -47,6 +48,7 @@ export let mixin = {
                 .filter(segment => segment.time.begin <= time)
                 .pop();
             if (!segment) return;
+            this.highlightSegmentId = segment.htmlId;
             this.$scrollTo(`#${segment.htmlId}`, 300, {
                 container
             });
