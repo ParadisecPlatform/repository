@@ -43,6 +43,30 @@
                             >{{ field.label }}</el-checkbox
                         >
                     </div>
+                    <div class="flex flex-row my-2">
+                        <div>
+                            <el-switch
+                                class="text-xs"
+                                v-model="phraseSearch"
+                                active-text="phrase search"
+                                inactive-text="keyword search"
+                            >
+                            </el-switch>
+                        </div>
+                        <div class="flex-grow"></div>
+                        <div>
+                            <el-switch
+                                class="text-sm"
+                                v-show="!phraseSearch"
+                                v-model="operator"
+                                active-text="AND"
+                                active-value="AND"
+                                inactive-text="OR"
+                                inactive-value="OR"
+                            >
+                            </el-switch>
+                        </div>
+                    </div>
                     <div class="text-xs mt-2 text-black">
                         Simple wildcard searches are supported. Try adding '*'
                         to match zero or more characters or '?' to match a
@@ -60,8 +84,9 @@
 <script>
 /*
 
-    This component takes two properties:
-    autofocus: [Boolean] - whether or not to autofocus the component on load
+    This component takes three properties:
+
+    autofocus: [Boolean] (default: true). Whether or not to autofocus the component on load
 
     fields: [Array] - the fields to set up and query. Following is an 
         example showing two fields - a simple text field query and a nested
@@ -98,7 +123,8 @@ import { SearchService } from "./search.service";
 export default {
     props: {
         autofocus: {
-            type: Boolean
+            type: Boolean,
+            default: true
         },
         fields: {
             type: Array,
@@ -108,6 +134,8 @@ export default {
     data() {
         return {
             text: "",
+            phraseSearch: true,
+            operator: "AND",
             fieldDataVerifies: true
         };
     },
@@ -128,7 +156,11 @@ export default {
             fields.forEach(f => (f.value = queryString));
 
             if (queryString.length < 3) return cb([]);
-            const results = await this.ss.textSearch({ fields });
+            const results = await this.ss.textSearch({
+                fields,
+                operator: this.operator,
+                phraseSearch: this.phraseSearch
+            });
             cb(results.documents);
         },
         handleSelect(result) {
