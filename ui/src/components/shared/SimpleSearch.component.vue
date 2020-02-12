@@ -36,7 +36,7 @@
 
                     <div class="flex flex-row flex-wrap mt-2">
                         <el-checkbox
-                            class="my-0 mx-2"
+                            class="style-component my-0 mx-2"
                             v-for="(field, idx) of fields"
                             :key="idx"
                             v-model="field.enabled"
@@ -46,8 +46,9 @@
                     <div class="flex flex-row my-2">
                         <div>
                             <el-switch
-                                class="text-xs"
+                                class="style-component"
                                 v-model="phraseSearch"
+                                active-color="#dd6b20"
                                 active-text="phrase search"
                                 inactive-text="keyword search"
                             >
@@ -56,9 +57,10 @@
                         <div class="flex-grow"></div>
                         <div>
                             <el-switch
-                                class="text-sm"
+                                class="style-component"
                                 v-show="!phraseSearch"
                                 v-model="operator"
+                                active-color="#dd6b20"
                                 active-text="AND"
                                 active-value="AND"
                                 inactive-text="OR"
@@ -170,4 +172,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.style-component .el-switch__label {
+    @apply text-xs;
+}
+.style-component .el-switch__label.is-active {
+    @apply text-orange-500;
+}
+</style>
