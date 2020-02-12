@@ -11,10 +11,12 @@
             <el-option
                 v-for="(aggregation, idx) of aggregations"
                 :key="idx"
-                :label="aggregation.key"
+                :label="toBoolean(aggregation.key)"
                 :value="aggregation.key"
             >
-                <div>{{aggregation.key}} ({{aggregation.doc_count}})</div>
+                <div>
+                    {{ toBoolean(aggregation.key) }}
+                </div>
             </el-option>
         </el-select>
     </div>
@@ -22,6 +24,7 @@
 
 <script>
 import { SearchService } from "../search.service";
+import { toBoolean } from "src/filters";
 
 export default {
     props: {
@@ -34,7 +37,8 @@ export default {
         return {
             value: undefined,
             aggregationSize: 100,
-            aggregations: []
+            aggregations: [],
+            toBoolean
         };
     },
     async mounted() {
@@ -43,23 +47,16 @@ export default {
     },
     methods: {
         async loadAggregations(selection) {
-            if (this.field.aggregate) {
-                const data = {
-                    ...this.field.aggregate,
-                    size: this.aggregationSize
-                };
-                let aggregations = await this.ss.aggregateOverField(data);
-                this.aggregations = this.field.aggregate.nested
-                    ? aggregations[this.field.aggregate.field]
-                    : aggregations[this.field.field];
-            }
+            const data = {
+                ...this.field,
+                size: this.aggregationSize
+            };
+            let aggregations = await this.ss.aggregateOverField(data);
+            this.aggregations = aggregations[this.field.field];
         },
         emitSelection() {
             this.$emit("change", {
                 ...this.field,
-                field: this.field.aggregate.nested
-                    ? this.field.aggregate.field
-                    : this.field.field,
                 value: this.value,
                 type: "text"
             });
@@ -68,5 +65,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

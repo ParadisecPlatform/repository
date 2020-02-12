@@ -1,22 +1,34 @@
 <template>
     <div class="flex flex-col">
         <div class="flex flex-row" v-for="(field, idx) of fields" :key="idx">
-            <div class="w-20 text-right mr-2 leading-loose">{{field.name}}</div>
-            <div class="flex-grow">
-                <el-input
-                    ref="inputElement"
-                    type="text"
-                    v-model="field.value"
-                    size="small"
-                    @change="emitSelection"
-                ></el-input>
+            <div class="w-20 text-right mr-2 leading-loose">
+                {{ field.label }}
             </div>
+            <render-text-field-selector-component
+                class="flex-grow"
+                :field="field"
+                @change="emitSelection"
+                v-if="field.type === 'text'"
+            />
+            <render-aggregation-field-selector-component
+                class="flex-grow"
+                :field="field"
+                @change="emitSelection"
+                v-if="field.type === 'select'"
+            />
         </div>
     </div>
 </template>
 
 <script>
+import { cloneDeep } from "lodash";
+import RenderTextFieldSelectorComponent from "./RenderTextFieldSelector.component.vue";
+import RenderAggregationFieldSelectorComponent from "./RenderAggregationFieldSelector.component.vue";
 export default {
+    components: {
+        RenderTextFieldSelectorComponent,
+        RenderAggregationFieldSelectorComponent
+    },
     props: {
         field: {
             type: Object,
@@ -25,30 +37,26 @@ export default {
     },
     data() {
         return {
-            fields: []
+            fields: [],
+            state: {}
         };
     },
     beforeMount() {
-        this.fields = this.field.subFields.map(f => {
-            return {
-                name: f,
-                value: undefined
-            };
-        });
-    },
-    mounted() {
-        this.$refs.inputElement[0].$refs.input.focus();
+        this.fields = cloneDeep(this.field.fields);
+        this.state = cloneDeep(this.field);
     },
     methods: {
-        emitSelection() {
-            this.$emit("change", {
-                ...this.field,
-                value: this.fields
+        emitSelection(field) {
+            this.state.fields = this.state.fields.map(f => {
+                if (f.label === field.label) {
+                    f = { ...field };
+                }
+                return f;
             });
+            this.$emit("change", { ...this.state });
         }
     }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
