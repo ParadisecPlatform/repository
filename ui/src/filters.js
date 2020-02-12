@@ -24,6 +24,6 @@ export function toBoolean(string) {
         case null:
             return "No";
         default:
-            return String(Boolean(string));
+            return string;
     }
 }
