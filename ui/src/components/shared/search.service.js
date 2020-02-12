@@ -484,7 +484,7 @@ export class SearchService {
                 }
             }
         };
-        console.log(JSON.stringify(query, null, 2));
+        // console.log(JSON.stringify(query, null, 2));
         let { total, documents } = await this.execute({ query });
         return { documents, total };
     }
@@ -521,6 +521,7 @@ export class SearchService {
         nested = false,
         path,
         field,
+        fields,
         value,
         operator = "OR",
         phraseSearch = false
@@ -532,6 +533,7 @@ export class SearchService {
                 type,
                 path,
                 field,
+                fields,
                 value,
                 operator,
                 phraseSearch
@@ -572,64 +574,61 @@ export class SearchService {
             type,
             path,
             field,
+            fields,
             value,
             operator,
             phraseSearch
         }) {
-            let query, wildcard;
-            if (["text", "multi"].includes(type)) {
-                query = {
-                    nested: {
-                        path,
-                        query: {}
+            let query = {
+                nested: {
+                    path,
+                    query: {}
+                }
+            };
+            let wildcard;
+            if (type === "text") {
+                wildcard = value.match(/\?|\*/g);
+                query.nested.query = wildcard
+                    ? assembleWildcardQuery({ path, field, value })
+                    : phraseSearch
+                    ? assembleMatchPhraseQuery({ path, field, value })
+                    : assembleMatchQuery({
+                          path,
+                          field,
+                          value,
+                          operator
+                      });
+            } else if (type === "multi") {
+                query.nested.query = {
+                    bool: {
+                        must: fields.map(f => {
+                            if (f.field && f.value) {
+                                wildcard = f.value.match(/\?|\*/g);
+                                return wildcard
+                                    ? assembleWildcardQuery({
+                                          path,
+                                          field: f.field,
+                                          value: f.value
+                                      })
+                                    : phraseSearch
+                                    ? assembleMatchPhraseQuery({
+                                          path,
+                                          field: f.field,
+                                          value: f.value
+                                      })
+                                    : assembleMatchQuery({
+                                          path,
+                                          field: f.field,
+                                          value: f.value
+                                      });
+                            }
+                        })
                     }
                 };
-                if (isString(value)) {
-                    wildcard = value.match(/\?|\*/g);
-                    query.nested.query = wildcard
-                        ? assembleWildcardQuery({ path, field, value })
-                        : phraseSearch
-                        ? assembleMatchPhraseQuery({ path, field, value })
-                        : assembleMatchQuery({
-                              path,
-                              field,
-                              value,
-                              operator
-                          });
-                } else if (isArray(value)) {
-                    query.nested.query = {
-                        bool: {
-                            must: value.map(v => {
-                                if (v.name && v.value) {
-                                    wildcard = v.value.match(/\?|\*/g);
-                                    return wildcard
-                                        ? assembleWildcardQuery({
-                                              path,
-                                              field: v.name,
-                                              value: v.value
-                                          })
-                                        : phraseSearch
-                                        ? assembleMatchPhraseQuery({
-                                              path,
-                                              field: v.name,
-                                              value: v.value
-                                          })
-                                        : assembleMatchQuery({
-                                              path,
-                                              field: v.name,
-                                              value: v.value
-                                          });
-                                }
-                            })
-                        }
-                    };
-                    query.nested.query.bool.must = compact(
-                        query.nested.query.bool.must
-                    );
-                }
-            }
-
-            if (type === "date") {
+                query.nested.query.bool.must = compact(
+                    query.nested.query.bool.must
+                );
+            } else if (type === "date") {
                 query = {
                     nested: {
                         path,
@@ -800,7 +799,7 @@ export class SearchService {
     }
 
     verifyFields({ fields, disableFields = [] }) {
-        let properties = ["label", "field", "enabled"];
+        let properties = ["label", "enabled"];
         properties = difference(properties, disableFields);
         let fieldDataVerifies = true;
         for (let field of fields) {
@@ -809,7 +808,7 @@ export class SearchService {
                 !["text", "multi", "date", "select"].includes(field.type)
             ) {
                 console.error(
-                    `Each field must have a property 'type' === 'text'`
+                    `Each field must have a property 'type' which is one of ['text', 'multi', 'date', 'select']`
                 );
                 fieldDataVerifies = false;
                 break;
@@ -822,13 +821,13 @@ export class SearchService {
                 }
             }
             if ("nested" in field) {
-                if (!("path" in field)) {
-                    console.error(
-                        `Each nested field must have a property 'path'`
-                    );
-                    fieldDataVerifies = false;
-                    break;
-                }
+                // if (!("path" in field)) {
+                //     console.error(
+                //         `Each nested field must have a property 'path'`
+                //     );
+                //     fieldDataVerifies = false;
+                //     break;
+                // }
             }
         }
         return fieldDataVerifies;
