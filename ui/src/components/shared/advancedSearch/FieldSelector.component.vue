@@ -13,19 +13,22 @@
                     v-for="(field, idx) of fields"
                     :key="idx"
                     :label="field.label"
-                    :value="field.field"
+                    :value="field.field || field.path"
                 ></el-option>
             </el-select>
         </div>
         <div v-for="(f, idx) of fields" :key="idx" class="flex-grow" v-else>
-            <div class="flex flex-col" v-if="f.field === select">
-                <div v-if="f.type === 'text'" class="w-full">
+            <div
+                class="flex flex-col"
+                v-if="[f.field, f.path].includes(select)"
+            >
+                <div v-if="f.type === 'text'">
                     <render-text-field-selector-component
                         :field="f"
                         @change="emitSelection"
                     />
                 </div>
-                <div v-if="f.type === 'date'" class="w-full">
+                <div v-if="f.type === 'date'">
                     <render-date-field-selector-component
                         :field="f"
                         @change="emitSelection"
@@ -74,15 +77,13 @@ export default {
     },
     data() {
         return {
-            select: undefined,
-            aggregations: {}
+            select: undefined
         };
     },
     mounted() {
         this.$refs.typeSelect.$refs.reference.focus();
     },
     methods: {
-        focusSelect() {},
         emitSelection(field) {
             field = { ...field, id: this.id };
             this.$emit("selected-field", field);
