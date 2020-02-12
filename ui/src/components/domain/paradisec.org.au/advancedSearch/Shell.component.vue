@@ -27,26 +27,49 @@ export default {
                 {
                     label: "Type",
                     field: "additionalType",
-                    type: "select",
-                    aggregate: {
-                        field: "additionalType"
-                    }
+                    type: "select"
+                },
+                {
+                    label: "Private",
+                    field: "private.keyword",
+                    type: "select"
                 },
                 {
                     label: "Contributor",
-                    nested: true,
                     path: "contributor",
-                    field: "contributor",
                     type: "multi",
-                    subFields: ["name", "role"]
+                    nested: true,
+                    fields: [
+                        {
+                            nested: true,
+                            label: "name",
+                            path: "contributor",
+                            field: "name",
+                            type: "text"
+                        },
+                        {
+                            nested: true,
+                            label: "role",
+                            path: "contributor",
+                            field: "role.raw",
+                            type: "select"
+                        }
+                    ]
                 },
                 {
-                    label: "License",
                     nested: true,
+                    label: "License",
                     path: "license",
-                    field: "license",
                     type: "multi",
-                    subFields: ["name", "description"]
+                    fields: [
+                        {
+                            nested: true,
+                            label: "name",
+                            path: "license",
+                            field: "name.raw",
+                            type: "select"
+                        }
+                    ]
                 },
                 {
                     label: "Date Created",
@@ -90,23 +113,33 @@ export default {
                 },
                 {
                     label: "University",
-                    nested: true,
                     path: "publisher",
-                    field: "publisher",
                     type: "multi",
-                    subFields: ["name"]
+                    nested: true,
+                    fields: [
+                        {
+                            nested: true,
+                            label: "name",
+                            path: "publisher",
+                            field: "name.raw",
+                            type: "select"
+                        }
+                    ]
                 },
                 {
                     label: "Data Format",
-                    nested: true,
                     path: "hasPart",
-                    field: "hasPart",
-                    type: "select",
-                    aggregate: {
-                        nested: true,
-                        path: "hasPart",
-                        field: "encodingFormat"
-                    }
+                    type: "multi",
+                    nested: true,
+                    fields: [
+                        {
+                            nested: true,
+                            label: "Format",
+                            path: "hasPart",
+                            field: "encodingFormat",
+                            type: "select"
+                        }
+                    ]
                 }
             ]
         };
