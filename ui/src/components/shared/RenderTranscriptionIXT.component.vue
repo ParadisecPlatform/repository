@@ -1,61 +1,42 @@
 <template>
     <div>
         <div
-            v-for="(segment, idx) of transcription.segments"
+            v-for="(phrase, idx) of transcription.segments.phrases"
             :key="idx"
-            :id="segment.htmlId"
+            :id="phrase.id"
             class="p-2"
-            :class="{ 'bg-yellow-200': highlightSegmentId === segment.htmlId }"
+            :class="{ 'bg-yellow-200': highlightSegmentId === phrase.id}"
         >
             <div>
-                <el-button @click="playSegment(segment)" size="small">
+                <el-button @click="playSegment(phrase)" size="small">
                     <i class="fas fa-play"></i>
-                    PLAY ({{ format(segment.time.begin) }})
+                    PLAY ({{ format(phrase.time.begin) }})
                 </el-button>
             </div>
-            <div class="style-text">{{ segment.transcription }}</div>
-            <div>{{ segment.translation }}</div>
+            <div class="style-text">{{ phrase.transcription }}</div>
+            <div>{{ phrase.translation }}</div>
             <div class="flex flex-row flex-wrap">
-                <table
-                    v-for="(word, widx) of segment.words"
-                    :key="widx"
-                    class="mx-2 my-2 style-table"
-                >
-                    <tbody class="flex flex-col">
-                        <tr class="style-cell style-text p-2" v-if="word.text">
-                            <td class :colspan="word.words.length">
-                                {{ word.text }}
-                            </td>
-                        </tr>
-                        <tr class="style-cell style-text p-2" v-if="!word.text">
-                            <td
-                                class
-                                v-for="(w, wcidx) of word.words"
-                                :key="wcidx"
-                            >
-                                {{ w.text }}
-                            </td>
-                        </tr>
-                        <tr class="style-cell p-2">
-                            <td
-                                class
-                                v-for="(w, wcidx) of word.words"
-                                :key="wcidx"
-                            >
-                                {{ w.morpheme }}
-                            </td>
-                        </tr>
-                        <tr class="style-cell p-2">
-                            <td
-                                class
-                                v-for="(w, wcidx) of word.words"
-                                :key="wcidx"
-                            >
-                                {{ w.gloss }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div v-for="(word, widx) of phrase.words" :key="widx">
+                    <div class="flex flex-row">
+                        <div class="flex flex-col p-2 border-2 m-1">
+                            <div class="py-2 text-orange-500">{{word.word}}</div>
+                            <div class="flex flex-row">
+                                <div
+                                    v-for="(m, midx) of word.morphemes.filter(m => m.type === 'morpheme')"
+                                    :key="midx"
+                                    class="mr-1"
+                                >{{m.text}}</div>
+                            </div>
+                            <div class="flex flex-row">
+                                <div
+                                    v-for="(m, midx) of word.morphemes.filter(m => m.type === 'gloss')"
+                                    :key="midx"
+                                    class="mr-1"
+                                >{{m.text}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
