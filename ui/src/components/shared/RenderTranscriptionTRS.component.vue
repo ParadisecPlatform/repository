@@ -1,16 +1,32 @@
 <template>
-    <div>
+    <div class="flex flex-col">
         <div
-            v-for="(segment, idx) of transcription.segments"
-            :key="idx"
-            :id="segment.htmlId"
-            class="style-segment"
+            v-for="(episode, eidx) of transcription.segments.episodes"
+            :key="eidx"
+            class="flex flex-col"
         >
-            <div>
-                <el-button @click="playSegment(segment)" size="small">
-                    <i class="fas fa-play"></i>
-                    PLAY ({{format(segment.time.begin)}})
-                </el-button>
+            <div
+                v-for="(section, sidx) of episode.sections"
+                :key="sidx"
+                class="flex flex-col"
+            >
+                <div
+                    v-for="(turn, tidx) of section.turns"
+                    :key="tidx"
+                    :id="turn.id"
+                    class="flex flex-row my-1 p-3 "
+                    :class="{
+                        'bg-yellow-200': highlightSegmentId === turn.id
+                    }"
+                >
+                    <div class="mr-2 text-center">
+                        <el-button @click="playSegment(turn)" size="small">
+                            <i class="fas fa-play"></i>
+                            PLAY ({{ format(turn.time.begin) }})
+                        </el-button>
+                    </div>
+                    <div class="text-orange-500">{{ turn.text }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -24,26 +40,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "src/assets/variables.scss";
-
-.style-segment {
-    border-bottom: 1px solid;
-    border-color: #b0bec5;
-}
-
-.style-table {
-    font-size: 12px;
-    border: 1px solid red;
-    border-color: #b0bec5;
-}
-
-.style-cell {
-    border: 1px solid red;
-    border-color: #b0bec5;
-}
-
-.style-text {
-    color: $brand-highlight-color;
-}
-</style>
+<style lang="scss" scoped></style>
