@@ -8,7 +8,7 @@
                 v-on:play-from="playFrom"
             />
 
-            <render-transcription-eaf-component
+            <render-transcription-trs-component
                 v-if="transcription.type === 'trs'"
                 :transcription="transcription"
                 :current-time="currentTime"
