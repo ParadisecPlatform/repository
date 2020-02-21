@@ -1,26 +1,12 @@
 <template>
     <div class="flex flex-col">
         <div :id="transcription.displayName" class="style-transcription">
-            <render-transcription-eaf-component
-                v-if="transcription.type === 'eaf'"
+            <component
+                v-bind:is="transcriptionRendererComponent"
                 :transcription="transcription"
                 :current-time="currentTime"
                 v-on:play-from="playFrom"
-            />
-
-            <render-transcription-trs-component
-                v-if="transcription.type === 'trs'"
-                :transcription="transcription"
-                :current-time="currentTime"
-                v-on:play-from="playFrom"
-            />
-
-            <render-transcription-ixt-component
-                v-if="transcription.type === 'ixt'"
-                :transcription="transcription"
-                :current-time="currentTime"
-                v-on:play-from="playFrom"
-            />
+            ></component>
 
             <div v-if="error" class="text-center">
                 There was an error loading that file. This is typically due to
@@ -36,12 +22,14 @@ const dataLoader = new DataLoader();
 import RenderTranscriptionEafComponent from "./RenderTranscriptionEAF.component.vue";
 import RenderTranscriptionIxtComponent from "./RenderTranscriptionIXT.component.vue";
 import RenderTranscriptionTrsComponent from "./RenderTranscriptionTRS.component.vue";
+import RenderTranscriptionFlextextComponent from "./RenderTranscriptionFlextext.component.vue";
 
 export default {
     components: {
         RenderTranscriptionEafComponent,
         RenderTranscriptionIxtComponent,
-        RenderTranscriptionTrsComponent
+        RenderTranscriptionTrsComponent,
+        RenderTranscriptionFlextextComponent
     },
     props: {
         transcriptions: {
@@ -60,6 +48,7 @@ export default {
         return {
             watchers: {},
             error: false,
+            transcriptionRendererComponent: undefined,
             transcription: {
                 type: undefined,
                 segments: []
@@ -96,6 +85,26 @@ export default {
                         .join(".")),
                     ...transcriptionContent
                 };
+
+                switch (this.transcription.type) {
+                    case "ixt":
+                        this.transcriptionRendererComponent =
+                            "RenderTranscriptionIxtComponent";
+                        break;
+                    case "trs":
+                        this.transcriptionRendererComponent =
+                            "RenderTranscriptionTrsComponent";
+                        break;
+                    case "eaf":
+                        this.transcriptionRendererComponent =
+                            "RenderTranscriptionEafComponent";
+                        break;
+                    case "flextext":
+                        this.transcriptionRendererComponent =
+                            "RenderTranscriptionFlextextComponent";
+                        break;
+                }
+
                 setTimeout(() => {
                     this.$scrollTo(`#${transcription.displayName}`, 300, {
                         container: `#${transcription.displayName}`
