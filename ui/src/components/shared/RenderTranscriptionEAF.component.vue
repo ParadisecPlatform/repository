@@ -1,35 +1,45 @@
 <template>
     <div>
-        <!-- {{ transcription.tiers }} -->
+        <!-- {{ transcription.timeslots.children }} -->
         <div
-            v-for="(segment, idx) of transcription.segments"
+            v-for="(timeslot, idx) of transcription.timeslots.children"
             :key="idx"
-            :id="segment.htmlId"
-            class="flex flex-col bg-gray-100 py-4 px-2 mb-4"
-            :class="{ 'bg-yellow-200': highlightSegmentId === segment.htmlId }"
+            class="flex flex-col"
         >
-            <div :id="segment.htmlId"></div>
-            <div>
-                <div>
-                    <el-button @click="playSegment(segment)" size="small">
-                        <i class="fas fa-play"></i>
-                        PLAY ({{ format(segment.time.begin) }})
-                    </el-button>
-                </div>
-            </div>
             <div
-                v-if="segment.value && segment.value.length"
-                class="p-1 text-sm"
+                v-for="(segment, sidx) of timeslot.children"
+                :key="sidx"
+                class="p-2"
+                :class="{
+                    'bg-yellow-200': highlightSegmentId === segment.id
+                }"
             >
-                {{ segment.value }}
-            </div>
-            <div class="flex flex-row flex-wrap">
+                <div :id="segment.id" class="pt-2"></div>
+                <div>
+                    <div>
+                        <el-button @click="playSegment(segment)" size="small">
+                            <i class="fas fa-play"></i>
+                            PLAY ({{ format(segment.time.begin) }})
+                        </el-button>
+                    </div>
+                </div>
                 <div
-                    v-for="(child, idx2) of segment.children"
-                    :key="idx2"
-                    class="border-2 border-orange-500 m-1 p-2"
+                    v-if="segment.value && segment.value.length"
+                    class="p-1 text-sm text-orange-500"
                 >
-                    <render-child-component :data="child" class="my-1" />
+                    {{ segment.value }}
+                </div>
+                <div
+                    class="flex flex-row flex-wrap"
+                    v-if="segment.children.length"
+                >
+                    <div
+                        v-for="(child, idx2) of segment.children"
+                        :key="idx2"
+                        class="border-2 border-orange-500 m-1 p-2"
+                    >
+                        <render-child-component :data="child" class="my-1" />
+                    </div>
                 </div>
             </div>
         </div>
