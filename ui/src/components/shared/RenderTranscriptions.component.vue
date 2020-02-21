@@ -81,18 +81,21 @@ export default {
             if (!this.selectedTranscription) return;
             let transcription = { ...this.selectedTranscription };
             try {
+                const transcriptionContent = await dataLoader.loadTranscription(
+                    { transcription }
+                );
+                if (!transcriptionContent) {
+                    this.error = true;
+                    return;
+                }
                 this.transcription = {
                     ...transcription,
                     displayName: (transcription.displayName = transcription.name
                         .split(".")
                         .slice(0, -1)
                         .join(".")),
-                    ...(await dataLoader.loadTranscription({
-                        transcription
-                    }))
+                    ...transcriptionContent
                 };
-                if (!transcription.segments || !transcription.segments.length)
-                    this.error = true;
                 setTimeout(() => {
                     this.$scrollTo(`#${transcription.displayName}`, 300, {
                         container: `#${transcription.displayName}`
