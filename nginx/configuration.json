@@ -15,7 +15,7 @@
         "ppt",
         "pptx"
     ],
-    "transcriptionFileExtensions": ["eaf", "trs", "ixt"],
+    "transcriptionFileExtensions": ["eaf", "trs", "ixt", "flextext"],
     "domain": "paradisec.org.au",
     "explore": "paradisec.org.au/explore/Shell.component.vue",
     "introduction": "paradisec.org.au/introduction/Shell.component.vue",
