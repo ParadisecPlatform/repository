@@ -1,6 +1,6 @@
 "use strict";
 
-import { round as roundValue, throttle } from "lodash";
+import { flattenDeep, throttle } from "lodash";
 import { format } from "date-fns";
 
 export let mixin = {
@@ -37,19 +37,49 @@ export let mixin = {
             });
             setTimeout(() => {
                 const container = `#${this.transcription.displayName}`;
-                this.$scrollTo(`#${segment.htmlId}`, 300, {
+                this.$scrollTo(`#${segment.id}`, 300, {
                     container
                 });
             }, 100);
         },
         scrollToSegment(time) {
             const container = `#${this.transcription.displayName}`;
-            const segment = this.transcription.segments
-                .filter(segment => segment.time.begin <= time)
+            let segments;
+            switch (this.transcription.type) {
+                case "ixt":
+                    segments = this.transcription.segments.phrases;
+                    break;
+                case "trs":
+                    segments = flattenDeep(
+                        this.transcription.segments.episodes.map(e =>
+                            e.sections.map(s => s.turns)
+                        )
+                    );
+                case "eaf":
+                    segments = flattenDeep(
+                        this.transcription.timeslots.children.map(
+                            t => t.children
+                        )
+                    );
+                case "flextext":
+                    segments = flattenDeep(
+                        this.transcription.segments.paragraphs.map(
+                            paragraph => paragraph.phrases
+                        )
+                    );
+            }
+            const segment = segments
+                .filter(segment => {
+                    try {
+                        return segment.time.begin <= time;
+                    } catch (error) {
+                        // do nothing
+                    }
+                })
                 .pop();
             if (!segment) return;
-            this.highlightSegmentId = segment.htmlId;
-            this.$scrollTo(`#${segment.htmlId}`, 300, {
+            this.highlightSegmentId = segment.id;
+            this.$scrollTo(`#${segment.id}`, 300, {
                 container
             });
         },
