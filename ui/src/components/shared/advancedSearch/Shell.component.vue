@@ -60,7 +60,7 @@ import FieldSelectorComponent from "./FieldSelector.component.vue";
 import SearchResultsComponent from "components/shared/SearchResults.component.vue";
 import MatcherComponent from "./Matcher.component.vue";
 import { SearchService } from "components/shared/search.service";
-import { uniqBy, compact } from "lodash";
+import { uniqBy, compact, debounce } from "lodash";
 
 export default {
     components: {
@@ -87,20 +87,15 @@ export default {
                     }
                 }
             },
-            metaQuery: {
-                match: {
-                    "ocfl:meta:type": "document"
-                }
-            },
             results: {},
             must: [],
-            mustNot: []
+            mustNot: [],
+            debouncedSearch: debounce(this.search, 300)
         };
     },
-    mounted() {
+    beforeMount() {
         this.ss = new SearchService({ store: this.$store });
         this.verifyFields();
-        this.search({});
     },
     methods: {
         verifyFields() {
@@ -111,10 +106,9 @@ export default {
         },
         updateQuery(data) {
             this.query.query.bool[data.type] = compact(data.filters);
-            this.search({});
+            this.debouncedSearch({});
         },
         async search({ page = 0, size = 10 }) {
-            this.query.query.bool.must.push(this.metaQuery);
             const query = { ...this.query, from: page * size, size: size };
             this.results = await this.ss.execute({ query });
         }

@@ -18,30 +18,31 @@
             </el-select>
         </div>
         <div v-for="(f, idx) of fields" :key="idx" class="flex-grow" v-else>
-            <div
-                class="flex flex-col"
-                v-if="[f.field, f.path].includes(select)"
-            >
+            <div class="flex flex-col" v-if="[f.field, f.path].includes(select)">
                 <div v-if="f.type === 'text'">
                     <render-text-field-selector-component
+                        :id="id"
                         :field="f"
                         @change="emitSelection"
                     />
                 </div>
                 <div v-if="f.type === 'date'">
                     <render-date-field-selector-component
+                        :id="id"
                         :field="f"
                         @change="emitSelection"
                     />
                 </div>
                 <div v-if="f.type === 'select'" class="w-full">
                     <render-aggregation-field-selector-component
+                        :id="id"
                         :field="f"
                         @change="emitSelection"
                     />
                 </div>
                 <div v-if="f.type === 'multi'" class="w-full">
                     <render-multi-text-field-selector-component
+                        :id="id"
                         :field="f"
                         @change="emitSelection"
                     />
@@ -80,11 +81,17 @@ export default {
             select: undefined
         };
     },
-    mounted() {
-        this.$refs.typeSelect.$refs.reference.focus();
+    beforeMount() {
+        const savedSearch = JSON.parse(sessionStorage.getItem(this.id));
+        if (savedSearch) {
+            this.select = savedSearch.select;
+        }
     },
     methods: {
         emitSelection(field) {
+            const savedSearch = JSON.parse(sessionStorage.getItem(this.id));
+            savedSearch.select = this.select;
+            sessionStorage.setItem(this.id, JSON.stringify(savedSearch));
             field = { ...field, id: this.id };
             this.$emit("selected-field", field);
         }

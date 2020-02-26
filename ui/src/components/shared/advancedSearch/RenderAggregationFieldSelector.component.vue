@@ -14,25 +14,18 @@
                 :label="toBoolean(aggregation.key)"
                 :value="aggregation.key"
             >
-                <div>
-                    {{ toBoolean(aggregation.key) }}
-                </div>
+                <div>{{ toBoolean(aggregation.key) }}</div>
             </el-option>
         </el-select>
     </div>
 </template>
 
 <script>
-import { SearchService } from "../search.service";
 import { toBoolean } from "src/filters";
+import { mixin } from "./FieldMixins";
 
 export default {
-    props: {
-        field: {
-            type: Object,
-            required: true
-        }
-    },
+    mixins: [mixin],
     data() {
         return {
             value: undefined,
@@ -41,9 +34,8 @@ export default {
             toBoolean
         };
     },
-    async mounted() {
-        this.ss = new SearchService({ store: this.$store });
-        await this.loadAggregations();
+    mounted() {
+        this.loadAggregations();
     },
     methods: {
         async loadAggregations(selection) {
@@ -55,6 +47,7 @@ export default {
             this.aggregations = aggregations[this.field.field];
         },
         emitSelection() {
+            this.saveState();
             this.$emit("change", {
                 ...this.field,
                 value: this.value,

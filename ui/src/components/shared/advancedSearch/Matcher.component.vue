@@ -63,18 +63,40 @@ export default {
     },
     data() {
         return {
-            clause: []
+            clause: [],
+            sessionStorageKey: `advancedSearch-${this.type}`,
+            metaQuery: {
+                match: {
+                    "ocfl:meta:type": "document"
+                }
+            }
         };
     },
-    mounted() {
+    beforeMount() {
         this.ss = new SearchService({ store: this.$store });
+        let savedSearch = sessionStorage.getItem(this.sessionStorageKey);
+        if (savedSearch) {
+            this.clause = JSON.parse(savedSearch);
+        }
     },
+    mounted() {},
     methods: {
         addClause() {
-            this.clause.push({ id: Math.random() });
+            const newClause = { id: Math.random() };
+            this.clause.push(newClause);
+            sessionStorage.setItem(newClause.id, JSON.stringify(newClause));
+            sessionStorage.setItem(
+                this.sessionStorageKey,
+                JSON.stringify(this.clause)
+            );
         },
         removeClause({ id }) {
             this.clause = this.clause.filter(e => e.id !== id);
+            sessionStorage.removeItem(id);
+            sessionStorage.setItem(
+                this.sessionStorageKey,
+                JSON.stringify(this.clause)
+            );
             this.emitData();
         },
         addFieldData(data) {
@@ -97,6 +119,8 @@ export default {
                     // ignore errors - usually arises from missing data
                 }
             });
+            filters = compact(filters);
+            if (this.type === "must") filters.push(this.metaQuery);
             this.$emit("update", { type: this.type, filters });
         }
     }

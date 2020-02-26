@@ -1,17 +1,17 @@
 <template>
     <div class="flex flex-col">
         <div class="flex flex-row" v-for="(field, idx) of fields" :key="idx">
-            <div class="w-20 text-right mr-2 leading-loose">
-                {{ field.label }}
-            </div>
+            <div class="w-20 text-right mr-2 leading-loose">{{ field.label }}</div>
             <render-text-field-selector-component
                 class="flex-grow"
+                :id="id"
                 :field="field"
                 @change="emitSelection"
                 v-if="field.type === 'text'"
             />
             <render-aggregation-field-selector-component
                 class="flex-grow"
+                :id="id"
                 :field="field"
                 @change="emitSelection"
                 v-if="field.type === 'select'"
@@ -30,6 +30,10 @@ export default {
         RenderAggregationFieldSelectorComponent
     },
     props: {
+        id: {
+            type: Number,
+            required: true
+        },
         field: {
             type: Object,
             required: true

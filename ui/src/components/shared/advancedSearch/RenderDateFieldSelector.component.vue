@@ -14,19 +14,17 @@
 </template>
 
 <script>
+import { mixin } from "./FieldMixins";
+
 export default {
-    props: {
-        field: {
-            type: Object,
-            required: true
-        }
-    },
+    mixins: [mixin],
     data() {
         return { value: undefined };
     },
     mounted() {},
     methods: {
         emitSelection() {
+            this.saveState();
             this.$emit("change", {
                 ...this.field,
                 value: this.value
