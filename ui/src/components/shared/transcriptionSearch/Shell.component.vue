@@ -2,11 +2,7 @@
     <div class="flex flex-col">
         <matcher-component @search="updateQuery" />
         <div class="style-results-section overflow-scroll mt-2">
-            <search-results-component
-                :results="results"
-                @update-search="search"
-                class="mx-2 px-6"
-            />
+            <search-results-component :results="results" @update-search="search" class="mx-2 px-6" />
         </div>
     </div>
 </template>
@@ -45,7 +41,7 @@ export default {
             mustNot: []
         };
     },
-    mounted() {
+    beforeMount() {
         this.ss = new SearchService({ store: this.$store });
         this.search({});
     },

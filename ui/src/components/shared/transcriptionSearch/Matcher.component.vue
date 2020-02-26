@@ -13,8 +13,7 @@
                     active-text="phrase search"
                     inactive-text="keyword search"
                     @change="query"
-                >
-                </el-switch>
+                ></el-switch>
             </div>
             <div class="w-20"></div>
             <div>
@@ -28,8 +27,7 @@
                     inactive-text="OR"
                     inactive-value="OR"
                     @change="query"
-                >
-                </el-switch>
+                ></el-switch>
             </div>
         </div>
     </div>
@@ -39,13 +37,33 @@
 export default {
     data() {
         return {
+            sessionStorageKey: "transcriptionSearch",
             value: undefined,
             phraseSearch: true,
             operator: "AND"
         };
     },
+    mounted() {
+        let savedSearch = JSON.parse(
+            sessionStorage.getItem(this.sessionStorageKey)
+        );
+        if (savedSearch) {
+            this.value = savedSearch.value;
+            this.phraseSearch = savedSearch.phraseSearch;
+            this.operator = savedSearch.operator;
+            this.query();
+        }
+    },
     methods: {
         query() {
+            sessionStorage.setItem(
+                this.sessionStorageKey,
+                JSON.stringify({
+                    value: this.value,
+                    phraseSearch: this.phraseSearch,
+                    operator: this.operator
+                })
+            );
             this.$emit("search", {
                 nested: true,
                 path: "segment",
