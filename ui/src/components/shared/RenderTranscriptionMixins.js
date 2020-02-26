@@ -55,18 +55,21 @@ export let mixin = {
                             e.sections.map(s => s.turns)
                         )
                     );
+                    break;
                 case "eaf":
                     segments = flattenDeep(
                         this.transcription.timeslots.children.map(
                             t => t.children
                         )
                     );
+                    break;
                 case "flextext":
                     segments = flattenDeep(
                         this.transcription.segments.paragraphs.map(
                             paragraph => paragraph.phrases
                         )
                     );
+                    break;
             }
             const segment = segments
                 .filter(segment => {

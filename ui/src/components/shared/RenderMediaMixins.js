@@ -36,6 +36,15 @@ export let mixin = {
             this.transcriptions && this.transcriptions.length
                 ? this.transcriptions[0]
                 : undefined;
+
+        if (this.$route.query.transcription) {
+            setTimeout(() => {
+                this.playFrom({
+                    start: this.$route.query.begin,
+                    end: this.$route.query.end
+                });
+            }, 3000);
+        }
     },
     methods: {
         playFrom({ start, end }) {

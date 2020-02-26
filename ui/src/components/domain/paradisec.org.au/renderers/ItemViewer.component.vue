@@ -2,20 +2,22 @@
     <div>
         <!-- <data-display-component :data="data" /> -->
 
-        <div class="flex flex-col">
+        <div class="flex flex-col" id="content">
             <div class="flex flex-row">
                 <div class="w-3/4 mr-4">
-                    <div class="my-4 text-3xl">{{ data.objectifiedCrate.name }}</div>
+                    <div class="my-4 text-3xl">
+                        {{ data.objectifiedCrate.name }}
+                    </div>
                     <div class="mb-2">
                         <license-component :data="data" />
                     </div>
-                    <div>Item: {{ collectionIdentifier }} / {{ itemIdentifier }}</div>
+                    <div>
+                        Item: {{ collectionIdentifier }} / {{ itemIdentifier }}
+                    </div>
                     <div>
                         Collection:
                         <router-link :to="collectionLink()">
-                            {{
-                            collectionIdentifier
-                            }}
+                            {{ collectionIdentifier }}
                         </router-link>
                     </div>
                     <div>
@@ -28,7 +30,7 @@
                                 :key="idx"
                             >
                                 {{ contributor.contributor.name }} ({{
-                                contributor.name
+                                    contributor.name
                                 }})
                             </li>
                         </ul>
@@ -75,7 +77,7 @@
                     name="Subject Languages"
                 />
             </div>
-            <div class="mt-4">
+            <div class="mt-4" id="itemContent">
                 <render-content-component :data="data" />
             </div>
         </div>
@@ -114,6 +116,13 @@ export default {
                 i => i.name === "itemIdentifier"
             )[0].value
         };
+    },
+    mounted() {
+        if (this.$route.query.transcription) {
+            setTimeout(() => {
+                this.$scrollTo("#itemContent", 0, { container: "body" });
+            }, 1500);
+        }
     },
     methods: {
         collectionLink() {

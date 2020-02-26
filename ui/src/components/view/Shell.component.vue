@@ -99,7 +99,10 @@ export default {
             )
                 this.$router.replace({
                     path: this.$route.path,
-                    query: { version: this.ocflObject.version }
+                    query: {
+                        version: this.ocflObject.version,
+                        ...this.$route.query
+                    }
                 });
 
             // determine which renderer to load by

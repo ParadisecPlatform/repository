@@ -200,28 +200,31 @@ export class DataLoader {
     determineDataTypes({ configuration, crate }) {
         if (!crate.hasPart) return {};
         let types = {
-            images:
-                crate.hasPart.filter(f =>
+            images: crate.hasPart
+                .filter(f =>
                     configuration.imageFormats.includes(f.encodingFormat)
-                ).length > 0,
-            audio:
-                crate.hasPart.filter(f =>
+                )
+                .map(i => i.name),
+            audio: crate.hasPart
+                .filter(f =>
                     configuration.audioFormats.includes(f.encodingFormat)
-                ).length > 0,
-            video:
-                crate.hasPart.filter(f =>
+                )
+                .map(a => a.name),
+            video: crate.hasPart
+                .filter(f =>
                     configuration.videoFormats.includes(f.encodingFormat)
-                ).length > 0,
-            documents:
-                crate.hasPart.filter(f =>
+                )
+                .map(v => v.name),
+            documents: crate.hasPart
+                .filter(f =>
                     configuration.documentFileExtensions.includes(
                         f.name.split(".").pop()
                     )
-                ).length > 0,
-            xmlFiles:
-                crate.hasPart.filter(
-                    f => f.encodingFormat === "application/xml"
-                ).length > 0
+                )
+                .map(d => d.name),
+            xmlFiles: crate.hasPart
+                .filter(f => f.encodingFormat === "application/xml")
+                .map(x => x.name)
         };
         return types;
     }

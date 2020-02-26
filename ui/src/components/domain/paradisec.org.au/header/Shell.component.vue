@@ -12,6 +12,10 @@
             <i class="fas fa-search"></i>
             <span class="hidden md:inline">Advanced Search</span>
         </router-link>
+        <router-link to="/transcription-search" class="px-5">
+            <i class="far fa-file"></i>
+            <span class="hidden md:inline">Transcription Search</span>
+        </router-link>
         <div class="flex-grow"></div>
         <router-link to="/about" class="px-5 hidden md:block">
             <i class="fas fa-info-circle"></i>

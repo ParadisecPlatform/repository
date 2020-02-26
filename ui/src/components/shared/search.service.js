@@ -459,7 +459,9 @@ export class SearchService {
             size,
             sort: [{ dateModified: "desc" }],
             query: {
-                match_all: {}
+                match: {
+                    "ocfl:meta:type": "document"
+                }
             }
         };
         let { documents, total } = await this.execute({ query });
@@ -490,21 +492,17 @@ export class SearchService {
     }
 
     async execute({ query }) {
-        // console.log(`${this.service}/_search`);
-        // console.log(JSON.stringify(query, null, 2));
-        let response = await fetch(
-            `${this.service}/${this.store.state.configuration.domain}/_search`,
-            {
-                method: "POST",
-                headers: this.headers,
-                body: JSON.stringify(query)
-            }
-        );
+        let index = this.store.state.configuration.domain
+            ? `${this.store.state.configuration.domain}/_search`
+            : "/_search";
+        index = `${this.service}/${index}`;
+        let response = await fetch(index, {
+            method: "POST",
+            headers: this.headers,
+            body: JSON.stringify(query)
+        });
         if (response.status !== 200) {
             console.log((await response.json()).error);
-            // console.log(
-            //     JSON.stringify((await response.json()).error.reason, null, 2)
-            // );
             return {};
         }
         response = await response.json();
@@ -732,18 +730,28 @@ export class SearchService {
 
     getItemMetadata({ item }) {
         const configuration = this.store.state.configuration;
-        return {
-            id: item._source.identifier
-                .filter(i => i.name === "id")[0]
-                .value.replace(this.store.state.configuration.domain, "view"),
-            domain: item._source.identifier.filter(i => i.name === "domain")[0]
-                .value,
-            name: item._source.name,
-            description: item._source.description,
-            type: item._source["additionalType"],
-            contentTypes: getDataTypes({ configuration, item }),
-            source: item._source
-        };
+        if (item._source["ocfl:meta:type"] === "document") {
+            return {
+                id: item._source.identifier
+                    .filter(i => i.name === "id")[0]
+                    .value.replace(
+                        this.store.state.configuration.domain,
+                        "view"
+                    ),
+                domain: item._source.identifier.filter(
+                    i => i.name === "domain"
+                )[0].value,
+                name: item._source.name,
+                description: item._source.description,
+                type: item._source["additionalType"],
+                contentTypes: getDataTypes({ configuration, item }),
+                source: item._source
+            };
+        } else if (item._source["ocfl:meta:type"] === "segment") {
+            return {
+                ...item._source
+            };
+        }
 
         function getDataTypes({ configuration, item }) {
             const types = {

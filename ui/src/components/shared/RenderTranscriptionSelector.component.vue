@@ -10,7 +10,8 @@
                 v-for="(transcription, idx) of transcriptions"
                 :key="idx"
                 :label="transcription"
-            >{{transcription.name}}</el-radio>
+                >{{ transcription.name }}</el-radio
+            >
         </el-radio-group>
     </div>
 </template>

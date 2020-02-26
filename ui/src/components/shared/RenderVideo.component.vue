@@ -50,6 +50,14 @@ export default {
             });
             video = compact(video);
             video = orderBy(video, "name");
+            if (this.$route.query.transcription) {
+                const transcription = this.$route.query.transcription
+                    .split(".")
+                    .shift();
+                video = video.filter(
+                    v => v.name.split(".").shift() === transcription
+                );
+            }
             this.video = groupBy(video, v => v.name.split(".").shift());
 
             const transcriptionFileExtensions = this.$store.state.configuration
@@ -69,6 +77,12 @@ export default {
                 };
             });
             transcriptions = compact(transcriptions);
+            if (this.$route.query.transcription) {
+                const transcription = this.$route.query.transcription;
+                transcriptions = transcriptions.filter(
+                    t => t.name === transcription
+                );
+            }
             this.transcriptions = groupBy(transcriptions, t =>
                 t.name.split(".").shift()
             );
