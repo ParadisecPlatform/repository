@@ -524,6 +524,7 @@ export class SearchService {
         operator = "OR",
         phraseSearch = false
     }) {
+        if (!value) return undefined;
         let query = {};
         // is it a nested query
         if (nested) {
