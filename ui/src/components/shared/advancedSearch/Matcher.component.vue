@@ -67,7 +67,7 @@ export default {
             sessionStorageKey: `advancedSearch-${this.type}`,
             metaQuery: {
                 match: {
-                    "ocfl:meta:type": "document"
+                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "document"
                 }
             }
         };
@@ -79,7 +79,9 @@ export default {
             this.clause = JSON.parse(savedSearch);
         }
     },
-    mounted() {},
+    mounted() {
+        this.emitData();
+    },
     methods: {
         addClause() {
             const newClause = { id: Math.random() };
