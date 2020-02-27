@@ -7,6 +7,7 @@ import { flattenDeep, isPlainObject, orderBy, groupBy } from "lodash";
 
 import { Parser } from "transcription-parsers";
 import ROCrate from "ro-crate/lib/rocrate";
+import Worker from "src/components/workers/transcript-parser.worker.js";
 
 export class DataLoader {
     constructor() {
@@ -240,11 +241,10 @@ export class DataLoader {
         let response = await fetch(transcription.path);
         if (!response.ok) throw response;
         let xmlString = await response.text();
-        let parser = new Parser({
-            name: transcription.name,
-            data: xmlString
+        return new Promise(resolve => {
+            const worker = new Worker();
+            worker.postMessage({ name: transcription.name, xmlString });
+            worker.addEventListener("message", m => resolve(m.data));
         });
-        let result = await parser.parse();
-        return result;
     }
 }

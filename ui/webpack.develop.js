@@ -16,7 +16,8 @@ module.exports = {
     entry: ["./src/vendor.js", "./src/index.js"],
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: "[name].[hash].bundle.js"
+        filename: "[name].[hash].bundle.js",
+        globalObject: "this"
     },
 
     optimization: {
@@ -115,6 +116,10 @@ module.exports = {
             {
                 test: /\.(woff|woff2|ttf|eot|svg|png|jp(e*)g|gif)?$/,
                 loader: "file-loader?name=res/[name].[ext]?[hash]"
+            },
+            {
+                test: /\.worker\.js$/,
+                use: { loader: "worker-loader", options: { inline: true } }
             }
         ]
     },

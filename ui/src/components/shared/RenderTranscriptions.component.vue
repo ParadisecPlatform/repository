@@ -70,10 +70,10 @@ export default {
             if (!this.selectedTranscription) return;
             let transcription = { ...this.selectedTranscription };
             try {
-                const transcriptionContent = await dataLoader.loadTranscription(
-                    { transcription }
-                );
-                if (!transcriptionContent) {
+                const content = await dataLoader.loadTranscription({
+                    transcription
+                });
+                if (!content) {
                     this.error = true;
                     return;
                 }
@@ -83,7 +83,7 @@ export default {
                         .split(".")
                         .slice(0, -1)
                         .join(".")),
-                    ...transcriptionContent
+                    ...content
                 };
 
                 switch (this.transcription.type) {
