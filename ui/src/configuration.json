@@ -16,6 +16,7 @@
         "pptx"
     ],
     "transcriptionFileExtensions": ["eaf", "trs", "ixt", "flextext"],
+    "indexerMetadataNamespace": "ocfl-indexer:meta",
     "domain": "paradisec.org.au",
     "explore": "paradisec.org.au/explore/Shell.component.vue",
     "introduction": "paradisec.org.au/introduction/Shell.component.vue",

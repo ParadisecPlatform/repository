@@ -17,6 +17,8 @@ export class SearchService {
         this.service = store.state.configuration.service.search;
         this.headers = new Headers();
         this.headers.append("Content-Type", "application/json");
+        this.indexerMetadataNamespace =
+            store.state.configuration.indexerMetadataNamespace;
     }
 
     async applyFilter({ filter }) {
@@ -460,7 +462,7 @@ export class SearchService {
             sort: [{ dateModified: "desc" }],
             query: {
                 match: {
-                    "ocfl:meta:type": "document"
+                    [`${this.indexerMetadataNamespace}:type`]: "document"
                 }
             }
         };
@@ -731,7 +733,9 @@ export class SearchService {
 
     getItemMetadata({ item }) {
         const configuration = this.store.state.configuration;
-        if (item._source["ocfl:meta:type"] === "document") {
+        if (
+            item._source[`${this.indexerMetadataNamespace}:type`] === "document"
+        ) {
             return {
                 id: item._source.identifier
                     .filter(i => i.name === "id")[0]
@@ -748,7 +752,9 @@ export class SearchService {
                 contentTypes: getDataTypes({ configuration, item }),
                 source: item._source
             };
-        } else if (item._source["ocfl:meta:type"] === "segment") {
+        } else if (
+            item._source[`${this.indexerMetadataNamespace}:type`] === "segment"
+        ) {
             return {
                 ...item._source
             };

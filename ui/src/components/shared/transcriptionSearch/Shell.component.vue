@@ -27,7 +27,7 @@ export default {
                         must: [
                             {
                                 match: {
-                                    "ocfl:meta:type": "segment"
+                                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "segment"
                                 }
                             }
                         ],
