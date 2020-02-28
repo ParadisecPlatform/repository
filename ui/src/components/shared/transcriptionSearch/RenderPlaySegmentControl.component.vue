@@ -2,9 +2,9 @@
     <div>
         <el-button
             @click="play"
-            :type="buttonType"
+            type="success"
             size="small"
-            :class="{'bg-orange-500': disablePlay}"
+            :class="{'transition duration-500 ease-in-out blinking bg-orange-500 border-orange-500': disablePlay}"
         >
             <i class="fas fa-play"></i>
         </el-button>
@@ -29,8 +29,7 @@ export default {
     data() {
         return {
             src: undefined,
-            disablePlay: false,
-            buttonType: "success"
+            disablePlay: false
         };
     },
     methods: {
@@ -53,7 +52,6 @@ export default {
                 )[0];
                 const datafile = ocflObject.datafiles[mediaElement][0];
                 this.disablePlay = true;
-                this.buttonType = "warning";
                 if (datafile.path) this.src = datafile.path;
             } catch (error) {
                 console.log(error);
@@ -67,7 +65,6 @@ export default {
                 this.src = undefined;
                 await new Promise(resolve => setTimeout(resolve, 200));
                 this.disablePlay = false;
-                this.buttonType = "success";
             }, (this.item.segment.timeEnd - this.item.segment.timeBegin) * 1000);
         }
     }
@@ -75,4 +72,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.blinking {
+    animation: blinkingBackground 1s infinite;
+}
+@keyframes blinkingBackground {
+    0% {
+        @apply bg-orange-800 border-orange-800;
+    }
+}
 </style>
