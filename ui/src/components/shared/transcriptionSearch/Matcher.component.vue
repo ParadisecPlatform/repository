@@ -1,7 +1,10 @@
 <template>
     <div class="flex flex-col">
         <div class="flex flex-row">
-            <el-input v-model="value" @change="query"></el-input>
+            <el-button @click="clear" type="danger" size="small">
+                <i class="fas fa-trash-alt"></i>
+            </el-button>
+            <el-input class="mx-2" v-model="value" @change="query"></el-input>
             <el-button @click="query">search</el-button>
         </div>
         <div class="flex flex-row my-2">
@@ -73,6 +76,10 @@ export default {
                 operator: this.operator,
                 phraseSearch: this.phraseSearch
             });
+        },
+        clear() {
+            this.value = undefined;
+            this.query();
         }
     }
 };
