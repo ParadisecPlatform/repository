@@ -1,0 +1,45 @@
+#!/bin/bash
+
+TAG="coedl/ocfl-viewer"
+
+# list current tags in repo
+echo -e "Current Tags: \n\n"
+git tag -l
+
+# get the new version tag
+echo ""
+read -p 'Please provide a tag for this release (major.minor.patch): ' VERSION
+echo ""
+
+read -p "Are you sure you wish to tag this release '${VERSION}'? type: 'yes': " resp
+echo ""
+if [ "$resp" != "yes" ] ; then
+    echo "Ok. Stopping now."
+    exit 0
+fi
+
+# tag the repo with the new version
+echo -e "Ok - Building the new container\n\n"
+git tag "v${VERSION}"
+
+# get the tag to be used for the docker images
+echo 'What tag should be used for this image? [default: coedl/ocfl-viewer]'
+read -p 'Tag: (enter to use the default)' resp
+if [ ! -z ${resp} ] ; then
+    TAG="$resp"
+fi
+
+echo -e "\nSetting tag to: ${TAG}\n"
+
+# build the container tagging with the specified tag and version
+docker build -t ${TAG}:${VERSION} .
+docker image tag ${TAG}:${VERSION} ${TAG}:latest
+
+# push the new container
+echo -e "\nLog in to docker hub to push the container."
+docker login
+docker push ${TAG}:${VERSION}
+docker push ${TAG}:latest
+
+# push the git tags 
+git push origin --tags
