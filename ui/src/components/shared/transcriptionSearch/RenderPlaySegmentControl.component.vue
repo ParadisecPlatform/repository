@@ -1,23 +1,39 @@
 <template>
-    <div>
+    <div class="flex flex-row">
         <el-button
             @click="play"
             type="success"
             size="small"
-            :class="{'transition duration-500 ease-in-out blinking bg-orange-500 border-orange-500': disablePlay}"
+            :class="{
+                'transition duration-500 ease-in-out blinking bg-orange-500 border-orange-500': disablePlay
+            }"
         >
             <i class="fas fa-play"></i>
         </el-button>
-        <audio ref="mediaElement" v-if="src" @canplay.once="playSegment">
-            <source :src="src" />Your browser does not support the
-            <code>audio</code> element.
+        <audio
+            ref="mediaElement"
+            v-if="sources.length && mediaType === 'audio'"
+            @canplay.once="playSegment"
+        >
+            <source :src="source" v-for="(source, idx) of sources" :key="idx" />
+            Your browser does not support the <code>audio</code> element.
         </audio>
+        <video
+            ref="mediaElement"
+            v-if="sources.length && mediaType === 'video'"
+            @canplay.once="playSegment"
+            class="w-64"
+        >
+            <source :src="source" v-for="(source, idx) of sources" :key="idx" />
+            Your browser does not support the <code>video</code> element.
+        </video>
     </div>
 </template>
 
 <script>
 import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
+import { compact } from "lodash";
 
 export default {
     props: {
@@ -28,8 +44,9 @@ export default {
     },
     data() {
         return {
-            src: undefined,
-            disablePlay: false
+            sources: [],
+            disablePlay: false,
+            mediaType: undefined
         };
     },
     methods: {
@@ -41,18 +58,38 @@ export default {
             };
             try {
                 const ocflObject = await dataLoader.load({ ...params });
-                const media = [
-                    ...ocflObject.dataTypes.audio
-                    // ...ocflObject.dataTypes.video
-                ];
-                const mediaElement = media.filter(
+
+                let mediaElements;
+                const audioElements = ocflObject.dataTypes.audio.filter(
                     m =>
                         m.split(".").shift() ===
                         this.item.segment.file.split(".").shift()
-                )[0];
-                const datafile = ocflObject.datafiles[mediaElement][0];
-                this.disablePlay = true;
-                if (datafile.path) this.src = datafile.path;
+                );
+                if (audioElements.length) {
+                    this.mediaType = "audio";
+                    mediaElements = audioElements;
+                }
+
+                const videoElements = ocflObject.dataTypes.video.filter(
+                    m =>
+                        m.split(".").shift() ===
+                        this.item.segment.file.split(".").shift()
+                );
+                if (videoElements.length) {
+                    this.mediaType = "video";
+                    mediaElements = videoElements;
+                }
+
+                let datafiles = mediaElements.map(e => {
+                    try {
+                        return ocflObject.datafiles[e][0].path;
+                    } catch (error) {}
+                });
+                datafiles = compact(datafiles);
+                if (datafiles.length) {
+                    this.sources = datafiles;
+                    this.disablePlay = true;
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -62,7 +99,7 @@ export default {
             this.$refs.mediaElement.play();
             setTimeout(async () => {
                 this.$refs.mediaElement.pause();
-                this.src = undefined;
+                this.sources = [];
                 await new Promise(resolve => setTimeout(resolve, 200));
                 this.disablePlay = false;
             }, (this.item.segment.timeEnd - this.item.segment.timeBegin) * 1000);
