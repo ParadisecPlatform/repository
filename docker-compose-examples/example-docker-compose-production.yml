@@ -2,12 +2,11 @@ version: "3.4"
 
 volumes:
     ui-modules:
-    api-modules:
     search:
 
 services:
     ui:
-        image: nginx:latest
+        image: coedl/ocfl-viewer:latest
         hostname: ui
         tty: true
         healthcheck:
@@ -21,12 +20,8 @@ services:
             TERM: "xterm-256color"
             NODE_ENV: "production"
         volumes:
-            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - ./nginx/mime.types:/etc/nginx/mime.types
-            - ./ui/dist:/usr/share/nginx/html:delegated
-            - ./nginx/configuration.json:/usr/share/nginx/html/configuration.json
-            - ../data/ocfl-repository:/srv/repository:delegated
-            - ui-modules:/srv/ui/node_modules:delegated
+            - ${PATH TO}/configuration.json:/usr/share/nginx/html/configuration.json
+            - ${PATH TO}/ocfl-repository:/srv/repository:delegated
         ports:
             - 80:80
 
@@ -58,9 +53,9 @@ services:
             - IPC_LOCK
         volumes:
             - search:/usr/share/elasticsearch/data:delegated
-            - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-            - ./elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
-            - ./elastic/users:/usr/share/elasticsearch/config/users
-            - ./elastic/users_roles:/usr/share/elasticsearch/config/users_roles
+            - ${PATH TO}/elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - ${PATH TO}/elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
+            - ${PATH TO}/elastic/users:/usr/share/elasticsearch/config/users
+            - ${PATH TO}/elastic/users_roles:/usr/share/elasticsearch/config/users_roles
         ports:
             - 9200:2300

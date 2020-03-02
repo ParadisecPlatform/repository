@@ -1,0 +1,61 @@
+version: "3.4"
+
+volumes:
+    ui-modules:
+    search:
+
+services:
+    ui:
+        image: coedl/ocfl-viewer:latest
+        hostname: ui
+        tty: true
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost/configuration.json"]
+            interval: 2m
+            timeout: 10s
+            retries: 3
+            start_period: 45s
+        restart: unless-stopped
+        environment:
+            TERM: "xterm-256color"
+            NODE_ENV: "production"
+        volumes:
+            - ./configuration.json:/usr/share/nginx/html/configuration.json
+            - ../data/ocfl-repository:/srv/repository:delegated
+        ports:
+            - 80:80
+
+    search:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+        hostname: search
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost/search/_search"]
+            interval: 2m
+            timeout: 10s
+            retries: 3
+            start_period: 45s
+        restart: unless-stopped
+        environment:
+            - node.name=search
+            - discovery.seed_hosts=search
+            - bootstrap.memory_lock=true
+            - http.host=0.0.0.0
+            - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
+        working_dir: /usr/share/elasticsearch
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536
+                hard: 65536
+        cap_add:
+            - IPC_LOCK
+        volumes:
+            - search:/usr/share/elasticsearch/data:delegated
+            - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - ./elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
+            - ./elastic/users:/usr/share/elasticsearch/config/users
+            - ./elastic/users_roles:/usr/share/elasticsearch/config/users_roles
+        ports:
+            - 9200:2300

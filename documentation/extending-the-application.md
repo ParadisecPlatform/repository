@@ -21,7 +21,7 @@ A renderer can be added as follows:
 
 -   Create a folder named as the domain in `ui/src/components/domain/`.
 -   Create the component in that folder.
--   Add a mapping for that component in to the renderers property in the main configuration file. You can load a renderer based on the `domain` of the data or the `domain` and `type` and / or `additionalType`. Using PARADISEC as an example the domain is paradisec.org.au and the additionalType is one of item or collection.
+-   Add a mapping for that component in to the renderers property in the main configuration file. You can load a renderer based on the `domain` of the data or the `domain` and `@type` and / or `additionalType`. Using PARADISEC as an example the domain is paradisec.org.au and the additionalType is one of item or collection.
 
 When instantiated the component will be passed a data object with a signature as follows:
 
@@ -43,7 +43,6 @@ When instantiated the component will be passed a data object with a signature as
 The signature of the component itself must be as follows:
 
 ```
-
 <script>
 export default {
     props: {
@@ -54,8 +53,6 @@ export default {
     }
 }
 </script>
-
-``
 ```
 
 ### Getting started with your own renderer

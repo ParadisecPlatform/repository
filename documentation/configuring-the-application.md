@@ -8,11 +8,14 @@
     - [documentFileExtensions](#documentfileextensions)
     - [transcriptionFileExtensions](#transcriptionfileextensions)
   - [service.search and service.api](#servicesearch-and-serviceapi)
+  - [Indexer Metadata Namespace](#indexer-metadata-namespace)
   - [introduction, explore, header, footer](#introduction-explore-header-footer)
   - [renderers](#renderers)
 
 The application takes a single configuration file -  `configuration.json` - which defines how it will behave.
-The master configuration file is at `./src/configuration.json`. In production, you will need to create that
+A simple generic configuration file can be seen at `./configuration/generic-configuration.json`. 
+
+In production, you will need to create that
 file and place it into the document root of the webserver. Have a look at the configuration of the ui container
 in `docker-compose-production.yml` to see an example configuration.
 
@@ -43,6 +46,14 @@ You probably don't want to change this.
 **API is currently not used**. `service.search` tells the application where to find elastic. In development
 you should leave as `http://localhost:9200` whilst in prod it's likely to be something like `/search` (assuming
 you've set up a proxy path via your nginx server to elastic - which you absolutely should do)
+
+## Indexer Metadata Namespace
+Is configured as:
+```
+"indexerMetadataNamespace": "ocfl-indexer:meta"
+```
+
+**Don't change this as it needs to match the configuration used by the OCFL tools**
 
 ## introduction, explore, header, footer
 These configuration options tell the app which component to use for that specific
