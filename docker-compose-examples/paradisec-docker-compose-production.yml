@@ -20,13 +20,13 @@ services:
             TERM: "xterm-256color"
             NODE_ENV: "production"
         volumes:
-            - ./configuration.json:/usr/share/nginx/html/configuration.json
-            - ../data/ocfl-repository:/srv/repository:delegated
+            - $PWD/../configuration.json:/usr/share/nginx/html/configuration.json
+            - /ocfl-repository:/srv/repository:delegated
         ports:
             - 80:80
 
     search:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
         hostname: search
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost/search/_search"]
@@ -53,9 +53,9 @@ services:
             - IPC_LOCK
         volumes:
             - search:/usr/share/elasticsearch/data:delegated
-            - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-            - ./elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
-            - ./elastic/users:/usr/share/elasticsearch/config/users
-            - ./elastic/users_roles:/usr/share/elasticsearch/config/users_roles
+            - $PWD/../elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - $PWD/../elastic/roles.yml:/usr/share/elasticsearch/config/roles.yml
+            - $PWD/../elastic/users:/usr/share/elasticsearch/config/users
+            - $PWD/../elastic/users_roles:/usr/share/elasticsearch/config/users_roles
         ports:
-            - 9200:2300
+            - 9200:9200
