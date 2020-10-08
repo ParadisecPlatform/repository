@@ -1,11 +1,11 @@
-import { Parser } from "transcription-parsers";
+import { Parser } from "@coedl/transcription-parsers";
 
-self.addEventListener("message", m => {
+self.addEventListener("message", (m) => {
     let parser = new Parser({
         name: m.data.name,
-        data: m.data.xmlString
+        data: m.data.xmlString,
     });
-    parser.parse().then(result => {
+    parser.parse().then((result) => {
         self.postMessage(result);
     });
 });
