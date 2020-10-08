@@ -2,6 +2,14 @@
 # through the API/UI. File based roles are useful in error scenarios when the
 # API based roles may not be available.
 anonymous:
+    cluster:
+        - all
     indices:
         - names: ["*"]
           privileges: ["read", "view_index_metadata"]
+ingest:
+    cluster:
+        - all
+    indices:
+        - names: ["*"]
+          privileges: ["create_index", "write", "read"]
