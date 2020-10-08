@@ -7,7 +7,7 @@ volumes:
 
 services:
     ui:
-        image: node:12-stretch
+        image: node:14-stretch
         hostname: ui
         tty: true
         environment:
