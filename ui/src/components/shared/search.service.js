@@ -6,7 +6,7 @@ import {
     isString,
     isArray,
     compact,
-    difference
+    difference,
 } from "lodash";
 
 const numberOfAggregations = 5;
@@ -26,7 +26,7 @@ export class SearchService {
 
         let filters = [...this.store.state.search.filters];
         filters.push(filter);
-        filters = uniqBy(filters, filter => `${filter.field}${filter.value}`);
+        filters = uniqBy(filters, (filter) => `${filter.field}${filter.value}`);
         this.search({ filters, page: 0 });
     }
 
@@ -35,7 +35,7 @@ export class SearchService {
         const data = encoder.encode(`${filter.field}${filter.value}`);
         let id = await crypto.subtle.digest("SHA-512", data);
         id = Array.from(new Uint8Array(id));
-        id = id.map(b => b.toString(16).padStart(2, "0")).join("");
+        id = id.map((b) => b.toString(16).padStart(2, "0")).join("");
         return id;
     }
 
@@ -43,7 +43,7 @@ export class SearchService {
         filter.id = await this.createFilterIdentifier({ filter });
 
         let filters = [...this.store.state.search.filters];
-        filters = filters.filter(f => f.id !== filter.id);
+        filters = filters.filter((f) => f.id !== filter.id);
         this.search({ filters, page: 0 });
     }
 
@@ -51,7 +51,7 @@ export class SearchService {
         filter.id = await this.createFilterIdentifier({ filter });
 
         let filters = [...this.store.state.search.filters];
-        filters = filters.map(f => {
+        filters = filters.map((f) => {
             if (f.id === filter.id) {
                 filter = { ...filter, negate: !f.negate };
                 return filter;
@@ -75,7 +75,7 @@ export class SearchService {
         this.store.commit("updateFiltersAndQuery", payload);
         // console.log(JSON.stringify(query, null, 2));
         let response = await this.execute({
-            query: { query, from: page * pageSize, size: pageSize }
+            query: { query, from: page * pageSize, size: pageSize },
         });
         const total = response.hits.total.value;
         const documents = response.hits.hits;
@@ -86,10 +86,10 @@ export class SearchService {
         let query = {
             bool: {
                 must: [],
-                must_not: []
-            }
+                must_not: [],
+            },
         };
-        filters.forEach(filter => {
+        filters.forEach((filter) => {
             let term;
             switch (filter.field) {
                 case "domain":
@@ -130,18 +130,18 @@ export class SearchService {
                             must: [
                                 {
                                     term: {
-                                        "identifier.name": "domain"
-                                    }
+                                        "identifier.name": "domain",
+                                    },
                                 },
                                 {
                                     term: {
-                                        "identifier.value": filter.value
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
+                                        "identifier.value": filter.value,
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                },
             };
         }
 
@@ -154,30 +154,30 @@ export class SearchService {
                             must: [
                                 {
                                     term: {
-                                        "contributor.name": filter.value
-                                    }
+                                        "contributor.name": filter.value,
+                                    },
                                 },
                                 {
                                     term: {
-                                        "contributor.role": filter.role
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
+                                        "contributor.role": filter.role,
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                },
             };
         }
 
         function constructTypeQuery({ filter }) {
             return {
-                term: { additionalType: filter.value }
+                term: { additionalType: filter.value },
             };
         }
 
         function constructHasContentQuery({ filter }) {
             return {
-                term: { hasContent: filter.value }
+                term: { hasContent: filter.value },
             };
         }
 
@@ -186,9 +186,9 @@ export class SearchService {
                 nested: {
                     path: "publisher",
                     query: {
-                        term: { "publisher.name": filter.value }
-                    }
-                }
+                        term: { "publisher.name": filter.value },
+                    },
+                },
             };
         }
 
@@ -197,9 +197,9 @@ export class SearchService {
                 nested: {
                     path: "hasPart",
                     query: {
-                        term: { "hasPart.encodingFormat": filter.value }
-                    }
-                }
+                        term: { "hasPart.encodingFormat": filter.value },
+                    },
+                },
             };
         }
 
@@ -208,9 +208,9 @@ export class SearchService {
                 range: {
                     [filter.field]: {
                         gte: filter.dateRange.min,
-                        lte: filter.dateRange.max
-                    }
-                }
+                        lte: filter.dateRange.max,
+                    },
+                },
             };
         }
     }
@@ -220,20 +220,20 @@ export class SearchService {
             size: 0,
             aggs: {
                 dateRange: {
-                    stats: { field }
-                }
-            }
+                    stats: { field },
+                },
+            },
         };
         let filters = [...this.store.state.search.filters];
         let q = this.assembleQuery({ filters });
         query = {
             query: q,
-            ...query
+            ...query,
         };
         let response = await this.execute({ query });
         return {
             min: response.aggregations.dateRange.min_as_string,
-            max: response.aggregations.dateRange.max_as_string
+            max: response.aggregations.dateRange.max_as_string,
         };
     }
 
@@ -243,24 +243,24 @@ export class SearchService {
             aggs: {
                 type: {
                     nested: {
-                        path: "hasPart"
+                        path: "hasPart",
                     },
                     aggs: {
                         values: {
                             terms: {
                                 field: "hasPart.encodingFormat",
-                                size
-                            }
-                        }
-                    }
-                }
-            }
+                                size,
+                            },
+                        },
+                    },
+                },
+            },
         };
         let filters = [...this.store.state.search.filters];
         let q = this.assembleQuery({ filters });
         query = {
             query: q,
-            ...query
+            ...query,
         };
         let response = await this.execute({ query });
         let types = response.aggregations.type.values.buckets;
@@ -273,33 +273,33 @@ export class SearchService {
             aggs: {
                 domains: {
                     nested: {
-                        path: "identifier"
+                        path: "identifier",
                     },
                     aggs: {
                         results: {
                             filter: {
                                 term: {
-                                    "identifier.name": "domain"
-                                }
+                                    "identifier.name": "domain",
+                                },
                             },
                             aggs: {
                                 values: {
                                     terms: {
                                         field: "identifier.value",
-                                        size
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                                        size,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         };
         let filters = [...this.store.state.search.filters];
         let q = this.assembleQuery({ filters });
         query = {
             query: q,
-            ...query
+            ...query,
         };
         let response = await this.execute({ query });
         let domains = response.aggregations.domains.results.values.buckets;
@@ -312,39 +312,39 @@ export class SearchService {
             aggs: {
                 contributors: {
                     nested: {
-                        path: "contributor"
+                        path: "contributor",
                     },
                     aggs: {
                         roles: {
                             terms: {
                                 field: "contributor.role",
-                                size
+                                size,
                             },
                             aggs: {
                                 names: {
                                     terms: {
                                         field: "contributor.name",
-                                        size
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                                        size,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         };
         let filters = [...this.store.state.search.filters];
         let q = this.assembleQuery({ filters });
         query = {
             query: q,
-            ...query
+            ...query,
         };
         let response = await this.execute({ query });
         let contributors = response.aggregations.contributors.roles.buckets.map(
-            role => {
+            (role) => {
                 return {
                     role: role.key,
-                    names: role.names.buckets
+                    names: role.names.buckets,
                 };
             }
         );
@@ -357,24 +357,24 @@ export class SearchService {
             aggs: {
                 publishers: {
                     nested: {
-                        path: "publisher"
+                        path: "publisher",
                     },
                     aggs: {
                         values: {
                             terms: {
                                 field: "publisher.name",
-                                size
-                            }
-                        }
-                    }
-                }
-            }
+                                size,
+                            },
+                        },
+                    },
+                },
+            },
         };
         let filters = [...this.store.state.search.filters];
         let q = this.assembleQuery({ filters });
         query = {
             query: q,
-            ...query
+            ...query,
         };
         let response = await this.execute({ query });
         let publishers = response.aggregations.publishers.values.buckets;
@@ -388,16 +388,16 @@ export class SearchService {
                 type: {
                     terms: {
                         field: "additionalType",
-                        size
-                    }
-                }
-            }
+                        size,
+                    },
+                },
+            },
         };
         let filters = [...this.store.state.search.filters];
         let q = this.assembleQuery({ filters });
         query = {
             query: q,
-            ...query
+            ...query,
         };
         // console.log(JSON.stringify(query, null, 2));
         let response = await this.execute({ query });
@@ -411,7 +411,7 @@ export class SearchService {
             nested,
             path,
             field,
-            size
+            size,
         });
         let response = await this.execute({ query: aggregations });
         let data;
@@ -428,18 +428,18 @@ export class SearchService {
 
         const typeAggregation = this.aggregationBuilder({
             field: "additionalType",
-            size: 10
+            size: 10,
         });
 
         let response = await this.execute({ query: typeAggregation });
         const types = response.aggregations.additionalType.buckets;
-        types.forEach(t => (data[t.key] = t.doc_count));
+        types.forEach((t) => (data[t.key] = t.doc_count));
 
         const publisherAggregation = this.aggregationBuilder({
             nested: true,
             path: "publisher",
             field: "name.raw",
-            size: 1
+            size: 1,
         });
         response = await this.execute({ query: publisherAggregation });
         data.publishers = response.aggregations.publisher.count.value;
@@ -448,7 +448,7 @@ export class SearchService {
             nested: true,
             path: "contributor",
             field: "name.raw",
-            size: 1
+            size: 1,
         });
         response = await this.execute({ query: contributorAggregation });
         data.contributors = response.aggregations.contributor.count.value;
@@ -462,9 +462,9 @@ export class SearchService {
             sort: [{ dateModified: "desc" }],
             query: {
                 match: {
-                    [`${this.indexerMetadataNamespace}:type`]: "document"
-                }
-            }
+                    [`${this.indexerMetadataNamespace}:type`]: "document",
+                },
+            },
         };
         let { documents, total } = await this.execute({ query });
         return { documents };
@@ -478,15 +478,15 @@ export class SearchService {
             size: 20,
             query: {
                 bool: {
-                    should: fields.map(f => {
+                    should: fields.map((f) => {
                         return this.queryBuilder({
                             ...f,
                             operator,
-                            phraseSearch
+                            phraseSearch,
                         });
-                    })
-                }
-            }
+                    }),
+                },
+            },
         };
         // console.log(JSON.stringify(query, null, 2));
         let { total, documents } = await this.execute({ query });
@@ -501,7 +501,7 @@ export class SearchService {
         let response = await fetch(index, {
             method: "POST",
             headers: this.headers,
-            body: JSON.stringify(query)
+            body: JSON.stringify(query),
         });
         if (response.status !== 200) {
             console.log((await response.json()).error);
@@ -510,7 +510,7 @@ export class SearchService {
         response = await response.json();
         const total = response.hits.total.value;
         const aggregations = response.aggregations;
-        const documents = response.hits.hits.map(hit =>
+        const documents = response.hits.hits.map((hit) =>
             this.getItemMetadata({ item: hit })
         );
         return { total, documents, aggregations };
@@ -524,9 +524,9 @@ export class SearchService {
         fields,
         value,
         operator = "OR",
-        phraseSearch = false
+        phraseSearch = false,
     }) {
-        if (!value) return undefined;
+        // if (!value) return undefined;
         let query = {};
         // is it a nested query
         if (nested) {
@@ -537,7 +537,7 @@ export class SearchService {
                 fields,
                 value,
                 operator,
-                phraseSearch
+                phraseSearch,
             });
         } else {
             query = assembleSimpleQuery({
@@ -545,7 +545,7 @@ export class SearchService {
                 field,
                 value,
                 operator,
-                phraseSearch
+                phraseSearch,
             });
         }
         return query;
@@ -555,10 +555,11 @@ export class SearchService {
             field,
             value,
             operator,
-            phraseSearch
+            phraseSearch,
         }) {
+            if (!value) return undefined;
             if (type === "text") {
-                let wildcard = value.match(/\?|\*/g);
+                let wildcard = value ? value.match(/\?|\*/g) : false;
                 query = wildcard
                     ? assembleWildcardQuery({ field, value })
                     : phraseSearch
@@ -578,13 +579,13 @@ export class SearchService {
             fields,
             value,
             operator,
-            phraseSearch
+            phraseSearch,
         }) {
             let query = {
                 nested: {
                     path,
-                    query: {}
-                }
+                    query: {},
+                },
             };
             let wildcard;
             if (type === "text") {
@@ -597,34 +598,34 @@ export class SearchService {
                           path,
                           field,
                           value,
-                          operator
+                          operator,
                       });
             } else if (type === "multi") {
                 query.nested.query = {
                     bool: {
-                        must: fields.map(f => {
+                        must: fields.map((f) => {
                             if (f.field && f.value) {
                                 wildcard = f.value.match(/\?|\*/g);
                                 return wildcard
                                     ? assembleWildcardQuery({
                                           path,
                                           field: f.field,
-                                          value: f.value
+                                          value: f.value,
                                       })
                                     : phraseSearch
                                     ? assembleMatchPhraseQuery({
                                           path,
                                           field: f.field,
-                                          value: f.value
+                                          value: f.value,
                                       })
                                     : assembleMatchQuery({
                                           path,
                                           field: f.field,
-                                          value: f.value
+                                          value: f.value,
                                       });
                             }
-                        })
-                    }
+                        }),
+                    },
                 };
                 query.nested.query.bool.must = compact(
                     query.nested.query.bool.must
@@ -633,8 +634,8 @@ export class SearchService {
                 query = {
                     nested: {
                         path,
-                        query: assembleRangeQuery({ field, value })
-                    }
+                        query: assembleRangeQuery({ field, value }),
+                    },
                 };
             }
 
@@ -642,38 +643,39 @@ export class SearchService {
         }
 
         function assembleMatchQuery({ path, field, value, operator }) {
-            return path
+            let query = path
                 ? {
                       match: {
                           [`${path}.${field}`]: {
                               query: value,
-                              operator
-                          }
-                      }
+                              operator,
+                          },
+                      },
                   }
                 : {
-                      match: { [field]: { query: value, operator } }
+                      match: { [field]: { query: value, operator } },
                   };
+            return query;
         }
 
         function assembleMatchPhraseQuery({ path, field, value }) {
             return path
                 ? {
                       match_phrase: {
-                          [`${path}.${field}`]: { query: value }
-                      }
+                          [`${path}.${field}`]: { query: value },
+                      },
                   }
                 : {
                       match_phrase: {
-                          [field]: value
-                      }
+                          [field]: value,
+                      },
                   };
         }
 
         function assembleWildcardQuery({ path, field, value }) {
             return path
                 ? {
-                      wildcard: { [`${path}.${field}`]: value }
+                      wildcard: { [`${path}.${field}`]: value },
                   }
                 : { wildcard: { [field]: value } };
         }
@@ -681,8 +683,8 @@ export class SearchService {
         function assembleRangeQuery({ field, value }) {
             return {
                 range: {
-                    [field]: { gte: value[0], lte: value[1] }
-                }
+                    [field]: { gte: value[0], lte: value[1] },
+                },
             };
         }
     }
@@ -699,10 +701,10 @@ export class SearchService {
                 size: 0,
                 aggs: {
                     [field]: {
-                        terms: { field, size }
+                        terms: { field, size },
                     },
-                    count: { cardinality: { field } }
-                }
+                    count: { cardinality: { field } },
+                },
             };
         }
 
@@ -712,21 +714,21 @@ export class SearchService {
                 aggs: {
                     [path]: {
                         nested: {
-                            path
+                            path,
                         },
                         aggs: {
                             values: {
-                                terms: { field: `${path}.${field}`, size }
+                                terms: { field: `${path}.${field}`, size },
                             },
                             count: {
                                 cardinality: {
-                                    field: `${path}.${field}`
+                                    field: `${path}.${field}`,
                                     // precision_threshold: 30000
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             };
         }
     }
@@ -738,25 +740,25 @@ export class SearchService {
         ) {
             return {
                 id: item._source.identifier
-                    .filter(i => i.name === "id")[0]
+                    .filter((i) => i.name === "id")[0]
                     .value.replace(
                         this.store.state.configuration.domain,
                         "view"
                     ),
                 domain: item._source.identifier.filter(
-                    i => i.name === "domain"
+                    (i) => i.name === "domain"
                 )[0].value,
                 name: item._source.name,
                 description: item._source.description,
                 type: item._source["additionalType"],
                 contentTypes: getDataTypes({ configuration, item }),
-                source: item._source
+                source: item._source,
             };
         } else if (
             item._source[`${this.indexerMetadataNamespace}:type`] === "segment"
         ) {
             return {
-                ...item._source
+                ...item._source,
             };
         }
 
@@ -766,11 +768,11 @@ export class SearchService {
                 audio: [],
                 video: [],
                 documents: [],
-                transcriptions: []
+                transcriptions: [],
             };
             let parts = item._source.hasPart ? item._source.hasPart : [];
             if (isPlainObject(parts)) parts = [parts];
-            parts.forEach(part => {
+            parts.forEach((part) => {
                 types.images.push(
                     checkIncludes(
                         configuration.imageFormats,
