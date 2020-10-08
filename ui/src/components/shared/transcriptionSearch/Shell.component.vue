@@ -2,7 +2,11 @@
     <div class="flex flex-col">
         <matcher-component @search="updateQuery" />
         <div class="style-results-section overflow-scroll mt-2">
-            <search-results-component :results="results" @update-search="search" class="mx-2 px-6" />
+            <search-results-component
+                :results="results"
+                @update-search="search"
+                class="mx-2 px-6"
+            />
         </div>
     </div>
 </template>
@@ -16,7 +20,7 @@ import { uniqBy, compact } from "lodash";
 export default {
     components: {
         MatcherComponent,
-        SearchResultsComponent
+        SearchResultsComponent,
     },
     data() {
         return {
@@ -27,18 +31,18 @@ export default {
                         must: [
                             {
                                 match: {
-                                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "segment"
-                                }
-                            }
+                                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "segment",
+                                },
+                            },
                         ],
                         should: [],
-                        mustNot: []
-                    }
-                }
+                        mustNot: [],
+                    },
+                },
             },
             results: {},
             must: [],
-            mustNot: []
+            mustNot: [],
         };
     },
     beforeMount() {
@@ -56,8 +60,8 @@ export default {
         async search({ page = 0, size = 10 }) {
             const query = { ...this.query, from: page * size, size: size };
             this.results = { ...(await this.ss.execute({ query })) };
-        }
-    }
+        },
+    },
 };
 </script>
 
