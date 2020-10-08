@@ -3,7 +3,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -17,7 +17,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "[name].[hash].bundle.js",
-        globalObject: "this"
+        globalObject: "this",
     },
 
     optimization: {
@@ -25,15 +25,15 @@ module.exports = {
             cacheGroups: {
                 vendor: {
                     test: /node_modules/,
-                    chunks: "all"
-                }
-            }
-        }
+                    chunks: "all",
+                },
+            },
+        },
     },
     watch: true,
     watchOptions: {
         poll: 1000,
-        ignored: ["git", "node_modules"]
+        ignored: ["git", "node_modules"],
     },
     devServer: {
         contentBase: path.join(__dirname, "dist"),
@@ -41,68 +41,69 @@ module.exports = {
         host: "0.0.0.0",
         port: 9001,
         historyApiFallback: true,
-        watchOptions: {
-            watch: true,
-            poll: 1000,
-            ignored: ["node_modules", "dist"]
-        }
+        // watchOptions: {
+        //     watch: true,
+        //     poll: 1000,
+        //     ignored: ["node_modules", "dist"],
+        // },
     },
     plugins: [
         new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify("development")
+            "process.env.NODE_ENV": JSON.stringify("development"),
         }),
-        new CleanWebpackPlugin(["dist/*.js", "dist/*.css"], {
-            watch: true,
-            root: __dirname
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ["dist/*.js", "dist/*.css"],
         }),
         new MiniCssExtractPlugin({
-            filename: "[name].[contenthash].css"
+            filename: "[name].[contenthash].css",
         }),
         new HtmlWebpackPlugin({
             title: "OCFL Repository Viewer",
-            template: "./src/index.html"
+            template: "./src/index.html",
         }),
         new VueLoaderPlugin(),
-        new CopyWebpackPlugin([
-            {
-                from: "./src/configuration.json",
-                to: "configuration.json"
-            },
-            {
-                from: "./jsonldcontext.jsonld",
-                to: "jsonldcontext.jsonld"
-            },
-            {
-                from: "src/assets/images",
-                to: "assets/images"
-            }
-        ]),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: "./src/configuration.json",
+                    to: "configuration.json",
+                },
+                {
+                    from: "./jsonldcontext.jsonld",
+                    to: "jsonldcontext.jsonld",
+                },
+                {
+                    from: "src/assets/images",
+                    to: "assets/images",
+                },
+            ],
+        }),
         new ImageminPlugin({
             test: /\.(jpe?g|png|gif|svg)$/i,
             pngquant: {
-                quality: "95-100"
-            }
-        })
+                quality: "95-100",
+            },
+        }),
     ],
     module: {
         rules: [
             {
                 test: /\.vue$/,
-                loader: "vue-loader"
+                loader: "vue-loader",
             },
             {
                 test: /\.js$/,
                 loader: "babel-loader",
                 exclude: /node_modules/,
-                query: { compact: false }
+                query: { compact: false },
             },
             {
                 test: /\.css$/,
                 use: [
                     "vue-style-loader",
                     { loader: "css-loader", options: { importLoaders: 1 } },
-                    "postcss-loader"
-                ]
+                    "postcss-loader",
+                ],
             },
             {
                 test: /\.scss$/,
@@ -110,18 +111,18 @@ module.exports = {
                     "vue-style-loader",
                     { loader: "css-loader", options: { importLoaders: 1 } },
                     "postcss-loader",
-                    "sass-loader"
-                ]
+                    "sass-loader",
+                ],
             },
             {
                 test: /\.(woff|woff2|ttf|eot|svg|png|jp(e*)g|gif)?$/,
-                loader: "file-loader?name=res/[name].[ext]?[hash]"
+                loader: "file-loader?name=res/[name].[ext]?[hash]",
             },
             {
                 test: /\.worker\.js$/,
-                use: { loader: "worker-loader", options: { inline: true } }
-            }
-        ]
+                use: { loader: "worker-loader" },
+            },
+        ],
     },
     resolve: {
         alias: {
@@ -132,7 +133,7 @@ module.exports = {
             directives: path.resolve(__dirname, "src/directives"),
             routes: path.resolve(__dirname, "src/routes/"),
             services: path.resolve(__dirname, "src/services"),
-            store: path.resolve(__dirname, "src/store")
-        }
-    }
+            store: path.resolve(__dirname, "src/store"),
+        },
+    },
 };
