@@ -6,7 +6,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ImageminPlugin = require("imagemin-webpack-plugin").default;
@@ -30,15 +29,12 @@ module.exports = {
                 },
             },
         },
-        minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})],
+        minimize: true,
+        minimizer: [new TerserPlugin()],
     },
     plugins: [
         new webpack.DefinePlugin({
             "process.env.NODE_ENV": JSON.stringify("production"),
-        }),
-        new MiniCssExtractPlugin({
-            filename: "[name].css",
-            chunkFilename: "[id].css",
         }),
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: ["dist/*.js", "dist/*.css"],
@@ -87,22 +83,11 @@ module.exports = {
                 query: { compact: false },
             },
             {
-                test: /\.css$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
-                    "vue-style-loader",
+                    MiniCssExtractPlugin.loader,
                     { loader: "css-loader", options: { importLoaders: 1 } },
                     "postcss-loader",
-                    "MiniCssExtractPlugin.loader",
-                ],
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    "vue-style-loader",
-                    { loader: "css-loader", options: { importLoaders: 1 } },
-                    "postcss-loader",
-                    "sass-loader",
-                    "MiniCssExtractPlugin.loader",
                 ],
             },
             {
@@ -111,7 +96,7 @@ module.exports = {
             },
             {
                 test: /\.worker\.js$/,
-                use: { loader: "worker-loader", options: { inline: true } },
+                use: { loader: "worker-loader" },
             },
         ],
     },

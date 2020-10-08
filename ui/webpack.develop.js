@@ -5,7 +5,6 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ImageminPlugin = require("imagemin-webpack-plugin").default;
 
@@ -54,9 +53,6 @@ module.exports = {
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: ["dist/*.js", "dist/*.css"],
         }),
-        new MiniCssExtractPlugin({
-            filename: "[name].[contenthash].css",
-        }),
         new HtmlWebpackPlugin({
             title: "OCFL Repository Viewer",
             template: "./src/index.html",
@@ -98,20 +94,11 @@ module.exports = {
                 query: { compact: false },
             },
             {
-                test: /\.css$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
                     "vue-style-loader",
                     { loader: "css-loader", options: { importLoaders: 1 } },
                     "postcss-loader",
-                ],
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    "vue-style-loader",
-                    { loader: "css-loader", options: { importLoaders: 1 } },
-                    "postcss-loader",
-                    "sass-loader",
                 ],
             },
             {
