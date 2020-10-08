@@ -5,28 +5,31 @@
             type="success"
             size="small"
             :class="{
-                'transition duration-500 ease-in-out blinking bg-orange-500 border-orange-500': disablePlay
+                'transition duration-500 ease-in-out blinking bg-orange-500 border-orange-500': disablePlay,
             }"
         >
             <i class="fas fa-play"></i>
         </el-button>
-        <audio
-            ref="mediaElement"
-            v-if="sources.length && mediaType === 'audio'"
-            @canplay.once="playSegment"
-        >
-            <source :src="source" v-for="(source, idx) of sources" :key="idx" />
-            Your browser does not support the <code>audio</code> element.
-        </audio>
-        <video
-            ref="mediaElement"
-            v-if="sources.length && mediaType === 'video'"
-            @canplay.once="playSegment"
-            class="w-64"
-        >
-            <source :src="source" v-for="(source, idx) of sources" :key="idx" />
-            Your browser does not support the <code>video</code> element.
-        </video>
+        <div v-if="sources.length && mediaType === 'audio'">
+            <audio ref="mediaElement" @canplay.once="playSegment">
+                <source
+                    :src="source"
+                    v-for="(source, idx) of sources"
+                    :key="idx"
+                />
+                Your browser does not support the <code>audio</code> element.
+            </audio>
+        </div>
+        <div v-if="sources.length && mediaType === 'video'" class="w-64">
+            <video ref="mediaElement" @canplay.once="playSegment">
+                <source
+                    :src="source"
+                    v-for="(source, idx) of sources"
+                    :key="idx"
+                />
+                Your browser does not support the <code>video</code> element.
+            </video>
+        </div>
     </div>
 </template>
 
@@ -39,14 +42,14 @@ export default {
     props: {
         item: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
             sources: [],
             disablePlay: false,
-            mediaType: undefined
+            mediaType: undefined,
         };
     },
     methods: {
@@ -54,14 +57,14 @@ export default {
             if (this.disablePlay) return;
             const params = {
                 identifier: this.item.segment.identifier,
-                configuration: this.$store.state.configuration
+                configuration: this.$store.state.configuration,
             };
             try {
                 const ocflObject = await dataLoader.load({ ...params });
 
                 let mediaElements;
                 const audioElements = ocflObject.dataTypes.audio.filter(
-                    m =>
+                    (m) =>
                         m.split(".").shift() ===
                         this.item.segment.file.split(".").shift()
                 );
@@ -71,7 +74,7 @@ export default {
                 }
 
                 const videoElements = ocflObject.dataTypes.video.filter(
-                    m =>
+                    (m) =>
                         m.split(".").shift() ===
                         this.item.segment.file.split(".").shift()
                 );
@@ -80,7 +83,7 @@ export default {
                     mediaElements = videoElements;
                 }
 
-                let datafiles = mediaElements.map(e => {
+                let datafiles = mediaElements.map((e) => {
                     try {
                         return ocflObject.datafiles[e][0].path;
                     } catch (error) {}
@@ -100,11 +103,11 @@ export default {
             setTimeout(async () => {
                 this.$refs.mediaElement.pause();
                 this.sources = [];
-                await new Promise(resolve => setTimeout(resolve, 200));
+                await new Promise((resolve) => setTimeout(resolve, 200));
                 this.disablePlay = false;
             }, (this.item.segment.timeEnd - this.item.segment.timeBegin) * 1000);
-        }
-    }
+        },
+    },
 };
 </script>
 
