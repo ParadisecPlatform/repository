@@ -7,7 +7,7 @@ volumes:
 
 services:
     ui:
-        image: node:14-stretch
+        image: node:14-buster
         hostname: ui
         tty: true
         environment:
@@ -23,7 +23,7 @@ services:
             - 9001:9001
 
     search:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
         hostname: search
         environment:
             - node.name=search

@@ -1,4 +1,4 @@
-FROM node:12-stretch AS builder 
+FROM node:14-buster AS builder 
 ADD ./ui /srv
 RUN cd /srv && rm -rf ./node_modules && npm run build:production
 
