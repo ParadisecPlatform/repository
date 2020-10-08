@@ -13,7 +13,6 @@ services:
         environment:
             TERM: "xterm-256color"
             NODE_ENV: "development"
-        mem_limit: 1024M
         volumes:
             - $PWD/ui:/srv/ui:cached
             - $PWD/../data/ocfl-repository:/srv/ui/dist/repository:cached
