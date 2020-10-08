@@ -18,7 +18,10 @@
             </el-select>
         </div>
         <div v-for="(f, idx) of fields" :key="idx" class="flex-grow" v-else>
-            <div class="flex flex-col" v-if="[f.field, f.path].includes(select)">
+            <div
+                class="flex flex-col"
+                v-if="[f.field, f.path].includes(select)"
+            >
                 <div v-if="f.type === 'text'">
                     <render-text-field-selector-component
                         :id="id"
@@ -64,21 +67,21 @@ export default {
         RenderTextFieldSelectorComponent,
         RenderDateFieldSelectorComponent,
         RenderAggregationFieldSelectorComponent,
-        RenderMultiTextFieldSelectorComponent
+        RenderMultiTextFieldSelectorComponent,
     },
     props: {
         id: {
             type: Number,
-            required: true
+            required: true,
         },
         fields: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
-            select: undefined
+            select: undefined,
         };
     },
     beforeMount() {
@@ -94,8 +97,8 @@ export default {
             sessionStorage.setItem(this.id, JSON.stringify(savedSearch));
             field = { ...field, id: this.id };
             this.$emit("selected-field", field);
-        }
-    }
+        },
+    },
 };
 </script>
 

@@ -44,22 +44,22 @@ import { uniqBy, compact } from "lodash";
 
 export default {
     components: {
-        FieldSelectorComponent
+        FieldSelectorComponent,
     },
     props: {
         type: {
             type: String,
             required: true,
-            validator: val => ["must", "mustNot", "should"].includes(val)
+            validator: (val) => ["must", "mustNot", "should"].includes(val),
         },
         label: {
             type: String,
-            required: true
+            required: true,
         },
         fields: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
@@ -67,9 +67,9 @@ export default {
             sessionStorageKey: `advancedSearch-${this.type}`,
             metaQuery: {
                 match: {
-                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "document"
-                }
-            }
+                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "document",
+                },
+            },
         };
     },
     beforeMount() {
@@ -93,7 +93,7 @@ export default {
             );
         },
         removeClause({ id }) {
-            this.clause = this.clause.filter(e => e.id !== id);
+            this.clause = this.clause.filter((e) => e.id !== id);
             sessionStorage.removeItem(id);
             sessionStorage.setItem(
                 this.sessionStorageKey,
@@ -102,18 +102,18 @@ export default {
             this.emitData();
         },
         addFieldData(data) {
-            this.clause = this.clause.map(e => {
+            this.clause = this.clause.map((e) => {
                 if (e.id === data.id)
                     return {
                         ...e,
-                        ...data
+                        ...data,
                     };
                 return e;
             });
             this.emitData();
         },
         emitData() {
-            let filters = this.clause.map(e => {
+            let filters = this.clause.map((e) => {
                 try {
                     return this.ss.queryBuilder(e);
                 } catch (error) {
@@ -124,8 +124,8 @@ export default {
             filters = compact(filters);
             if (this.type === "must") filters.push(this.metaQuery);
             this.$emit("update", { type: this.type, filters });
-        }
-    }
+        },
+    },
 };
 </script>
 

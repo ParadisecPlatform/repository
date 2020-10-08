@@ -3,7 +3,9 @@
         <div v-if="fieldDataVerifies">
             <div class="flex flex-row">
                 <div class="flex flex-col w-1/2">
-                    <div class="text-xs mt-2 bg-teal-200 text-black p-2 text-center">
+                    <div
+                        class="text-xs mt-2 bg-teal-200 text-black p-2 text-center"
+                    >
                         wildcard searches are supported. Try adding '*' to match
                         zero or more characters or '?' to match a single
                         character.
@@ -47,7 +49,10 @@
                     </div>
                 </div>
                 <div class="pl-16 p-4 px-8 w-1/2">
-                    <search-results-component :results="results" @update-search="search" />
+                    <search-results-component
+                        :results="results"
+                        @update-search="search"
+                    />
                 </div>
             </div>
         </div>
@@ -66,13 +71,13 @@ export default {
     components: {
         FieldSelectorComponent,
         SearchResultsComponent,
-        MatcherComponent
+        MatcherComponent,
     },
     props: {
         fields: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
@@ -83,14 +88,14 @@ export default {
                     bool: {
                         must: [],
                         should: [],
-                        mustNot: []
-                    }
-                }
+                        mustNot: [],
+                    },
+                },
             },
             results: {},
             must: [],
             mustNot: [],
-            debouncedSearch: debounce(this.search, 300)
+            debouncedSearch: debounce(this.search, 300),
         };
     },
     beforeMount() {
@@ -101,7 +106,7 @@ export default {
         verifyFields() {
             this.fieldDataVerifies = this.ss.verifyFields({
                 fields: this.fields,
-                disableFields: ["enabled"]
+                disableFields: ["enabled"],
             });
         },
         updateQuery(data) {
@@ -111,8 +116,8 @@ export default {
         async search({ page = 0, size = 10 }) {
             const query = { ...this.query, from: page * size, size: size };
             this.results = await this.ss.execute({ query });
-        }
-    }
+        },
+    },
 };
 </script>
 
