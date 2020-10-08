@@ -5,7 +5,7 @@ import shajs from "sha.js";
 import jsonld from "jsonld";
 import { flattenDeep, isPlainObject, orderBy, groupBy } from "lodash";
 
-import { Parser } from "transcription-parsers";
+// import { Parser } from "@coedl/transcription-parsers";
 import ROCrate from "ro-crate/lib/rocrate";
 import Worker from "src/components/workers/transcript-parser.worker.js";
 
@@ -17,8 +17,8 @@ export class DataLoader {
             domain: "",
             service: {
                 search: "http://localhost:8000/search",
-                api: "http://localhost:8000"
-            }
+                api: "http://localhost:8000",
+            },
         };
     }
 
@@ -101,22 +101,46 @@ export class DataLoader {
             inventory,
             versions,
             datafiles: this.extractObjectDataFiles({ inventory, path }),
-            path
+            path,
         };
 
         ocflObject.version = version
-            ? versions.filter(v => v.version === version)[0].version
+            ? versions.filter((v) => v.version === version)[0].version
             : [...versions].pop().version;
 
-        let rocrateMetadataFile = [
-            ...ocflObject.datafiles["ro-crate-metadata.jsonld"]
-        ].pop();
+        const crateFile = ocflObject.datafiles["ro-crate-metadata.json"]
+            ? "ro-crate-metadata.json"
+            : "ro-crate-metadata.jsonld";
+        let rocrateMetadataFile = [...ocflObject.datafiles[crateFile]].pop();
         response = await fetch(rocrateMetadataFile.path);
         if (!response.ok) throw response;
         ocflObject.flattenedCrate = await response.json();
+        debugger;
 
         const crate = new ROCrate(ocflObject.flattenedCrate);
-        await crate.objectify();
+        try {
+            await crate.objectify();
+        } catch (error) {
+            if ((error.message = "There is not pointer to the root dataset")) {
+                let graph = ocflObject.flattenedCrate["@graph"];
+                graph = graph.map((e) => {
+                    if (e["@id"] === "/ro-crate-metadata.jsonld") {
+                        return {
+                            "@type": "CreativeWork",
+                            "@id": "ro-crate-metadata.json",
+                            conformsTo: {
+                                "@id": "https://w3id.org/ro/crate/1.1-DRAFT",
+                            },
+                            about: { "@id": "./" },
+                        };
+                    } else {
+                        return e;
+                    }
+                });
+                ocflObject.flattenedCrate["@graph"] = graph;
+                await crate.objectify();
+            }
+        }
         ocflObject.objectifiedCrate = await jsonld.compact(
             crate.objectified,
             {},
@@ -124,7 +148,7 @@ export class DataLoader {
                 base: null,
                 // compactArrays: false,
                 compactToRelative: true,
-                skipExpansion: true
+                skipExpansion: true,
             }
         );
 
@@ -132,22 +156,22 @@ export class DataLoader {
         for (let item of ensureArray) {
             if (isPlainObject(ocflObject.objectifiedCrate[item]))
                 ocflObject.objectifiedCrate[item] = [
-                    ocflObject.objectifiedCrate[item]
+                    ocflObject.objectifiedCrate[item],
                 ];
         }
 
         ocflObject.domain = ocflObject.objectifiedCrate.identifier.filter(
-            i => i.name === "domain"
+            (i) => i.name === "domain"
         )[0].value;
         ocflObject.type = [
             ...[ocflObject.objectifiedCrate.additionalType],
-            ...[ocflObject.objectifiedCrate["@type"]]
+            ...[ocflObject.objectifiedCrate["@type"]],
         ];
         ocflObject.type = flattenDeep(ocflObject.type);
 
         ocflObject.dataTypes = this.determineDataTypes({
             crate: ocflObject.objectifiedCrate,
-            configuration
+            configuration,
         });
 
         return ocflObject;
@@ -160,13 +184,13 @@ export class DataLoader {
     }
 
     getObjectVersions({ inventory }) {
-        const versions = Object.keys(inventory.versions).map(version => {
+        const versions = Object.keys(inventory.versions).map((version) => {
             return {
                 version,
-                created: inventory.versions[version].created
+                created: inventory.versions[version].created,
             };
         });
-        return orderBy(versions, v => parseInt(v.version.replace("v", "")));
+        return orderBy(versions, (v) => parseInt(v.version.replace("v", "")));
     }
 
     extractObjectDataFiles({ inventory, path }) {
@@ -174,7 +198,7 @@ export class DataLoader {
         for (let hash in inventory.manifest) {
             let items = inventory.manifest[hash];
             files.push(
-                items.map(item => {
+                items.map((item) => {
                     return {
                         name: item.split("/").pop(),
                         path: `${this.repository}${path}${item}`,
@@ -184,7 +208,7 @@ export class DataLoader {
                                 .split("/")
                                 .shift()
                                 .replace("v", "")
-                        )
+                        ),
                     };
                 })
             );
@@ -202,30 +226,30 @@ export class DataLoader {
         if (!crate.hasPart) return {};
         let types = {
             images: crate.hasPart
-                .filter(f =>
+                .filter((f) =>
                     configuration.imageFormats.includes(f.encodingFormat)
                 )
-                .map(i => i.name),
+                .map((i) => i.name),
             audio: crate.hasPart
-                .filter(f =>
+                .filter((f) =>
                     configuration.audioFormats.includes(f.encodingFormat)
                 )
-                .map(a => a.name),
+                .map((a) => a.name),
             video: crate.hasPart
-                .filter(f =>
+                .filter((f) =>
                     configuration.videoFormats.includes(f.encodingFormat)
                 )
-                .map(v => v.name),
+                .map((v) => v.name),
             documents: crate.hasPart
-                .filter(f =>
+                .filter((f) =>
                     configuration.documentFileExtensions.includes(
                         f.name.split(".").pop()
                     )
                 )
-                .map(d => d.name),
+                .map((d) => d.name),
             xmlFiles: crate.hasPart
-                .filter(f => f.encodingFormat === "application/xml")
-                .map(x => x.name)
+                .filter((f) => f.encodingFormat === "application/xml")
+                .map((x) => x.name),
         };
         return types;
     }
@@ -241,10 +265,10 @@ export class DataLoader {
         let response = await fetch(transcription.path);
         if (!response.ok) throw response;
         let xmlString = await response.text();
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             const worker = new Worker();
             worker.postMessage({ name: transcription.name, xmlString });
-            worker.addEventListener("message", m => resolve(m.data));
+            worker.addEventListener("message", (m) => resolve(m.data));
         });
     }
 }
