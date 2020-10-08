@@ -9,8 +9,7 @@
             v-for="(v, idx) of versions"
             :key="idx"
             :class="{
-                'style-selected-version opacity-200':
-                    v.version === selectedVersion
+                'bg-highlight opacity-200': v.version === selectedVersion,
             }"
         >
             {{ v.version }}
@@ -23,12 +22,12 @@ export default {
     props: {
         selectedVersion: {
             type: String,
-            required: true
+            required: true,
         },
         versions: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {};
@@ -36,15 +35,7 @@ export default {
     methods: {
         loadVersion(version) {
             this.$emit("load-version", version);
-        }
-    }
+        },
+    },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "assets/variables.scss";
-
-.style-selected-version {
-    background-color: $brand-highlight-color;
-}
-</style>

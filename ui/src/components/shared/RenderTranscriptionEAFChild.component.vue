@@ -23,30 +23,19 @@ import { mixin } from "./RenderTranscriptionMixins";
 export default {
     components: {
         RenderChildComponent: () =>
-            import("./RenderTranscriptionEAFChild.component.vue")
+            import("./RenderTranscriptionEAFChild.component.vue"),
     },
     props: {
         root: { type: Boolean },
         data: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {};
-    }
+    },
 };
 </script>
 
-<style lang="scss" scoped>
-@import "src/assets/variables.scss";
-
-.style-segment {
-    border-bottom: 1px solid;
-    border-color: #b0bec5;
-}
-
-.style-text {
-    color: $brand-highlight-color;
-}
-</style>
+<style lang="scss" scoped></style>

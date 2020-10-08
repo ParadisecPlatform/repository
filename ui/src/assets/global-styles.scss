@@ -6,20 +6,15 @@ body {
 
 a:link,
 a:visited {
-    color: $brand-primary-color;
-    text-decoration: none;
-    // font-size: 18px;
+    @apply text-primary;
 }
 
 a:hover,
 a:active {
-    color: $brand-primary-color;
-    text-decoration: underline;
-    // opacity: 0.8;
+    @apply underline;
 }
 
 .el-card {
     border: unset;
     border-radius: 0;
-    // background-color: rgba(242, 241, 239, 1);
 }

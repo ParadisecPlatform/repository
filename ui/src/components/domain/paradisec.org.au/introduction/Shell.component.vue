@@ -6,7 +6,7 @@
                     Welcome to the catalog of the
                     <span class="font-bold">PARADISEC</span> collection.
                 </div>
-                <div class="bg-teal-200 p-4 mb-4 rounded-full">
+                <div class="bg-teal-200 p-4 mb-2 rounded-full">
                     <introduction-stats-component />
                 </div>
                 <el-card class="box-card text-sm text-justify bg-white">
@@ -16,7 +16,7 @@
                         the University of Melbourne and the Australian National
                         University.
                     </p>
-                    <p class="text-center">
+                    <p class="text-center mt-6">
                         See the
                         <a href="www.paradisec.org.au" target="_blank"
                             >PARADISEC</a
@@ -39,17 +39,6 @@
                     cleared by the depositors. Please let us know if you think
                     that is not the case for any particular item.
                 </el-card>
-                <el-card class="my-1 bg-orange-200 p-4 rounded">
-                    <p class="text-sm">
-                        This installation is a Proof of Concept demonstrating a
-                        new generation catalog operating as a single page
-                        application interacting with an OCFL on-disk repository.
-                        Search capability is provided provided via Elastic
-                        Search. Read
-                        <router-link to="/about">the about page</router-link
-                        >&nbsp;to find out more.
-                    </p>
-                </el-card>
             </div>
             <div class="flex flex-col w-full lg:w-2/4 lg:ml-1">
                 <div class="my-1 bg-gray-500 rounded">
@@ -68,6 +57,14 @@
                 </div>
             </div>
         </div>
+        <el-card class="my-1 bg-orange-200 p-4 rounded text-sm text-center">
+            This installation is a Proof of Concept demonstrating a new
+            generation catalog operating as a single page application
+            interacting with an OCFL on-disk repository. Search capability is
+            provided provided via Elastic Search. Read
+            <router-link to="/about">the about page</router-link>&nbsp;to find
+            out more.
+        </el-card>
         <div class="flex flex-row">
             <div class="p-4 text-center">
                 <recently-updated-component />
@@ -89,7 +86,7 @@ export default {
         ItemBrowserComponent,
         SimpleSearchComponent,
         IntroductionStatsComponent,
-        RecentlyUpdatedComponent
+        RecentlyUpdatedComponent,
     },
     data() {
         return {
@@ -100,7 +97,7 @@ export default {
                     type: "text",
                     label: "Description",
                     field: "description",
-                    enabled: true
+                    enabled: true,
                 },
                 {
                     type: "text",
@@ -108,7 +105,7 @@ export default {
                     path: "contributor",
                     field: "name",
                     nested: true,
-                    enabled: true
+                    enabled: true,
                 },
                 {
                     type: "text",
@@ -116,7 +113,7 @@ export default {
                     path: "subjectLanguages",
                     field: "name",
                     nested: true,
-                    enabled: false
+                    enabled: false,
                 },
                 {
                     type: "text",
@@ -124,18 +121,12 @@ export default {
                     path: "contentLanguages",
                     field: "name",
                     nested: true,
-                    enabled: false
-                }
-            ]
+                    enabled: false,
+                },
+            ],
         };
-    }
+    },
 };
 </script>
 
-<style lang="scss" scoped>
-@import "assets/variables.scss";
-
-.style-heading {
-    color: $brand-primary-color;
-}
-</style>
+<style lang="scss" scoped></style>

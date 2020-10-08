@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="flex justify-center">
-            <div class="text-3xl style-heading">OCFL Catalog Viewer</div>
+            <div class="text-3xl text-primary">OCFL Catalog Viewer</div>
         </div>
         <div class="flex flex-col mt-5">
             <p>
@@ -31,20 +31,14 @@ export default {
         },
         configuration: function() {
             return this.$store.state.configuration;
-        }
+        },
     },
     methods: {
         route(target) {
             return `/view/${target}`;
-        }
-    }
+        },
+    },
 };
 </script>
 
-<style lang="scss" scoped>
-@import "assets/variables.scss";
-
-.style-heading {
-    color: $brand-primary-color;
-}
-</style>
+<style lang="scss" scoped></style>

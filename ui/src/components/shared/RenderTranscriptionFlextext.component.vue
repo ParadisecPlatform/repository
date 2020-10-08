@@ -45,30 +45,8 @@
 import { mixin } from "./RenderTranscriptionMixins";
 
 export default {
-    mixins: [mixin]
+    mixins: [mixin],
 };
 </script>
 
-<style lang="scss" scoped>
-@import "src/assets/variables.scss";
-
-.style-segment {
-    border-bottom: 1px solid;
-    border-color: #b0bec5;
-}
-
-.style-table {
-    font-size: 12px;
-    border: 1px solid red;
-    border-color: #b0bec5;
-}
-
-.style-cell {
-    border: 1px solid red;
-    border-color: #b0bec5;
-}
-
-.style-text {
-    color: $brand-highlight-color;
-}
-</style>
+<style lang="scss" scoped></style>

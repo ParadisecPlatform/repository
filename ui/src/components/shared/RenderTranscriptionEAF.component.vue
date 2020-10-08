@@ -11,7 +11,7 @@
                 :key="sidx"
                 class="p-2"
                 :class="{
-                    'bg-yellow-200': highlightSegmentId === segment.id
+                    'bg-yellow-200': highlightSegmentId === segment.id,
                 }"
             >
                 <div :id="segment.id" class="pt-2"></div>
@@ -52,19 +52,8 @@ import RenderChildComponent from "./RenderTranscriptionEAFChild.component.vue";
 
 export default {
     mixins: [mixin],
-    components: { RenderChildComponent }
+    components: { RenderChildComponent },
 };
 </script>
 
-<style lang="scss" scoped>
-@import "src/assets/variables.scss";
-
-.style-segment {
-    border-bottom: 1px solid;
-    border-color: #b0bec5;
-}
-
-.style-text {
-    color: $brand-highlight-color;
-}
-</style>
+<style lang="scss" scoped></style>
