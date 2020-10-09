@@ -6,10 +6,10 @@
             @current-change="update"
             v-if="results.total"
         ></el-pagination>
-        <ol>
+        <ol class="pl-12">
             <li
                 :value="page * size + idx + 1"
-                class="list-decimal"
+                class="list-decimal text-xs"
                 v-for="(result, idx) of results.documents"
                 :key="result._id"
             >
@@ -36,26 +36,26 @@ import RenderSearchResultComponent from "./RenderSearchResult.component.vue";
 
 export default {
     components: {
-        RenderSearchResultComponent
+        RenderSearchResultComponent,
     },
     props: {
         results: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
             page: 0,
-            size: 10
+            size: 10,
         };
     },
     methods: {
         update(page) {
             this.page = page - 1;
             this.$emit("update-search", { page: this.page });
-        }
-    }
+        },
+    },
 };
 </script>
 
