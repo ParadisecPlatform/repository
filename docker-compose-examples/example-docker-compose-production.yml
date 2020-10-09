@@ -9,6 +9,8 @@ services:
         image: coedl/ocfl-viewer:latest
         hostname: ui
         tty: true
+        depends_on:
+            - search
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost/configuration.json"]
             interval: 2m
