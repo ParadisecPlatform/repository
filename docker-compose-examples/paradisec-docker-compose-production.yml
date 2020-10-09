@@ -22,7 +22,7 @@ services:
             TERM: "xterm-256color"
             NODE_ENV: "production"
         volumes:
-            - $PWD/../configuration.json:/usr/share/nginx/html/configuration.json
+            - $PWD/../paradisec-configuration.json:/usr/share/nginx/html/configuration.json
             - /ocfl-repository:/srv/repository:delegated
         ports:
             - 80:80
