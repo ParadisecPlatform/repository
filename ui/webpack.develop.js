@@ -18,17 +18,6 @@ module.exports = {
         filename: "[name].[hash].bundle.js",
         globalObject: "this",
     },
-
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    test: /node_modules/,
-                    chunks: "all",
-                },
-            },
-        },
-    },
     watch: true,
     watchOptions: {
         poll: 1000,
@@ -40,6 +29,7 @@ module.exports = {
         host: "0.0.0.0",
         port: 9001,
         historyApiFallback: true,
+        writeToDisk: true,
         // watchOptions: {
         //     watch: true,
         //     poll: 1000,
@@ -102,8 +92,27 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(woff|woff2|ttf|eot|svg|png|jp(e*)g|gif)?$/,
-                loader: "file-loader?name=res/[name].[ext]?[hash]",
+                test: /\.(png|jpg|jpeg|gif|svg|svgz)(\?.+)?$/,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 10000,
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(woff|woff2|ttf|eot|otf)?$/,
+                use: [
+                    {
+                        loader: "file-loader",
+                        options: {
+                            limit: 10000,
+                            name: "[name].[ext]",
+                        },
+                    },
+                ],
             },
             {
                 test: /\.worker\.js$/,
