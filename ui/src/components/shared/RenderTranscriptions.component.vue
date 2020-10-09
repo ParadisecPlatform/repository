@@ -29,20 +29,20 @@ export default {
         RenderTranscriptionEafComponent,
         RenderTranscriptionIxtComponent,
         RenderTranscriptionTrsComponent,
-        RenderTranscriptionFlextextComponent
+        RenderTranscriptionFlextextComponent,
     },
     props: {
         transcriptions: {
             type: Array | undefined,
-            required: true
+            required: true,
         },
         selectedTranscription: {
             type: Object | undefined,
-            required: true
+            required: true,
         },
         currentTime: {
-            type: Number
-        }
+            type: Number,
+        },
     },
     data() {
         return {
@@ -51,8 +51,8 @@ export default {
             transcriptionRendererComponent: undefined,
             transcription: {
                 type: undefined,
-                segments: []
-            }
+                segments: [],
+            },
         };
     },
     mounted() {
@@ -71,7 +71,7 @@ export default {
             let transcription = { ...this.selectedTranscription };
             try {
                 const content = await dataLoader.loadTranscription({
-                    transcription
+                    transcription,
                 });
                 if (!content) {
                     this.error = true;
@@ -83,7 +83,7 @@ export default {
                         .split(".")
                         .slice(0, -1)
                         .join(".")),
-                    ...content
+                    ...content,
                 };
 
                 switch (this.transcription.type) {
@@ -107,7 +107,7 @@ export default {
 
                 setTimeout(() => {
                     this.$scrollTo(`#${transcription.displayName}`, 300, {
-                        container: `#${transcription.displayName}`
+                        container: `#${transcription.displayName}`,
                     });
                 }, 1000);
             } catch (error) {
@@ -116,8 +116,8 @@ export default {
         },
         playFrom({ start, end }) {
             this.$emit("play-from", { start, end });
-        }
-    }
+        },
+    },
 };
 </script>
 
