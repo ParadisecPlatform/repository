@@ -10,12 +10,12 @@
                 >
                     <span v-if="!show[idx]">Show</span>
                     <span v-else>Hide</span>
-                    {{control.name}}
+                    {{ control.name }}
                 </el-button>
             </div>
         </div>
         <div class="style-data-view bg-white p-8 mx-6 overflow-scroll my-4" v-if="showing">
-            <pre class="text-sm">{{showing}}</pre>
+            <pre class="text-sm">{{ showing }}</pre>
         </div>
     </div>
 </template>
@@ -27,19 +27,18 @@ export default {
     props: {
         data: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
             controls: [
                 { name: "OCFL inventory file", data: this.data.inventory },
-                { name: "RO-Crate", data: this.data.flattenedCrate },
-                { name: "Objectified Crate", data: this.data.objectifiedCrate },
-                { name: "Data files", data: this.data.datafiles }
+                { name: "RO-Crate", data: this.data.rocrate },
+                { name: "Data files", data: this.data.datafiles },
             ],
-            show: range(4).map(r => false),
-            showing: undefined
+            show: range(4).map((r) => false),
+            showing: undefined,
         };
     },
     methods: {
@@ -50,8 +49,8 @@ export default {
             this.showing = this.show.includes(true)
                 ? this.controls[this.show.indexOf(true)].data
                 : undefined;
-        }
-    }
+        },
+    },
 };
 </script>
 

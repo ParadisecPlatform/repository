@@ -14,12 +14,8 @@ Vue.use(ElementUI, { locale });
 import VueScrollTo from "vue-scrollto";
 Vue.use(VueScrollTo);
 
-// import infiniteScroll from "vue-infinite-scroll";
 import VueAnalytics from "vue-analytics";
 
-// import { VueMasonryPlugin } from "vue-masonry";
-// Vue.use(infiniteScroll);
-// Vue.use(VueMasonryPlugin);
 import App from "components/app.vue";
 import { router } from "./routes/";
 import { store } from "store";

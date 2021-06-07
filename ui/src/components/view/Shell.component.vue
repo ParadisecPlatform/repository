@@ -2,7 +2,7 @@
     <div>
         <div v-if="error">The item is currently unavailable.</div>
         <div v-if="componentFile" class="flex flex-col">
-            <data-display-component :data="ocflObject" class="float-right" />
+            <data-display-component :data="ocflObject" />
             <div class="flex flex-row text-sm">
                 <version-selection-component
                     :selected-version="ocflObject.version"
@@ -19,6 +19,7 @@
 
 <script>
 import { DataLoader } from "src/services/data-loader.service";
+import { flattenDeep } from "lodash";
 const dataLoader = new DataLoader();
 
 import VersionSelectionComponent from "./VersionSelection.component.vue";
@@ -27,7 +28,7 @@ import DataDisplayComponent from "../shared/DataDisplay.component.vue";
 export default {
     components: {
         VersionSelectionComponent,
-        DataDisplayComponent
+        DataDisplayComponent,
     },
     data() {
         return {
@@ -35,25 +36,25 @@ export default {
             ocflObject: {},
             viewComponent: undefined,
             error: false,
-            errorMsg: undefined
+            errorMsg: undefined,
         };
     },
     async mounted() {
         this.loadViewer({});
     },
     watch: {
-        "$route.params": function(n, o) {
+        "$route.params": function (n, o) {
             if (n.pathMatch !== o.pathMatch) this.loadViewer({});
-        }
+        },
     },
     computed: {
-        componentFile: function() {
+        componentFile: function () {
             if (!this.viewComponent) return;
             return () => import(`src/components/domain/${this.viewComponent}`);
         },
-        configuration: function() {
+        configuration: function () {
             return this.$store.state.configuration;
-        }
+        },
     },
     methods: {
         async loadViewer({ version }) {
@@ -76,48 +77,44 @@ export default {
                     params = {
                         identifier,
                         version: version || this.$route.query.version,
-                        configuration: this.$store.state.configuration
+                        configuration: this.$store.state.configuration,
                     };
                 } else {
                     params = {
                         identifier,
-                        configuration: this.$store.state.configuration
+                        configuration: this.$store.state.configuration,
                     };
                 }
                 this.ocflObject = await dataLoader.load({ ...params });
             } catch (error) {
+                console.log(error);
                 this.error = true;
                 this.errorMsg = error;
                 return;
             }
-            let { domain, type } = this.ocflObject;
 
             //  set the version in the URL if not already defined
-            if (
-                !this.$route.query.version ||
-                this.$route.query.version !== this.ocflObject.version
-            )
+            if (!this.$route.query.version || this.$route.query.version !== this.ocflObject.version)
                 this.$router.replace({
                     path: this.$route.path,
                     query: {
                         version: this.ocflObject.version,
-                        ...this.$route.query
-                    }
+                        ...this.$route.query,
+                    },
                 });
 
             // determine which renderer to load by
-            //   - construct the type array containing the @type and additionalType properties
-            //   - iterate over the renderers in the configuration using the first that matches
-
+            //   - iterate over the renderers in the configuration using the last (most specific) that matches
             let viewComponent;
-            let renderers = this.configuration.renderers;
+            const renderers = this.configuration.renderers;
+            const { domain, type } = this.ocflObject;
 
             if (domain && renderers[domain]) {
                 try {
-                    let renderer = renderers[domain]
-                        .filter(r => type.includes(r.type))
-                        .shift();
+                    let renderer = type.map((t) => renderers[domain].filter((r) => r.type === t));
+                    renderer = flattenDeep(renderer).pop();
                     viewComponent = renderer.component;
+                    console.log(`Loading ${viewComponent} to render the data`);
                 } catch (error) {
                     console.error(
                         `Something went wrong trying to find a renderer for ${domain} ${type}`
@@ -130,8 +127,8 @@ export default {
         },
         update(v) {
             this.loadViewer({ version: v.version });
-        }
-    }
+        },
+    },
 };
 </script>
 

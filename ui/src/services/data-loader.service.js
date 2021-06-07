@@ -33,13 +33,9 @@ export class DataLoader {
     }
 
     async verifyRepositoryMounted() {
-        let response = await fetch(
-            `${this.repository}/${this.ocflRootDescriptor}`
-        );
+        let response = await fetch(`${this.repository}/${this.ocflRootDescriptor}`);
         if (response.status !== 200) {
-            console.log(
-                "Error: the OCFL filesystem does not seem to be mounted."
-            );
+            console.log("Error: the OCFL filesystem does not seem to be mounted.");
             return false;
         }
         return true;
@@ -64,16 +60,12 @@ export class DataLoader {
             let response = await fetch(`${service}/_search?size=0`);
             // do nothing for now
             if (response.status !== 200) {
-                console.log(
-                    "Error: the Search endpoint does not seem to be available."
-                );
+                console.log("Error: the Search endpoint does not seem to be available.");
                 return false;
             }
             return true;
         } catch (error) {
-            console.log(
-                "Error: the Search endpoint does not seem to be available."
-            );
+            console.log("Error: the Search endpoint does not seem to be available.");
             return false;
         }
     }
@@ -96,7 +88,6 @@ export class DataLoader {
             if (!response.ok) throw response;
             inventory = await response.json();
         }
-
         let ocflObject = {
             inventory,
             versions,
@@ -108,71 +99,33 @@ export class DataLoader {
             ? versions.filter((v) => v.version === version)[0].version
             : [...versions].pop().version;
 
-        const crateFile = ocflObject.datafiles["ro-crate-metadata.json"]
-            ? "ro-crate-metadata.json"
-            : "ro-crate-metadata.jsonld";
-        let rocrateMetadataFile = [...ocflObject.datafiles[crateFile]].pop();
+        let rocrateMetadataFile;
+        try {
+            rocrateMetadataFile = [...ocflObject.datafiles["ro-crate-metadata.json"]].pop();
+        } catch (error) {
+            rocrateMetadataFile = [...ocflObject.datafiles["ro-crate-metadata.jsonld"]].pop();
+        }
         response = await fetch(rocrateMetadataFile.path);
         if (!response.ok) throw response;
-        ocflObject.flattenedCrate = await response.json();
-        debugger;
+        ocflObject.rocrate = await response.json();
 
-        const crate = new ROCrate(ocflObject.flattenedCrate);
-        try {
-            await crate.objectify();
-        } catch (error) {
-            if ((error.message = "There is not pointer to the root dataset")) {
-                let graph = ocflObject.flattenedCrate["@graph"];
-                graph = graph.map((e) => {
-                    if (e["@id"] === "/ro-crate-metadata.jsonld") {
-                        return {
-                            "@type": "CreativeWork",
-                            "@id": "ro-crate-metadata.json",
-                            conformsTo: {
-                                "@id": "https://w3id.org/ro/crate/1.1-DRAFT",
-                            },
-                            about: { "@id": "./" },
-                        };
-                    } else {
-                        return e;
-                    }
-                });
-                ocflObject.flattenedCrate["@graph"] = graph;
-                await crate.objectify();
-            }
-        }
-        ocflObject.objectifiedCrate = await jsonld.compact(
-            crate.objectified,
-            {},
-            {
-                base: null,
-                // compactArrays: false,
-                compactToRelative: true,
-                skipExpansion: true,
-            }
-        );
+        const rootDescriptor = ocflObject.rocrate["@graph"].filter(
+            (e) => e["@type"] === "CreativeWork" && e["@id"] === "ro-crate-metadata.json"
+        )[0];
+        const rootDataset = ocflObject.rocrate["@graph"].filter(
+            (e) => e["@type"].includes("Dataset") && e["@id"] === rootDescriptor.about["@id"]
+        )[0];
 
-        const ensureArray = ["hasPart", "contributor"];
-        for (let item of ensureArray) {
-            if (isPlainObject(ocflObject.objectifiedCrate[item]))
-                ocflObject.objectifiedCrate[item] = [
-                    ocflObject.objectifiedCrate[item],
-                ];
-        }
-
-        ocflObject.domain = ocflObject.objectifiedCrate.identifier.filter(
-            (i) => i.name === "domain"
-        )[0].value;
-        ocflObject.type = [
-            ...[ocflObject.objectifiedCrate.additionalType],
-            ...[ocflObject.objectifiedCrate["@type"]],
-        ];
-        ocflObject.type = flattenDeep(ocflObject.type);
-
-        ocflObject.dataTypes = this.determineDataTypes({
-            crate: ocflObject.objectifiedCrate,
-            configuration,
-        });
+        let identifiers = rootDataset.identifier
+            .map((e) => e["@id"])
+            .map((id) => ocflObject.rocrate["@graph"].filter((e) => e["@id"] === id));
+        identifiers = flattenDeep(identifiers);
+        ocflObject.domain = identifiers.filter((i) => i.name === "domain")[0].value;
+        ocflObject.type = flattenDeep([...[rootDataset["@type"]], ...[rootDataset.additionalType]]);
+        // ocflObject.dataTypes = this.determineDataTypes({
+        //     crate: ocflObject.rocrate,
+        //     configuration,
+        // });
 
         return ocflObject;
     }
@@ -222,38 +175,6 @@ export class DataLoader {
         return files;
     }
 
-    determineDataTypes({ configuration, crate }) {
-        if (!crate.hasPart) return {};
-        let types = {
-            images: crate.hasPart
-                .filter((f) =>
-                    configuration.imageFormats.includes(f.encodingFormat)
-                )
-                .map((i) => i.name),
-            audio: crate.hasPart
-                .filter((f) =>
-                    configuration.audioFormats.includes(f.encodingFormat)
-                )
-                .map((a) => a.name),
-            video: crate.hasPart
-                .filter((f) =>
-                    configuration.videoFormats.includes(f.encodingFormat)
-                )
-                .map((v) => v.name),
-            documents: crate.hasPart
-                .filter((f) =>
-                    configuration.documentFileExtensions.includes(
-                        f.name.split(".").pop()
-                    )
-                )
-                .map((d) => d.name),
-            xmlFiles: crate.hasPart
-                .filter((f) => f.encodingFormat === "application/xml")
-                .map((x) => x.name),
-        };
-        return types;
-    }
-
     async loadFile({ file }) {
         let response = await fetch(file.path);
         if (!response.ok) throw response;
@@ -271,4 +192,30 @@ export class DataLoader {
             worker.addEventListener("message", (m) => resolve(m.data));
         });
     }
+}
+
+export function determineDataTypes({ configuration, crate }) {
+    let types = {
+        images: crate["@graph"]
+            .filter((e) => e["@type"] === "File")
+            .filter((f) => configuration.imageFormats.includes(f.encodingFormat))
+            .map((i) => i.name),
+        audio: crate["@graph"]
+            .filter((e) => e["@type"] === "File")
+            .filter((f) => configuration.audioFormats.includes(f.encodingFormat))
+            .map((a) => a.name),
+        video: crate["@graph"]
+            .filter((e) => e["@type"] === "File")
+            .filter((f) => configuration.videoFormats.includes(f.encodingFormat))
+            .map((v) => v.name),
+        documents: crate["@graph"]
+            .filter((e) => e["@type"] === "File")
+            .filter((f) => configuration.documentFileExtensions.includes(f.name.split(".").pop()))
+            .map((d) => d.name),
+        xmlFiles: crate["@graph"]
+            .filter((e) => e["@type"] === "File")
+            .filter((f) => f.encodingFormat === "application/xml")
+            .map((x) => x.name),
+    };
+    return types;
 }

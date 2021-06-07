@@ -15,7 +15,7 @@ services:
             NODE_ENV: "development"
         volumes:
             - $PWD/ui:/srv/ui:cached
-            - $PWD/../data/ocfl-repository:/srv/ui/dist/repository:cached
+            - $PWD/../data/ocfl-repository/repository:/srv/ui/dist/repository:cached
             - ui-modules:/srv/ui/node_modules:delegated
         working_dir: /srv/ui
         command: ["npm", "run", "develop"]
