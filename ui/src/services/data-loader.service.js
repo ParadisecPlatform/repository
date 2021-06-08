@@ -2,11 +2,9 @@
 
 import pairtree from "pairtree";
 import shajs from "sha.js";
-import jsonld from "jsonld";
-import { flattenDeep, isPlainObject, orderBy, groupBy } from "lodash";
+import { flattenDeep, orderBy, groupBy } from "lodash";
 
 // import { Parser } from "@coedl/transcription-parsers";
-import ROCrate from "ro-crate/lib/rocrate";
 import Worker from "src/components/workers/transcript-parser.worker.js";
 
 export class DataLoader {

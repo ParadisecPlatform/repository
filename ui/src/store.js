@@ -2,7 +2,6 @@
 
 import Vue from "vue";
 import Vuex from "vuex";
-import { flattenDeep } from "lodash";
 Vue.use(Vuex);
 import { DataLoader } from "src/services/data-loader.service";
 
@@ -13,13 +12,13 @@ const configuration = {
         status: {
             api: undefined,
             search: undefined,
-            ocfl: undefined
+            ocfl: undefined,
         },
         search: {
             filters: [],
             query: {},
-            results: []
-        }
+            results: [],
+        },
     },
     mutations: {
         saveApplicationConfiguration(state, configuration) {
@@ -34,7 +33,7 @@ const configuration = {
         },
         updateQueryResults(state, payload) {
             state.search.results = { ...payload };
-        }
+        },
     },
     actions: {
         async initialise({ commit }) {
@@ -44,21 +43,21 @@ const configuration = {
             let status = {
                 api: undefined,
                 search: undefined,
-                ocfl: undefined
+                ocfl: undefined,
             };
             if (configuration.service.api) {
                 status.api = await dataLoader.verifyApiServiceAvailable({
-                    service: configuration.service.api
+                    service: configuration.service.api,
                 });
             } else {
                 status.ocfl = await dataLoader.verifyRepositoryMounted();
                 status.search = await dataLoader.verifySearchServiceAvailable({
-                    service: configuration.service.search
+                    service: configuration.service.search,
                 });
             }
             commit("saveStatus", status);
-        }
+        },
     },
-    getters: {}
+    getters: {},
 };
 export const store = new Vuex.Store(configuration);

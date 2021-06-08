@@ -1,52 +1,31 @@
 "use strict";
 
 const path = require("path");
-const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ImageminPlugin = require("imagemin-webpack-plugin").default;
 
 module.exports = {
     target: "web",
-    mode: "production",
-    devtool: "none",
     entry: ["./src/vendor.js", "./src/index.js"],
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: "[name].[hash].bundle.js",
-        globalObject: "this",
-    },
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    test: /node_modules/,
-                    chunks: "all",
-                },
-            },
-        },
-        minimize: true,
-        minimizer: [new TerserPlugin()],
+        filename: "[contenthash].js",
+        publicPath: "/",
     },
     plugins: [
-        new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify("production"),
-        }),
         new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns: ["dist/*.js", "dist/*.css"],
-        }),
-        new MiniCssExtractPlugin({
-            filename: "[name].[contenthash].css",
+            cleanOnceBeforeBuildPatterns: ["*.js", "*.css", "*.txt"],
         }),
         new HtmlWebpackPlugin({
             title: "OCFL Repository Viewer",
             template: "./src/index.html",
         }),
         new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({ filename: "[contenthash].css" }),
         new CopyWebpackPlugin({
             patterns: [
                 {
@@ -80,38 +59,40 @@ module.exports = {
                 test: /\.js$/,
                 loader: "babel-loader",
                 exclude: /node_modules/,
-                query: { compact: false },
             },
             {
-                test: /\.(sa|sc|c)ss$/,
+                test: /\.css$/,
                 use: [
-                    MiniCssExtractPlugin.loader,
-                    { loader: "css-loader", options: { importLoaders: 1 } },
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: "",
+                        },
+                    },
+                    "css-loader",
                     "postcss-loader",
                 ],
             },
             {
-                test: /\.(png|jpg|jpeg|gif|svg|svgz)(\?.+)?$/,
+                test: /\.scss$/,
                 use: [
                     {
-                        loader: "url-loader",
+                        loader: MiniCssExtractPlugin.loader,
                         options: {
-                            limit: 10000,
+                            publicPath: "",
                         },
                     },
+                    "css-loader",
+                    "postcss-loader",
                 ],
             },
             {
-                test: /\.(woff|woff2|ttf|eot|otf)?$/,
-                use: [
-                    {
-                        loader: "file-loader",
-                        options: {
-                            limit: 10000,
-                            name: "[name].[ext]",
-                        },
-                    },
-                ],
+                test: /\.(woff|woff2|ttf|eot|svg|png|jp(e*)g|gif|mp4)?$/,
+                loader: "file-loader",
+                options: {
+                    name: "assets/[contenthash].[ext]",
+                    esModule: false,
+                },
             },
             {
                 test: /\.worker\.js$/,
@@ -121,14 +102,10 @@ module.exports = {
     },
     resolve: {
         alias: {
+            "@": path.resolve(__dirname, "src"),
             src: path.resolve(__dirname, "src"),
             assets: path.resolve(__dirname, "src/assets"),
             components: path.resolve(__dirname, "src/components"),
-            configuration: path.resolve(__dirname, "src/configuration"),
-            directives: path.resolve(__dirname, "src/directives"),
-            routes: path.resolve(__dirname, "src/routes/"),
-            services: path.resolve(__dirname, "src/services"),
-            store: path.resolve(__dirname, "src/store"),
         },
     },
 };

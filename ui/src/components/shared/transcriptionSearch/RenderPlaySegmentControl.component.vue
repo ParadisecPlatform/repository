@@ -117,7 +117,7 @@ export default {
 }
 @keyframes blinkingBackground {
     0% {
-        @apply bg-orange-800 border-orange-800;
+        @apply bg-yellow-800 border-yellow-800;
     }
 }
 </style>

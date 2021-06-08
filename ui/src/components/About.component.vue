@@ -1,7 +1,5 @@
 <template>
-    <div
-        class="container flex flex-col items-center text-sm lg:text-lg xl:text-xl"
-    >
+    <div class="flex flex-col items-center text-sm lg:text-lg xl:text-xl">
         <div class="flex flex-col space-y-6">
             <div class="flex flex-row">
                 <a href="http://www.dynamicsoflanguage.edu.au/" target="_blank">
@@ -12,35 +10,30 @@
                     <el-image :src="images[2]" fit="contain" class="h-12" />
                 </a>
             </div>
-            <div class="text-lg text-center md:text-left">
-                About this application
+
+            <div class="my-1 bg-green-200 p-8 rounded text-center">
+                This installation is a Proof of Concept demonstrating a new generation catalog
+                operating as a single page application interacting with an OCFL on-disk repository.
+                Search capability is provided provided via Elastic Search.
             </div>
 
-            <div
-                class="flex flex-col md:flex-row justify-center text-center md:text-left"
-            >
+            <div class="flex flex-col md:flex-row space-x-8 text-center justify-center">
                 <a href="https://ardc.edu.au/" target="_blank">
-                    <el-image
-                        :src="images[0]"
-                        fit="contain"
-                        class="h-12 my-4 md:my-0"
-                    />
+                    <el-image :src="images[0]" fit="contain" class="h-12 my-4 md:my-0" />
                 </a>
-                <div class="md:mx-6">
+                <div class="">
                     This work was funded in 2019 by a grant from the ARDC titled
-                    <br />"Modularising PARADISEC 's catalogue as a model for
-                    the data commons".
+                    <br />"Modularising PARADISEC 's catalogue as a model for the data commons".
                 </div>
             </div>
 
             <div p class="">
-                This proof of concept is intended to demonstrate a single page
-                application operating over an OCFL on-disk repository. In the
-                current configuration, the application enables browsing and
-                discovery of the content (collections and items) from multiple
-                domains with graceful degradation in the event that the search
-                service is unavailable (discovery will be disabled but browsing
-                directly to collections and items will continue to work).
+                This proof of concept is intended to demonstrate a single page application operating
+                over an OCFL on-disk repository. In the current configuration, the application
+                enables browsing and discovery of the content (collections and items) from multiple
+                domains with graceful degradation in the event that the search service is
+                unavailable (discovery will be disabled but browsing directly to collections and
+                items will continue to work).
             </div>
 
             <div class="">
@@ -49,8 +42,7 @@
                 &nbsp;page.
             </div>
             <div class="">
-                In this demonstrator the URL path is
-                "/{domain}/{collectionId}/{itemId}".
+                In this demonstrator the URL path is "/{domain}/{collectionId}/{itemId}".
             </div>
 
             <div class="">

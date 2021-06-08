@@ -6,18 +6,18 @@
 
 <script>
 import leaflet from "leaflet";
-import styles from "src/assets/variables.scss";
+// import styles from "src/assets/variables.scss";
 
 export default {
     props: {
         topLeft: {
             type: Array,
-            required: true
+            required: true,
         },
         bottomRight: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {};
@@ -31,12 +31,9 @@ export default {
                 //     "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012"
             }
         ).addTo(this.map);
-        const rectangle = L.rectangle(
-            [this.topLeft.reverse(), this.bottomRight.reverse()],
-            {
-                color: styles.brandHighlightColor
-            }
-        ).addTo(this.map);
+        const rectangle = L.rectangle([this.topLeft.reverse(), this.bottomRight.reverse()], {
+            color: "red",
+        }).addTo(this.map);
         this.map.fitBounds(rectangle.getBounds());
         this.map.zoomOut();
         // L.tileLayer(
@@ -51,7 +48,7 @@ export default {
         //     }
         // ).addTo(this.map);
     },
-    methods: {}
+    methods: {},
 };
 </script>
 

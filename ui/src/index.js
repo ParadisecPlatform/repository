@@ -18,7 +18,7 @@ import VueAnalytics from "vue-analytics";
 
 import App from "components/app.vue";
 import { router } from "./routes/";
-import { store } from "store";
+import { store } from "./store";
 
 import * as filters from "./filters";
 const filterNames = Object.keys(filters);

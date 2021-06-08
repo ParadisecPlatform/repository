@@ -1,6 +1,6 @@
 "use strict";
 
-import "assets/tailwind.scss";
+import "assets/tailwind.css";
 import "iv-viewer/dist/iv-viewer.css";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";

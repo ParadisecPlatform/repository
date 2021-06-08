@@ -177,6 +177,6 @@ export default {
     @apply text-xs;
 }
 .style-component .el-switch__label.is-active {
-    @apply text-orange-500;
+    @apply text-yellow-500;
 }
 </style>

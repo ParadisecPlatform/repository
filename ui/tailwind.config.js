@@ -1,4 +1,6 @@
 module.exports = {
+    purge: [],
+    darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {
             colors: {
@@ -14,4 +16,6 @@ module.exports = {
             xxl: "1600px",
         },
     },
+    variants: {},
+    plugins: [require("@tailwindcss/typography")],
 };
