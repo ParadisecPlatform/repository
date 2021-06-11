@@ -22,7 +22,7 @@
 import ConditionsOfAccessComponent from "./ConditionsOfAccess.component.vue";
 import MediaPlayerComponent from "components/shared/media-player/Shell.component.vue";
 import { ROCrate } from "ro-crate";
-
+import { intervalToDuration, parseISO } from "date-fns";
 export default {
     components: {
         ConditionsOfAccessComponent,
@@ -48,14 +48,22 @@ export default {
             let identifier = this.getIdentifier();
             let agreements = JSON.parse(window.localStorage.getItem("paradisecAgreements"));
             if (agreements && agreements[identifier]) {
-                this.showConditionsOfAccess = false;
+                const interval = intervalToDuration({
+                    start: parseISO(agreements[identifier]),
+                    end: new Date(),
+                });
+                if (interval.years === 0 && interval.months === 0) {
+                    this.showConditionsOfAccess = false;
+                } else {
+                    this.reviewConditions();
+                }
             }
         },
         acceptConditions() {
             let identifier = this.getIdentifier();
             let agreements = JSON.parse(window.localStorage.getItem("paradisecAgreements"));
             if (!agreements) agreements = {};
-            agreements[identifier] = true;
+            agreements[identifier] = new Date().toISOString();
             window.localStorage.setItem("paradisecAgreements", JSON.stringify(agreements));
             this.showConditionsOfAccess = false;
         },
