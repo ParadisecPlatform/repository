@@ -53,7 +53,6 @@ export default {
                 rocrate: this.data.rocrate,
                 formats: this.$store.state.configuration.documentFileExtensions,
             });
-            console.log(documents);
 
             const datafiles = cloneDeep(this.data.datafiles);
             documents = documents.map((d) => {
