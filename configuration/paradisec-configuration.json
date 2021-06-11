@@ -6,15 +6,7 @@
     "imageFormats": ["image/jpg", "image/jpeg"],
     "audioFormats": ["audio/mpeg"],
     "videoFormats": ["video/quicktime", "video/mp4"],
-    "documentFileExtensions": [
-        "pdf",
-        "doc",
-        "docx",
-        "xls",
-        "xlsx",
-        "ppt",
-        "pptx"
-    ],
+    "documentFileExtensions": ["txt", "rtf", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx"],
     "transcriptionFileExtensions": ["eaf", "trs", "ixt", "flextext"],
     "indexerMetadataNamespace": "ocfl-indexer:meta",
     "domain": "paradisec.org.au",
