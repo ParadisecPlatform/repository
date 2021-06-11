@@ -1,21 +1,20 @@
 <template>
     <div>
-        <el-button type="primary" size="mini" @click="showItemInformation = !showItemInformation">
+        <!-- <el-button type="primary" size="mini" @click="showItemInformation = !showItemInformation">
             <span v-show="showItemInformation">hide</span>
             <span v-show="!showItemInformation">show</span>
             item metadata
-        </el-button>
+        </el-button> -->
         <div class="flex flex-col my-2 bg-yellow-300 p-4 rounded-lg" v-if="showItemInformation">
             <div v-for="(field, idx) of fields" :key="idx" class="flex flex-row">
-                <div class="text-orange-900 font-light">{{ field.label }}: &nbsp;</div>
+                <div class="w-1/5 text-orange-900 font-light">{{ field.label }}: &nbsp;</div>
                 <div
-                    class="text-gray-700 font-normal tracking-wide"
+                    class="w-4/5 text-gray-700 font-normal tracking-wide"
                     v-if="field.prop && field.prop.length"
-                >{{ field.prop }}</div>
+                >
+                    {{ field.prop }}
+                </div>
             </div>
-
-            <!-- contentLanguages -->
-            <!-- subjectLanguages -->
         </div>
     </div>
 </template>
@@ -24,74 +23,92 @@
 import { date, toBoolean } from "src/filters";
 export default {
     props: {
-        data: {
+        item: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
-            showItemInformation: false,
+            showItemInformation: true,
             fields: [
                 {
+                    label: "DOI",
+                    prop: `https://dx.doi.org/${
+                        this.item.identifier.filter((i) => i.name === "doi")[0].value
+                    }`,
+                },
+                {
                     label: "Date Created",
-                    prop: date(this.data.objectifiedCrate.dateCreated)
+                    prop: date(this.item.dateCreated),
                 },
                 {
                     label: "Last Update",
-                    prop: date(this.data.objectifiedCrate.dateModified)
+                    prop: date(this.item.dateModified),
                 },
                 {
                     label: "Born Digital",
-                    prop: toBoolean(this.data.objectifiedCrate.bornDigital)
+                    prop: toBoolean(this.item.bornDigital),
                 },
                 {
                     label: "Cite As",
-                    prop: this.data.objectifiedCrate.citeAs
+                    prop: this.item.citeAs,
                 },
                 {
                     label: "Dialect",
-                    prop: this.data.objectifiedCrate.dialect
+                    prop: this.item.dialect,
                 },
                 {
                     label: "Digitised On",
-                    prop: date(this.data.objectifiedCrate.digitisedOn)
+                    prop: this.item.digitisedOn,
                 },
                 {
                     label: "Discourse Type",
-                    prop: this.data.objectifiedCrate.discourseType
+                    prop: this.item.discourseType,
                 },
                 {
                     label: "External",
-                    prop: toBoolean(this.data.objectifiedCrate.external)
+                    prop: toBoolean(this.item.external),
                 },
                 {
                     label: "Ingest Notes",
-                    prop: this.data.objectifiedCrate.ingestNotes
+                    prop: this.item.ingestNotes,
+                },
+                {
+                    label: "Original Media",
+                    prop: this.item.originalMedia,
+                },
+                {
+                    label: "Metadata Exportable",
+                    prop: this.item.metadataExportable,
+                },
+                {
+                    label: "Tapes Returned",
+                    prop: this.item.tapesReturned,
                 },
                 {
                     label: "Language As Given",
-                    prop: this.data.objectifiedCrate.languageAsGiven
+                    prop: this.item.languageAsGiven,
                 },
                 {
                     label: "Originated On",
-                    prop: this.data.objectifiedCrate.originatedOn
+                    prop: this.item.originatedOn,
                 },
                 {
                     label: "Originated On Narrative",
-                    prop: this.data.objectifiedCrate.originatedOnNarrative
+                    prop: this.item.originatedOnNarrative,
                 },
                 {
                     label: "Private",
-                    prop: toBoolean(this.data.objectifiedCrate.private)
+                    prop: toBoolean(this.item.private),
                 },
                 {
                     label: "Received On",
-                    prop: this.data.objectifiedCrate.receivedOn
-                }
-            ]
+                    prop: this.item.receivedOn,
+                },
+            ],
         };
-    }
+    },
 };
 </script>
 

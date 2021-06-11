@@ -1,83 +1,74 @@
 <template>
     <div>
-        <!-- <data-display-component :data="data" /> -->
+        <div class="flex flex-col" id="content" v-if="item && item.name">
+            <div class="flex flex-col space-y-2">
+                <div class="my-4 text-3xl">{{ item.name }}</div>
+                <div class="mb-2">
+                    <license-component :data="item.license[0]" />
+                </div>
+                <div class="flex flex-row space-x-2">
+                    <div class="flex flex-col space-y-2 flex-grow">
+                        <div class="text-sm">
+                            Item Identifier {{ item.collectionIdentifier }} /
+                            {{ item.itemIdentifier }}
+                        </div>
+                        <div class="text-sm">
+                            Collection
+                            <router-link :to="collectionLink(item.collectionIdentifier)">
+                                {{ item.collectionIdentifier }}
+                            </router-link>
+                        </div>
 
-        <div class="flex flex-col" id="content">
-            <div class="flex flex-row">
-                <div class="w-3/4 mr-4">
-                    <div class="my-4 text-3xl">
-                        {{ data.objectifiedCrate.name }}
-                    </div>
-                    <div class="mb-2">
-                        <license-component :data="data" />
+                        <div class="p-6 rounded">
+                            {{ item.description }}
+                        </div>
+
+                        <render-set-component
+                            name="Contributors"
+                            :items="item.contributor"
+                            :fields="['displayName']"
+                            layout="{displayName}"
+                        />
+
+                        <render-set-component
+                            name="Publisher"
+                            :items="item.publisher"
+                            :fields="['name']"
+                            layout="{name}"
+                        />
+
+                        <render-set-component name="Countries" :items="item.countries" />
+
+                        <render-set-component
+                            name="Fields of Research"
+                            :items="item.fieldsOfResearch"
+                            :fields="['name', 'identifier']"
+                            layout="{name} ({identifier})"
+                        />
                     </div>
                     <div>
-                        Item: {{ collectionIdentifier }} / {{ itemIdentifier }}
-                    </div>
-                    <div>
-                        Collection:
-                        <router-link :to="collectionLink()">
-                            {{ collectionIdentifier }}
-                        </router-link>
-                    </div>
-                    <div>
-                        Contributors:
-                        <ul class="px-6">
-                            <li
-                                class="list-disc"
-                                v-for="(contributor, idx) of data
-                                    .objectifiedCrate.contributor"
-                                :key="idx"
-                            >
-                                {{ contributor.contributor.name }} ({{
-                                    contributor.name
-                                }})
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="my-4 px-6 text-xl">
-                        <render-description-component
-                            :description="data.objectifiedCrate.description"
+                        <render-location-component
+                            :content-location="item.contentLocation"
+                            width="200"
+                            height="200"
+                            class="p-4 border border-gray-600"
                         />
                     </div>
                 </div>
-                <div class="hidden lg:block">
-                    <render-location-component
-                        :top-left="
-                            JSON.parse(
-                                `[${
-                                    data.objectifiedCrate.contentLocation.geo.box.split(
-                                        ' '
-                                    )[0]
-                                }]`
-                            )
-                        "
-                        :bottom-right="
-                            JSON.parse(
-                                `[${
-                                    data.objectifiedCrate.contentLocation.geo.box.split(
-                                        ' '
-                                    )[1]
-                                }]`
-                            )
-                        "
-                    />
-                </div>
-            </div>
-            <div class="my-2">
-                <render-item-information-component :data="data" />
-            </div>
-            <div class="my-2">
-                <language-renderer-component
-                    :languages="data.objectifiedCrate.contentLanguages"
-                    name="Content Languages"
-                />
-                <language-renderer-component
-                    :languages="data.objectifiedCrate.subjectLanguages"
+
+                <render-item-information-component :item="item" />
+
+                <render-set-component
                     name="Subject Languages"
+                    :items="item.subjectLanguages"
+                    item-style="bg-yellow-400"
                 />
-            </div>
-            <div class="mt-4" id="itemContent">
+
+                <render-set-component
+                    name="Content Languages"
+                    :items="item.contentLanguages"
+                    item-style="bg-yellow-400"
+                />
                 <render-content-component :data="data" />
             </div>
         </div>
@@ -85,52 +76,93 @@
 </template>
 
 <script>
+import RenderLocationComponent from "./RenderLocation.component.vue";
 import RenderContentComponent from "./RenderContent.component.vue";
 import RenderItemInformationComponent from "./RenderItemInformation.component.vue";
-import RenderLocationComponent from "src/components/shared/RenderLocation.component.vue";
-import RenderDescriptionComponent from "src/components/shared/RenderDescription.component.vue";
 import LicenseComponent from "./License.component.vue";
-import LanguageRendererComponent from "./LanguageRenderer.component.vue";
+import RenderSetComponent from "../../../shared/RenderSet.component.vue";
+import { ROCrate } from "ro-crate";
+import { flattenDeep } from "lodash";
 
 export default {
     components: {
         RenderContentComponent,
         RenderItemInformationComponent,
-        RenderDescriptionComponent,
-        RenderLocationComponent,
         LicenseComponent,
-        LanguageRendererComponent
+        RenderSetComponent,
+        RenderLocationComponent,
     },
     props: {
         data: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
-            collectionIdentifier: this.data.objectifiedCrate.identifier.filter(
-                i => i.name === "collectionIdentifier"
-            )[0].value,
-            itemIdentifier: this.data.objectifiedCrate.identifier.filter(
-                i => i.name === "itemIdentifier"
-            )[0].value
+            item: {},
         };
     },
     mounted() {
-        if (this.$route.query.transcription) {
-            setTimeout(() => {
-                this.$scrollTo("#itemContent", 0, { container: "body" });
-            }, 1500);
-        }
+        this.loadItem();
     },
     methods: {
-        collectionLink() {
+        loadItem() {
+            const crate = new ROCrate(this.data.rocrate);
+            crate.index();
+            let item = crate.getRootDataset();
+            item = this.populate(crate, item, [
+                "contentLocation",
+                "contributor",
+                "identifier",
+                "license",
+                "publisher",
+                "countries",
+                "contentLanguages",
+                "subjectLanguages",
+            ]);
+            item.collectionIdentifier = item.identifier.filter(
+                (i) => i.name === "collectionIdentifier"
+            )[0].value;
+            item.itemIdentifier = item.identifier.filter(
+                (i) => i.name === "itemIdentifier"
+            )[0].value;
+            item.contributor = item.contributor.map((contributor) => {
+                contributor.role = flattenDeep([contributor.role]);
+                contributor.role = contributor.role.map((role) => crate.getItem(role["@id"]));
+
+                contributor.homeLocation = flattenDeep([contributor.homeLocation]);
+                contributor.homeLocation = contributor.homeLocation.map((location) =>
+                    crate.getItem(location["@id"])
+                );
+                contributor.displayName = `${contributor.givenName} ${
+                    contributor.familyName
+                } - ${contributor.role.map((r) => r.name).join(", ")}`;
+                return contributor;
+            });
+            item.contentLocation = item.contentLocation.map((l) => {
+                if (l.geo) l.geo = crate.getItem(l.geo["@id"]);
+                return l;
+            });
+            item.hasPart = flattenDeep([item.hasPart]);
+
+            // console.log(JSON.stringify(item, null, 2));
+            this.item = item;
+        },
+        populate(crate, item, properties) {
+            for (let property of properties) {
+                item[property] = flattenDeep([item[property]]).map((linkedItem) =>
+                    crate.getItem(linkedItem["@id"])
+                );
+            }
+            return item;
+        },
+        collectionLink(collectionIdentifier) {
             return this.$store.state.configuration.domain
-                ? `/view/${this.collectionIdentifier}`
-                : item.rocrate.memberOf["@id"];
-        }
-    }
+                ? `/view/${collectionIdentifier}`
+                : item.memberOf["@id"];
+        },
+    },
 };
 </script>
 

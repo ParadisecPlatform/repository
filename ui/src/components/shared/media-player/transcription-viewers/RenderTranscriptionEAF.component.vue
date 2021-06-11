@@ -29,10 +29,7 @@
                 >
                     {{ segment.value }}
                 </div>
-                <div
-                    class="flex flex-row flex-wrap"
-                    v-if="segment.children.length"
-                >
+                <div class="flex flex-row flex-wrap" v-if="segment.children.length">
                     <div
                         v-for="(child, idx2) of segment.children"
                         :key="idx2"
@@ -47,8 +44,8 @@
 </template>
 
 <script>
-import { mixin } from "./RenderTranscriptionMixins";
-import RenderChildComponent from "./RenderTranscriptionEAFChild.component.vue";
+import { mixin } from "../../media-player/transcription-viewers/RenderTranscriptionMixins";
+import RenderChildComponent from "../../media-player/transcription-viewers/RenderTranscriptionEAFChild.component.vue";
 
 export default {
     mixins: [mixin],

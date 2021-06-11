@@ -1,129 +1,82 @@
 <template>
-    <div>
-        <el-tabs type="border-card" tab-position="top" v-model="activeTab">
-            <el-tab-pane
-                label="Images"
-                name="images"
-                v-if="data.dataTypes.images.length"
+    <div class="flex flex-col">
+        <conditions-of-access-component
+            v-if="showConditionsOfAccess"
+            @accept-conditions="acceptConditions"
+            class="p-8 bg-yellow-200 text-gray-700"
+        />
+
+        <div class="bg-green-200 p-8 text-center" v-if="!showConditionsOfAccess">
+            You have agreed to the conditions of access for viewing the content of this item. To
+            review the conditions
+            <a class="cursor-pointer text-yellow-600" href.prevent="" @click="reviewConditions"
+                >click here.</a
             >
-                <span slot="label"> <i class="fas fa-images"></i> Images </span>
-                <render-images-component
-                    :data="data"
-                    v-if="activeTab === 'images'"
-                />
-            </el-tab-pane>
-            <el-tab-pane
-                label="Audio"
-                name="audio"
-                v-if="data.dataTypes.audio.length"
-            >
-                <span slot="label">
-                    <i class="fas fa-volume-up"></i> Audio
-                </span>
-                <render-audio-component
-                    :data="data"
-                    v-if="activeTab === 'audio'"
-                />
-            </el-tab-pane>
-            <el-tab-pane
-                label="Video"
-                name="video"
-                v-if="data.dataTypes.video.length"
-            >
-                <span slot="label"> <i class="fas fa-video"></i> Video </span>
-                <render-video-component
-                    :data="data"
-                    v-if="activeTab === 'video'"
-                />
-            </el-tab-pane>
-            <el-tab-pane
-                label="Documents"
-                name="documents"
-                v-if="data.dataTypes.documents.length"
-            >
-                <span slot="label">
-                    <i class="fas fa-file-pdf"></i> Documents
-                </span>
-                <render-documents-component
-                    :data="data"
-                    v-if="activeTab === 'documents'"
-                />
-            </el-tab-pane>
-            <el-tab-pane
-                label="XML Files"
-                name="xmlFiles"
-                v-if="data.dataTypes.xmlFiles.length"
-            >
-                <span slot="label">
-                    <i class="fas fa-file"></i> XML Files
-                </span>
-                <render-xml-component
-                    :data="data"
-                    v-if="activeTab === 'xmlFiles'"
-                />
-            </el-tab-pane>
-        </el-tabs>
+        </div>
+
+        <media-player-component :data="data" v-if="!showConditionsOfAccess" />
     </div>
 </template>
 
 <script>
-import RenderImagesComponent from "components/shared/RenderImages.component.vue";
-import RenderAudioComponent from "components/shared/RenderAudio.component.vue";
-import RenderVideoComponent from "components/shared/RenderVideo.component.vue";
-import RenderDocumentsComponent from "components/shared/RenderDocuments.component.vue";
-import RenderXmlComponent from "components/shared/RenderXML.component.vue";
-import { groupBy } from "lodash";
+import ConditionsOfAccessComponent from "./ConditionsOfAccess.component.vue";
+import MediaPlayerComponent from "components/shared/media-player/Shell.component.vue";
+import { ROCrate } from "ro-crate";
 
 export default {
     components: {
-        RenderImagesComponent,
-        RenderAudioComponent,
-        RenderVideoComponent,
-        RenderDocumentsComponent,
-        RenderXmlComponent
+        ConditionsOfAccessComponent,
+        MediaPlayerComponent,
     },
     props: {
         data: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
-            activeTab: undefined
+            activeTab: undefined,
+            showConditionsOfAccess: true,
         };
     },
     mounted() {
-        this.setActiveTab();
+        this.init();
     },
     methods: {
-        setActiveTab() {
-            if (this.$route.query.transcription) {
-                const transcription = this.$route.query.transcription
-                    .split(".")
-                    .shift();
-                if (
-                    this.data.dataTypes.audio.filter(
-                        a => a.split(".").shift() === transcription
-                    )
-                ) {
-                    this.activeTab = "audio";
-                } else if (
-                    this.data.dataTypes.audio.filter(
-                        a => a.split(".").shift() === transcription
-                    )
-                ) {
-                    this.activeTab = "video";
-                }
-            } else {
-                const types = [];
-                for (let type of Object.entries(this.data.dataTypes)) {
-                    if (type[1].length) types.push(type[0]);
-                }
-                this.activeTab = types[0];
+        init() {
+            let identifier = this.getIdentifier();
+            let agreements = JSON.parse(window.localStorage.getItem("paradisecAgreements"));
+            if (agreements && agreements[identifier]) {
+                this.showConditionsOfAccess = false;
             }
-        }
-    }
+        },
+        acceptConditions() {
+            let identifier = this.getIdentifier();
+            let agreements = JSON.parse(window.localStorage.getItem("paradisecAgreements"));
+            if (!agreements) agreements = {};
+            agreements[identifier] = true;
+            window.localStorage.setItem("paradisecAgreements", JSON.stringify(agreements));
+            this.showConditionsOfAccess = false;
+        },
+        reviewConditions() {
+            let identifier = this.getIdentifier();
+            let agreements = JSON.parse(window.localStorage.getItem("paradisecAgreements"));
+            delete agreements[identifier];
+            window.localStorage.setItem("paradisecAgreements", JSON.stringify(agreements));
+            this.showConditionsOfAccess = true;
+        },
+        getIdentifier() {
+            const crate = new ROCrate(this.data.rocrate);
+            crate.index();
+            let identifier = crate.resolve([crate.getRootDataset()], [{ property: "identifier" }]);
+            let collectionIdentifier = identifier.filter(
+                (i) => i.name === "collectionIdentifier"
+            )[0].value;
+            let itemIdentifier = identifier.filter((i) => i.name === "itemIdentifier")[0].value;
+            return `${collectionIdentifier}/${itemIdentifier}`;
+        },
+    },
 };
 </script>
 

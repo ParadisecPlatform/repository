@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col">
-        <div class="flex flex-col md:flex-row my-3">
-            <div class="text-xl" v-if="documents.length">{{documents[current].name}}</div>
+    <div class="flex flex-col bg-indigo-100 rounded p-4">
+        <div class="flex flex-col md:flex-row my-2">
+            <div class="" v-if="documents.length">{{ documents[current].name }}</div>
             <div class="flex-grow"></div>
             <el-pagination
                 background
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { cloneDeep, compact, orderBy, groupBy } from "lodash";
-
+import { getFilesByEncoding } from "../lib";
+import { cloneDeep, compact } from "lodash";
 import { DataLoader } from "src/services/data-loader.service";
 const dataLoader = new DataLoader();
 import Prism from "prismjs";
@@ -30,8 +30,8 @@ export default {
     props: {
         data: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
@@ -40,25 +40,26 @@ export default {
             total: 0,
             current: 0,
             fileContent: "",
-            loading: false
+            loading: false,
         };
     },
     mounted() {
-        this.loadDocuments();
+        this.init();
     },
     methods: {
-        loadDocuments() {
-            let documents = this.data.objectifiedCrate.hasPart.filter(
-                file => file.encodingFormat === "application/xml"
-            );
+        init() {
+            let documents = getFilesByEncoding({
+                rocrate: this.data.rocrate,
+                formats: ["application/xml"],
+            });
 
             const datafiles = cloneDeep(this.data.datafiles);
-            documents = documents.map(d => {
+            documents = documents.map((d) => {
                 if (!datafiles[d.name]) return undefined;
 
                 return {
                     ...d,
-                    path: datafiles[d.name].pop().path
+                    path: datafiles[d.name].pop().path,
                 };
             });
             documents = compact(documents);
@@ -69,11 +70,7 @@ export default {
         async highlight() {
             let file = this.documents[this.current];
             let data = await load({ file });
-            this.fileContent = Prism.highlight(
-                data,
-                Prism.languages.xml,
-                "xml"
-            );
+            this.fileContent = Prism.highlight(data, Prism.languages.xml, "xml");
             async function load({ file }) {
                 try {
                     return await dataLoader.loadFile({ file });
@@ -85,8 +82,8 @@ export default {
         next(current) {
             this.current = current - 1;
             this.highlight();
-        }
-    }
+        },
+    },
 };
 </script>
 

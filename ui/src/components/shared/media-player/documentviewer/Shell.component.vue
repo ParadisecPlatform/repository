@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
         <div class="flex flex-col md:flex-row my-3">
-            <div class="text-xl" v-if="documents.length">{{documents[current].name}}</div>
+            <div class="text-xl" v-if="documents.length">{{ documents[current].name }}</div>
             <div class="flex-grow"></div>
             <el-pagination
                 background
@@ -24,17 +24,15 @@
 </template>
 
 <script>
-import { cloneDeep, compact, orderBy, groupBy } from "lodash";
-
-import Prism from "prismjs";
-Prism.highlightAll();
+import { getFilesByName } from "../lib";
+import { cloneDeep, compact } from "lodash";
 
 export default {
     props: {
         data: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
@@ -43,29 +41,27 @@ export default {
             total: 0,
             current: 0,
             fileContent: "",
-            selectedFileUrl: undefined
+            selectedFileUrl: undefined,
         };
     },
     mounted() {
-        this.loadDocuments();
+        this.init();
     },
     methods: {
-        loadDocuments() {
-            const documentFileExtensions = this.$store.state.configuration
-                .documentFileExtensions;
-            let documents = this.data.objectifiedCrate.hasPart.filter(file => {
-                return documentFileExtensions.includes(
-                    file.name.split(".").pop()
-                );
+        init() {
+            let documents = getFilesByName({
+                rocrate: this.data.rocrate,
+                formats: this.$store.state.configuration.documentFileExtensions,
             });
+            console.log(documents);
 
             const datafiles = cloneDeep(this.data.datafiles);
-            documents = documents.map(d => {
+            documents = documents.map((d) => {
                 if (!datafiles[d.name]) return undefined;
 
                 return {
                     ...d,
-                    path: datafiles[d.name].pop().path
+                    path: datafiles[d.name].pop().path,
                 };
             });
             documents = compact(documents);
@@ -74,15 +70,15 @@ export default {
             if (this.total) this.setFile();
         },
         setFile() {
-            this.selectedFileUrl = `https://docs.google.com/viewer?url=${
-                window.location.origin
-            }${this.documents[this.current].path}&embedded=true`;
+            this.selectedFileUrl = `https://docs.google.com/viewer?url=${window.location.origin}${
+                this.documents[this.current].path
+            }&embedded=true`;
         },
         next(current) {
             this.current = current - 1;
             this.setFile();
-        }
-    }
+        },
+    },
 };
 </script>
 

@@ -1,47 +1,44 @@
 "use strict";
 
 import { DataLoader } from "src/services/data-loader.service";
-const dataLoader = new DataLoader();
+// const dataLoader = new DataLoader();
 
-import RenderTranscriptionsComponent from "./RenderTranscriptions.component.vue";
-import RenderTranscriptionSelectorComponent from "./RenderTranscriptionSelector.component.vue";
+import RenderTranscriptionsComponent from "./transcription-viewers/RenderTranscriptions.component.vue";
+import RenderTranscriptionSelectorComponent from "./transcription-viewers/RenderTranscriptionSelector.component.vue";
 
 export let mixin = {
     components: {
         RenderTranscriptionsComponent,
-        RenderTranscriptionSelectorComponent
+        RenderTranscriptionSelectorComponent,
     },
     props: {
         name: {
             type: String,
-            required: true
+            required: true,
         },
-        item: {
+        items: {
             type: Array,
-            required: true
+            required: true,
         },
         transcriptions: {
             type: Array | undefined,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
             currentTime: 0,
-            selectedTranscription: undefined
+            selectedTranscription: undefined,
         };
     },
     mounted() {
         this.selectedTranscription =
-            this.transcriptions && this.transcriptions.length
-                ? this.transcriptions[0]
-                : undefined;
-
+            this.transcriptions && this.transcriptions.length ? this.transcriptions[0] : undefined;
         if (this.$route.query.transcription) {
             setTimeout(() => {
                 this.playFrom({
                     start: this.$route.query.begin,
-                    end: this.$route.query.end
+                    end: this.$route.query.end,
                 });
             }, 3000);
         }
@@ -55,11 +52,10 @@ export let mixin = {
             }, (end - start) * 1000);
         },
         notifyTranscription(time) {
-            if (this.$refs.mediaElement)
-                this.currentTime = this.$refs.mediaElement.currentTime;
+            if (this.$refs.mediaElement) this.currentTime = this.$refs.mediaElement.currentTime;
         },
         async loadTranscription(transcription) {
             this.selectedTranscription = transcription;
-        }
-    }
+        },
+    },
 };

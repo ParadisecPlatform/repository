@@ -1,26 +1,34 @@
 <template>
     <div class="mt-4">
-        <div ref="map" class="z-0 style-map"></div>
+        <div ref="map" class="z-0" :style="{ width: `${width}px`, height: `${height}px` }"></div>
     </div>
 </template>
 
 <script>
 import leaflet from "leaflet";
-// import styles from "src/assets/variables.scss";
 
 export default {
     props: {
-        topLeft: {
-            type: Array,
-            required: true,
+        box: {
+            type: String,
         },
-        bottomRight: {
-            type: Array,
-            required: true,
+        colour: {
+            type: String,
+            default: "red",
+        },
+        width: {
+            type: String,
+            default: "300",
+        },
+        height: {
+            type: String,
+            default: "300",
         },
     },
     data() {
-        return {};
+        return {
+            map: undefined,
+        };
     },
     mounted() {
         this.map = leaflet.map(this.$refs.map).setView([0, 0], 0);
@@ -31,10 +39,14 @@ export default {
                 //     "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012"
             }
         ).addTo(this.map);
-        const rectangle = L.rectangle([this.topLeft.reverse(), this.bottomRight.reverse()], {
-            color: "red",
-        }).addTo(this.map);
-        this.map.fitBounds(rectangle.getBounds());
+        if (this.box) {
+            let bottomLeft = JSON.parse(`[${this.box.split(" ")[0]}]`);
+            let topRight = JSON.parse(`[${this.box.split(" ")[1]}]`);
+            const rectangle = L.rectangle([bottomLeft.reverse(), topRight.reverse()], {
+                color: this.colour,
+            }).addTo(this.map);
+            this.map.fitBounds(rectangle.getBounds());
+        }
         this.map.zoomOut();
         // L.tileLayer(
         //     "https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}",
@@ -52,9 +64,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.style-map {
-    width: 300px;
-    height: 300px;
-}
-</style>
+<style lang="scss" scoped></style>
