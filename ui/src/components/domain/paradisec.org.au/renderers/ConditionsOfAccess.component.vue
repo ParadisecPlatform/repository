@@ -14,8 +14,8 @@
         </div>
 
         <div class="flex flex-row">
-            <div class="w-1/5 text-lg font-bold">Purpose:</div>
-            <div class="w-4/5">
+            <div class="w-2/6 lg:w-1/5 text-lg font-bold">Purpose:</div>
+            <div class="w-4/6 lg:w-4/5">
                 To use the data for purposes of private scholarly research and/or for purposes of
                 educational use, and not for profit (this shall not preclude the publication in a
                 scholarly context of analyses or interpretations derived from the data, unless such
@@ -24,8 +24,8 @@
         </div>
 
         <div class="flex flex-row">
-            <div class="w-1/5 text-lg font-bold">Acknowledgement:</div>
-            <div class="w-4/5">
+            <div class="w-2/6 lg:w-1/5 text-lg font-bold">Acknowledgement:</div>
+            <div class="w-4/6 lg:w-4/5">
                 To acknowledge in any work, published or unpublished, based in whole or in part on
                 analyses of the data, both the original depositors of the data and PARADISEC (by use
                 of the PARADISEC persistent identifier and citation form).
@@ -33,8 +33,8 @@
         </div>
 
         <div class="flex flex-row">
-            <div class="w-1/5 text-lg font-bold">Copyright:</div>
-            <div class="w-4/5">
+            <div class="w-2/6 lg:w-1/5 text-lg font-bold">Copyright:</div>
+            <div class="w-4/6 lg:w-4/5">
                 Not to copy the data in whole or in part except insofar as this may be necessary for
                 security purposes or for my own personal use. Not to distribute the data to third
                 parties, nor to publish or reproduce it in any way. Copyright of all
@@ -43,8 +43,8 @@
         </div>
 
         <div class="flex flex-row">
-            <div class="w-1/5 text-lg font-bold">Access:</div>
-            <div class="w-4/5">
+            <div class="w-2/6 lg:w-1/5 text-lg font-bold">Access:</div>
+            <div class="w-4/6 lg:w-4/5">
                 To give access to the data only to persons directly associated with me or working
                 under my control and to require of such persons signed undertakings neither to use
                 the data except in connection with my academic or educational purposes, nor to give
@@ -55,16 +55,16 @@
         </div>
 
         <div class="flex flex-row">
-            <div class="w-1/5 text-lg font-bold">Errors:</div>
-            <div class="w-4/5">
+            <div class="w-2/6 lg:w-1/5 text-lg font-bold">Errors:</div>
+            <div class="w-4/6 lg:w-4/5">
                 Not to hold PARADISEC liable for any errors of transcription or marking-up which may
                 be found in the data, but to notify PARADISEC of such errors wherever possible.
             </div>
         </div>
 
         <div class="flex flex-row">
-            <div class="w-1/5 text-lg font-bold">Revisions:</div>
-            <div class="w-4/5">
+            <div class="w-2/6 lg:w-1/5 text-lg font-bold">Revisions:</div>
+            <div class="w-4/6 lg:w-4/5">
                 Where substantial revisions or reformatting of the data is permitted by the
                 conditions of deposit and carried out as a part of my research, to inform PARADISEC,
                 and also the original depositor if this is a condition of deposit, of the nature of
@@ -74,8 +74,8 @@
         </div>
 
         <div class="flex flex-row">
-            <div class="w-1/5 text-lg font-bold">Charges:</div>
-            <div class="w-4/5">
+            <div class="w-2/6 lg:w-1/5 text-lg font-bold">Charges:</div>
+            <div class="w-4/6 lg:w-4/5">
                 To pay such charges as PARADISEC may require to cover the cost of supplying the data
                 (not applicable unless an invoice accompanies the data).
             </div>
