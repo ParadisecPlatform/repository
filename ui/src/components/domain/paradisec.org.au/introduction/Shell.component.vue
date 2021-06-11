@@ -2,36 +2,46 @@
     <div>
         <div class="flex flex-col lg:flex-row">
             <div class="flex flex-col w-full lg:w-2/4 mr-1">
-                <div class="text-center text-xl my-3 lg:my-6">
+                <div class="flex-grow flex flex-col items-center">
+                    <a href="https://www.paradisec.org.au/" target="blank" class="block">
+                        <el-image src="assets/images/pdsc-logo.png" fit="contain" class="h-12" />
+                    </a>
+                </div>
+                <div class="text-center text-xl lg:my-6">
                     Welcome to the catalog of the
                     <span class="font-bold">PARADISEC</span> collection.
                 </div>
-                <div class="bg-yellow-200 p-4 mb-2 rounded-full">
+                <div class="bg-yellow-200 p-4 rounded-full">
                     <introduction-stats-component />
                 </div>
-                <div class="box-card text-sm text-justify bg-white">
-                    <p>
+                <div
+                    class="border border-gray-200 rounded text-justify my-2 lg:my-4 p-4 flex flex-col space-y-2"
+                >
+                    <div>
+                        PARADISEC (Pacific And Regional Archive for DIgital Sources in Endangered
+                        Cultures) curates digital material about small or endangered languages. The
+                        catalog entry for an item is usually written by the depositor, and some are
+                        more detailed than others.
+                    </div>
+                    <div>
+                        In the case of collections that we have digitised from deceased researchers,
+                        we do the best we can to describe the records, but often there is little
+                        information available. By placing these items in the collection we hope that
+                        other researchers will enrich the descriptions as they use the material. We
+                        believe the rights in the material presented in this collection have been
+                        cleared by the depositors. Please let us know if you think that is not the
+                        case for any particular item.
+                    </div>
+                    <div>
                         PARADISEC has been developed since 2003 by a consortium of Australian
                         researchers from the University of Sydney, the University of Melbourne and
                         the Australian National University.
-                    </p>
-                    <p class="text-center mt-6">
+                    </div>
+                    <div class="text-center">
                         See the
-                        <a href="www.paradisec.org.au" target="_blank">PARADISEC</a>
+                        <a href="https://www.paradisec.org.au" target="_blank">PARADISEC</a>
                         website for further details.
-                    </p>
-                </div>
-                <div class="box-card text-sm text-justify my-2 lg:my-4">
-                    PARADISEC (Pacific And Regional Archive for DIgital Sources in Endangered
-                    Cultures) curates digital material about small or endangered languages. The
-                    catalog entry for an item is usually written by the depositor, and some are more
-                    detailed than others. In the case of collections that we have digitised from
-                    deceased researchers, we do the best we can to describe the records, but often
-                    there is little information available. By placing these items in the collection
-                    we hope that other researchers will enrich the descriptions as they use the
-                    material. We believe the rights in the material presented in this collection
-                    have been cleared by the depositors. Please let us know if you think that is not
-                    the case for any particular item.
+                    </div>
                 </div>
             </div>
             <div class="flex flex-col w-full lg:w-2/4 lg:ml-1">
