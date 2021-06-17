@@ -1,11 +1,13 @@
 <template>
     <div class="flex flex-col bg-indigo-100 rounded p-4">
-        <div class="flex flex-col md:flex-row my-2">
+        <div class="flex flex-col md:flex-row md:space-x-2 my-2">
             <div class="">{{ selectedName }}</div>
+            <copy-to-clipboard-component :data="itemLink" />
             <div class="flex-grow"></div>
             <el-pagination
                 :background="true"
                 layout="prev, pager, next"
+                :current-page.sync="current"
                 :page-size="1"
                 :total="total"
                 @current-change="update"
@@ -25,10 +27,12 @@
 import { getFilesByEncoding, getFilesByName } from "../lib";
 import { cloneDeep, compact, orderBy, groupBy } from "lodash";
 import RenderAudioElementComponent from "./RenderAudioElement.component.vue";
+import CopyToClipboardComponent from "src/components/shared/CopyToClipboard.component.vue";
 
 export default {
     components: {
         RenderAudioElementComponent,
+        CopyToClipboardComponent,
     },
     props: {
         data: {
@@ -40,9 +44,10 @@ export default {
         return {
             audio: {},
             transcriptions: {},
-            current: 0,
+            current: 1,
             total: undefined,
             selectedName: undefined,
+            itemLink: undefined,
         };
     },
     mounted() {
@@ -96,17 +101,25 @@ export default {
             this.audio = audio;
             this.transcriptions = transcriptions;
             this.total = Object.keys(audio).length;
+            if (this.$route.hash && this.$route.query?.type === "audio") {
+                this.current =
+                    Object.keys(this.audio).indexOf(this.$route.hash.replace("#", "")) + 1;
+            }
             this.setSelectedFile();
         },
         update(number) {
-            this.current = number - 1;
+            this.current = number;
             this.selectedName = undefined;
             this.$nextTick(() => {
                 this.setSelectedFile();
             });
         },
         setSelectedFile() {
-            this.selectedName = Object.keys(this.audio)[this.current];
+            this.selectedName = Object.keys(this.audio)[this.current - 1];
+            this.$emit("update-route", { hash: this.selectedName, type: "audio" });
+            this.$nextTick(() => {
+                this.itemLink = window.location;
+            });
         },
     },
 };

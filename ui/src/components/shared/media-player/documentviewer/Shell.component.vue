@@ -1,15 +1,17 @@
 <template>
     <div class="flex flex-col">
-        <div class="flex flex-col md:flex-row my-3">
-            <div class="text-xl" v-if="documents.length">{{ documents[current].name }}</div>
+        <div class="flex flex-col md:flex-row md:space-x-2 my-3">
+            <div class="text-xl" v-if="documents.length">{{ selectedName }}</div>
+            <copy-to-clipboard-component :data="itemLink" />
             <div class="flex-grow"></div>
             <el-pagination
                 background
                 layout="prev, pager, next"
+                :current-page.sync="current"
                 :pager-count="pagerCount"
                 :total="total"
                 :page-size="1"
-                @current-change="next"
+                @current-change="update"
             ></el-pagination>
         </div>
         <iframe :src="selectedFileUrl" class="style-file-view">
@@ -26,8 +28,12 @@
 <script>
 import { getFilesByName } from "../lib";
 import { cloneDeep, compact } from "lodash";
+import CopyToClipboardComponent from "src/components/shared/CopyToClipboard.component.vue";
 
 export default {
+    components: {
+        CopyToClipboardComponent,
+    },
     props: {
         data: {
             type: Object,
@@ -39,9 +45,11 @@ export default {
             documents: [],
             pagerCount: window.innerWidth < 500 ? 5 : 7,
             total: 0,
-            current: 0,
+            current: 1,
             fileContent: "",
             selectedFileUrl: undefined,
+            selectedName: undefined,
+            itemLink: undefined,
         };
     },
     mounted() {
@@ -66,15 +74,23 @@ export default {
             documents = compact(documents);
             this.documents = documents;
             this.total = this.documents.length;
-            if (this.total) this.setFile();
+            if (this.$route.hash && this.$route.query?.type === "document") {
+                let docs = this.documents.map((d) => d.name);
+                this.current = docs.indexOf(this.$route.hash.replace("#", "")) + 1;
+            }
+            this.setFile();
         },
         setFile() {
-            this.selectedFileUrl = `https://docs.google.com/viewer?url=${window.location.origin}${
-                this.documents[this.current].path
-            }&embedded=true`;
+            const file = this.documents[this.current - 1];
+            this.selectedFileUrl = `https://docs.google.com/viewer?url=${window.location.origin}${file.path}&embedded=true`;
+            this.selectedName = file.name;
+            this.$emit("update-route", { hash: file.name, type: "document" });
+            this.$nextTick(() => {
+                this.itemLink = window.location;
+            });
         },
-        next(current) {
-            this.current = current - 1;
+        update(number) {
+            this.current = number;
             this.setFile();
         },
     },

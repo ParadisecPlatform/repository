@@ -43,40 +43,42 @@ export default {
         this.loadViewer({});
     },
     watch: {
-        "$route.params": function (n, o) {
+        "$route.params": function(n, o) {
             if (n.pathMatch !== o.pathMatch) this.loadViewer({});
         },
     },
     computed: {
-        componentFile: function () {
+        componentFile: function() {
             if (!this.viewComponent) return;
             return () => import(`src/components/domain/${this.viewComponent}`);
         },
-        configuration: function () {
+        configuration: function() {
             return this.$store.state.configuration;
         },
     },
     methods: {
         async loadViewer({ version }) {
             this.viewComponent = undefined;
-            let identifier;
+
+            let identifier = this.$route.path;
+            if (identifier.substring(identifier.length, identifier.length - 1) === "/") {
+                identifier = identifier.substring(0, identifier.length - 1);
+            }
+            identifier = identifier.split(/\/view/)[1];
 
             // determine what to load based on the URL path
             if (this.configuration.domain) {
-                identifier = `/${this.configuration.domain}${this.$route.params.pathMatch}`;
-            } else {
-                identifier = this.$route.params.pathMatch;
+                identifier = `/${this.configuration.domain}${identifier}`;
             }
 
             // try to load the object directly from OCFL
             //  not yet implemented: call to API if config says there is one
-            console.debug(`Loading: ${identifier}: ${version}`);
             try {
                 let params;
-                if (version || this.$route.query.version) {
+                if (version || this.$route.query.ocfl_version) {
                     params = {
                         identifier,
-                        version: version || this.$route.query.version,
+                        ocfl_version: version || this.$route.query.ocfl_version,
                         configuration: this.$store.state.configuration,
                     };
                 } else {
@@ -93,13 +95,17 @@ export default {
                 return;
             }
 
+            console.debug(`Loading: ${identifier}: ${version}`);
             //  set the version in the URL if not already defined
-            if (!this.$route.query.version || this.$route.query.version !== this.ocflObject.version)
+            if (
+                !this.$route.query.ocfl_version ||
+                this.$route.query.ocfl_version !== this.ocflObject.version
+            )
                 this.$router.replace({
                     path: this.$route.path,
                     query: {
-                        version: this.ocflObject.version,
                         ...this.$route.query,
+                        ocfl_version: this.ocflObject.version,
                     },
                 });
 

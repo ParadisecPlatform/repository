@@ -17,3 +17,15 @@ export function getFilesByName({ formats, rocrate }) {
         return formats.includes(file.name.split(".").pop());
     });
 }
+
+export function updateRouterLocation({ router, route, hash, type }) {
+    if (route.hash === `#${hash}` && route.query?.type === type) return window.location;
+    router.replace({
+        hash,
+        query: {
+            ...route.query,
+            type,
+        },
+    });
+    return window.location;
+}

@@ -1,7 +1,8 @@
 <template>
     <div class="flex flex-col bg-indigo-100 rounded p-4" v-if="images.length">
-        <div class="flex flex-col md:flex-row my-2">
-            <div>{{ images[current].name }}</div>
+        <div class="flex flex-col md:flex-row  md:space-x-2 my-2">
+            <div>{{ selectedName }}</div>
+            <copy-to-clipboard-component :data="itemLink" />
             <div class="flex-grow"></div>
             <el-pagination
                 :background="true"
@@ -27,8 +28,12 @@
 import { getFilesByEncoding } from "../lib";
 import { orderBy, compact, cloneDeep } from "lodash";
 const { FullScreenViewer } = require("iv-viewer");
+import CopyToClipboardComponent from "src/components/shared/CopyToClipboard.component.vue";
 
 export default {
+    components: {
+        CopyToClipboardComponent,
+    },
     props: {
         data: {
             type: Object,
@@ -38,8 +43,10 @@ export default {
     data() {
         return {
             images: [],
-            current: 0,
+            current: 1,
             totalImages: undefined,
+            selectedName: undefined,
+            itemLink: undefined,
         };
     },
     mounted() {
@@ -62,13 +69,25 @@ export default {
             images = compact(images);
             this.images = orderBy(images, "name");
             this.totalImages = images.length;
+            if (this.$route.hash && this.$route.query?.type === "image") {
+                let images = this.images.map((d) => d.name);
+                this.current = images.indexOf(this.$route.hash.replace("#", "")) + 1;
+            }
+            this.update(this.current);
         },
         update(number) {
-            this.current = number - 1;
+            this.current = number;
+            const file = this.images[this.current - 1];
+            this.selectedName = file.name;
+            this.$emit("update-route", { hash: file.name, type: "image" });
+            this.$nextTick(() => {
+                this.itemLink = window.location;
+            });
         },
         toggleFullScreen() {
             const viewer = new FullScreenViewer({});
-            viewer.show(this.images[this.current].path);
+            const file = this.images[this.current - 1];
+            viewer.show(file.path);
         },
     },
 };

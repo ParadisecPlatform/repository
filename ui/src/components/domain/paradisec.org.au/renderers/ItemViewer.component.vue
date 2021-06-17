@@ -1,7 +1,12 @@
 <template>
     <div>
         <div class="flex flex-col" id="content" v-if="item && item.name">
-            <el-tabs type="border-card" tab-position="top" v-model="activeTab">
+            <el-tabs
+                type="border-card"
+                tab-position="top"
+                v-model="activeTab"
+                @tab-click="handleTabChange"
+            >
                 <el-tab-pane label="Metadata" name="metadata">
                     <div class="flex flex-col space-y-2">
                         <div class="my-4 text-3xl">{{ item.name }}</div>
@@ -74,7 +79,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="Content" name="content">
-                    <render-content-component :data="data" />
+                    <render-content-component :data="data" v-if="activeTab === 'content'" />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -155,6 +160,7 @@ export default {
 
             // console.log(JSON.stringify(item, null, 2));
             this.item = item;
+            this.setActiveTab();
         },
         populate(crate, item, properties) {
             for (let property of properties) {
@@ -168,6 +174,21 @@ export default {
             return this.$store.state.configuration.domain
                 ? `/view/${collectionIdentifier}`
                 : item.memberOf["@id"];
+        },
+        setActiveTab() {
+            if (this.$route.hash && this.$route.query?.type) {
+                this.activeTab = "content";
+            }
+        },
+        handleTabChange(tab) {
+            if (tab._props.name === "metadata" && this.$route.hash) {
+                this.$router.replace({
+                    hash: "",
+                    query: {
+                        ocfl_version: this.$route.query.ocfl_version,
+                    },
+                });
+            }
         },
     },
 };
