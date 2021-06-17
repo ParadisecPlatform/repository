@@ -34,36 +34,41 @@ export default {
                 let essence = this.ocflObject.rocrate["@graph"].filter(
                     (i) => i.essenceId == essenceId
                 )[0];
-
-                const configuration = this.$store.state.configuration;
-                let type, hash;
-                if (configuration.imageFormats.includes(essence.encodingFormat)) {
-                    type = "image";
-                    hash = essence.name;
-                } else if (configuration.audioFormats.includes(essence.encodingFormat)) {
-                    type = "audio";
-                    hash = essence.name.split(".").shift();
-                } else if (configuration.videoFormats.includes(essence.encodingFormat)) {
-                    type = "video";
-                    hash = essence.name.split(".").shift();
-                } else if (
-                    configuration.documentFileExtensions.includes(essence.name.split(".").pop())
-                ) {
-                    type = "document";
-                    hash = essence.name;
-                } else if (
-                    configuration.transcriptionFileExtensions.includes(
-                        essence.name.split(".").pop()
-                    )
-                ) {
-                    type = "xml";
-                    hash = essence.name;
+                if (essence?.essenceId) {
+                    const configuration = this.$store.state.configuration;
+                    let type, hash;
+                    if (configuration.imageFormats.includes(essence.encodingFormat)) {
+                        type = "image";
+                        hash = essence.name;
+                    } else if (configuration.audioFormats.includes(essence.encodingFormat)) {
+                        type = "audio";
+                        hash = essence.name.split(".").shift();
+                    } else if (configuration.videoFormats.includes(essence.encodingFormat)) {
+                        type = "video";
+                        hash = essence.name.split(".").shift();
+                    } else if (
+                        configuration.documentFileExtensions.includes(essence.name.split(".").pop())
+                    ) {
+                        type = "document";
+                        hash = essence.name;
+                    } else if (
+                        configuration.transcriptionFileExtensions.includes(
+                            essence.name.split(".").pop()
+                        )
+                    ) {
+                        type = "xml";
+                        hash = essence.name;
+                    }
+                    this.$router.push({
+                        path: `/view/${collectionId}/${itemId}`,
+                        query: { type },
+                        hash: `#${hash}`,
+                    });
+                } else {
+                    this.$router.push({
+                        path: `/view/${collectionId}/${itemId}`,
+                    });
                 }
-                this.$router.push({
-                    path: `/view/${collectionId}/${itemId}`,
-                    query: { type },
-                    hash: `#${hash}`,
-                });
             }
         },
     },
