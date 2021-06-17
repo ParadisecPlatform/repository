@@ -78,7 +78,7 @@ export default {
                 if (version || this.$route.query.ocfl_version) {
                     params = {
                         identifier,
-                        ocfl_version: version || this.$route.query.ocfl_version,
+                        version: version || this.$route.query.ocfl_version,
                         configuration: this.$store.state.configuration,
                     };
                 } else {
@@ -95,7 +95,7 @@ export default {
                 return;
             }
 
-            console.debug(`Loading: ${identifier}: ${version}`);
+            console.debug(`Loading: ${identifier}: ${this.ocflObject.version}`);
             //  set the version in the URL if not already defined
             if (
                 !this.$route.query.ocfl_version ||
@@ -120,7 +120,7 @@ export default {
                     let renderer = type.map((t) => renderers[domain].filter((r) => r.type === t));
                     renderer = flattenDeep(renderer).pop();
                     viewComponent = renderer.component;
-                    console.log(`Loading ${viewComponent} to render the data`);
+                    console.debug(`Loading ${viewComponent} to render the data`);
                 } catch (error) {
                     console.error(
                         `Something went wrong trying to find a renderer for ${domain} ${type}`
