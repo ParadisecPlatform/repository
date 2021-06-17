@@ -103,6 +103,7 @@ export default {
             )
                 this.$router.replace({
                     path: this.$route.path,
+                    hash: this.$route.hash,
                     query: {
                         ...this.$route.query,
                         ocfl_version: this.ocflObject.version,
