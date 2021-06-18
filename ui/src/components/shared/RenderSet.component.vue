@@ -61,7 +61,7 @@ export default {
         return {
             showAll: false,
             maxItemsToShow: 10,
-            defaultStyle: "m-1 p-2 rounded text-sm",
+            defaultStyle: "m-1 p-2 rounded text-sm border",
         };
     },
     computed: {
