@@ -50,6 +50,14 @@
                     </div>
                 </div>
 
+                <cite-as-component
+                    type="Collection"
+                    :id="collection.collectionIdentifier"
+                    :contributors="collection.contributor"
+                    :title="collection.name"
+                    :doi="collection.doi"
+                />
+
                 <render-collection-information-component :collection="collection" />
 
                 <render-set-component
@@ -78,6 +86,7 @@ import RenderLocationComponent from "./RenderLocation.component.vue";
 import RenderCollectionInformationComponent from "./RenderCollectionInformation.component.vue";
 import LicenseComponent from "./License.component.vue";
 import RenderSetComponent from "../../../shared/RenderSet.component.vue";
+import CiteAsComponent from "./CiteAs.component.vue";
 import { ROCrate } from "ro-crate";
 import { flattenDeep } from "lodash";
 
@@ -87,6 +96,7 @@ export default {
         RenderCollectionInformationComponent,
         LicenseComponent,
         RenderSetComponent,
+        CiteAsComponent,
     },
     props: {
         data: {
@@ -108,6 +118,7 @@ export default {
             const crate = new ROCrate(this.data.rocrate);
             crate.index();
             let collection = crate.getRootDataset();
+            console.log(JSON.stringify(collection, null, 2));
             collection = this.populate(crate, collection, [
                 "contentLocation",
                 "contributor",
@@ -139,6 +150,7 @@ export default {
                 return l;
             });
             collection.hasMember = flattenDeep([collection.hasMember]);
+            collection.doi = collection.identifier.filter((i) => i.name === "doi")[0].value;
 
             // console.log(JSON.stringify(collection, null, 2));
             this.collection = collection;

@@ -15,10 +15,7 @@
                         </div>
                         <div class="flex flex-row space-x-2">
                             <div class="flex flex-col space-y-2 flex-grow">
-                                <div class="text-sm">
-                                    Item Identifier {{ item.collectionIdentifier }} /
-                                    {{ item.itemIdentifier }}
-                                </div>
+                                <div class="text-sm">Item Identifier {{ item.itemIdentifier }}</div>
                                 <div class="text-sm">
                                     Collection
                                     <router-link :to="collectionLink(item.collectionIdentifier)">
@@ -63,6 +60,15 @@
                             </div>
                         </div>
 
+                        <cite-as-component
+                            type="Item"
+                            :id="item.itemIdentifier"
+                            :contributors="item.contributor"
+                            :originatedOn="item.originatedOn"
+                            :title="item.name"
+                            :doi="item.doi"
+                        />
+
                         <render-item-information-component :item="item" />
 
                         <render-set-component
@@ -92,6 +98,7 @@ import RenderContentComponent from "./RenderContent.component.vue";
 import RenderItemInformationComponent from "./RenderItemInformation.component.vue";
 import LicenseComponent from "./License.component.vue";
 import RenderSetComponent from "../../../shared/RenderSet.component.vue";
+import CiteAsComponent from "./CiteAs.component.vue";
 import { ROCrate } from "ro-crate";
 import { flattenDeep } from "lodash";
 
@@ -102,6 +109,7 @@ export default {
         LicenseComponent,
         RenderSetComponent,
         RenderLocationComponent,
+        CiteAsComponent,
     },
     props: {
         data: {
@@ -136,9 +144,9 @@ export default {
             item.collectionIdentifier = item.identifier.filter(
                 (i) => i.name === "collectionIdentifier"
             )[0].value;
-            item.itemIdentifier = item.identifier.filter(
-                (i) => i.name === "itemIdentifier"
-            )[0].value;
+            item.itemIdentifier = `${item.collectionIdentifier}/${
+                item.identifier.filter((i) => i.name === "itemIdentifier")[0].value
+            }`;
             item.contributor = item.contributor.map((contributor) => {
                 contributor.role = flattenDeep([contributor.role]);
                 contributor.role = contributor.role.map((role) => crate.getItem(role["@id"]));
@@ -157,6 +165,7 @@ export default {
                 return l;
             });
             item.hasPart = flattenDeep([item.hasPart]);
+            item.doi = item.identifier.filter((i) => i.name === "doi")[0].value;
 
             // console.log(JSON.stringify(item, null, 2));
             this.item = item;
