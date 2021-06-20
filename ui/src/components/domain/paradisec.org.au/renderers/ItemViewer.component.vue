@@ -101,6 +101,7 @@ import RenderSetComponent from "../../../shared/RenderSet.component.vue";
 import CiteAsComponent from "./CiteAs.component.vue";
 import { ROCrate } from "ro-crate";
 import { flattenDeep } from "lodash";
+import { populate, contributorDisplayName } from "./lib";
 
 export default {
     components: {
@@ -131,7 +132,7 @@ export default {
             const crate = new ROCrate(this.data.rocrate);
             crate.index();
             let item = crate.getRootDataset();
-            item = this.populate(crate, item, [
+            item = populate(crate, item, [
                 "contentLocation",
                 "contributor",
                 "identifier",
@@ -155,9 +156,7 @@ export default {
                 contributor.homeLocation = contributor.homeLocation.map((location) =>
                     crate.getItem(location["@id"])
                 );
-                contributor.displayName = `${contributor.givenName} ${
-                    contributor.familyName
-                } - ${contributor.role.map((r) => r.name).join(", ")}`;
+                contributor.displayName = contributorDisplayName(contributor);
                 return contributor;
             });
             item.contentLocation = item.contentLocation.map((l) => {
@@ -170,14 +169,6 @@ export default {
             // console.log(JSON.stringify(item, null, 2));
             this.item = item;
             this.setActiveTab();
-        },
-        populate(crate, item, properties) {
-            for (let property of properties) {
-                item[property] = flattenDeep([item[property]]).map((linkedItem) =>
-                    crate.getItem(linkedItem["@id"])
-                );
-            }
-            return item;
         },
         collectionLink(collectionIdentifier) {
             return this.$store.state.configuration.domain
