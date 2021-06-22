@@ -28,7 +28,7 @@ services:
             - 80:80
 
     search:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
         hostname: search
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost/search/_search"]
