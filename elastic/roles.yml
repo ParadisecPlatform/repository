@@ -10,4 +10,4 @@ anonymous:
 ingest:
     indices:
         - names: ["*"]
-          privileges: ["create_index", "index", "read", "write"]
+          privileges: ["create_index", "delete_index", "index", "read", "write"]
