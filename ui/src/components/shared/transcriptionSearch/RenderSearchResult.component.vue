@@ -19,30 +19,32 @@ import RenderPlaySegmentControl from "./RenderPlaySegmentControl.component.vue";
 
 export default {
     components: {
-        RenderPlaySegmentControl
+        RenderPlaySegmentControl,
     },
     props: {
         item: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
-            descriptionMaxLength: 200
+            descriptionMaxLength: 200,
         };
     },
     methods: {
         constructIdentifier({ segment }) {
             const domain = this.$store.state.configuration.domain;
-            let identifier = segment.identifier;
+            let identifier = segment.resource;
             if (domain) {
                 identifier = identifier.replace(`/${domain}/`, "/view/");
             }
-            identifier = `${identifier}?transcription=${segment.file}&begin=${segment.timeBegin}&end=${segment.timeEnd}`;
+            identifier = `${identifier}&transcription=${segment.file}&begin=${
+                segment.timeBegin
+            }&end=${segment.timeEnd}#${segment.file.split(".").shift()}`;
             return identifier;
-        }
-    }
+        },
+    },
 };
 </script>
 

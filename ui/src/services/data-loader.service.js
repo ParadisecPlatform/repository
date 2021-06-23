@@ -154,12 +154,7 @@ export class DataLoader {
                         name: item.split("/").pop(),
                         path: `${this.repository}${path}${item}`,
                         hash,
-                        version: parseInt(
-                            item
-                                .split("/")
-                                .shift()
-                                .replace("v", "")
-                        ),
+                        version: item.split("/").shift(),
                     };
                 })
             );

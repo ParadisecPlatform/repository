@@ -120,7 +120,7 @@ export default {
             crate.index();
             let collection = crate.getRootDataset();
             console.log(JSON.stringify(collection, null, 2));
-            collection = this.populate(crate, collection, [
+            collection = populate(crate, collection, [
                 "contentLocation",
                 "contributor",
                 "identifier",

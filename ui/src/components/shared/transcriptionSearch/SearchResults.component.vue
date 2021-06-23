@@ -3,6 +3,7 @@
         <el-pagination
             layout="total, prev, pager, next"
             :total="results.total"
+            :current-page.sync="page"
             @current-change="update"
             v-if="results.total"
         ></el-pagination>
@@ -22,6 +23,7 @@
         <el-pagination
             layout="total, prev, pager, next"
             :total="results.total"
+            :current-page.sync="page"
             @current-change="update"
             v-if="results.total"
         ></el-pagination>
@@ -46,14 +48,17 @@ export default {
     },
     data() {
         return {
-            page: 0,
+            page: 1,
             size: 10,
         };
     },
+    mounted() {
+        this.page = this.$route.query?.page ? parseInt(this.$route.query.page) : 1;
+    },
     methods: {
         update(page) {
-            this.page = page - 1;
-            this.$emit("update-search", { page: this.page });
+            this.page = page;
+            this.$emit("update-search", { page: this.page - 1 });
         },
     },
 };
