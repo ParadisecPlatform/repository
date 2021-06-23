@@ -50,8 +50,8 @@ export default {
     methods: {
         async play() {
             if (this.disablePlay) return;
-            const identifier = this.item.segment.identifier;
-            const ocflVersion = this.item.segment.ocflVersion;
+            const identifier = this.item.resource;
+            const ocflVersion = this.item.ocflVersion;
             const params = {
                 identifier,
                 version: ocflVersion,
@@ -61,11 +61,11 @@ export default {
             try {
                 ocflObject = await dataLoader.load({ ...params });
             } catch (error) {
-                console.error(`Unable to load the object with id ${this.item.segment.identifier}`);
+                console.error(`Unable to load the object with id ${this.item.identifier}`);
                 return;
             }
 
-            const fileBasename = this.item.segment.file.split(".").shift();
+            const fileBasename = this.item.file.split(".").shift();
             let types = determineDataTypes({
                 configuration: this.$store.state.configuration,
                 crate: ocflObject.rocrate,
@@ -99,14 +99,14 @@ export default {
             }
         },
         playSegment() {
-            this.$refs.mediaElement.currentTime = this.item.segment.timeBegin;
+            this.$refs.mediaElement.currentTime = this.item.timeBegin;
             this.$refs.mediaElement.play();
             setTimeout(async () => {
                 this.$refs.mediaElement.pause();
                 this.sources = [];
                 await new Promise((resolve) => setTimeout(resolve, 200));
                 this.disablePlay = false;
-            }, (this.item.segment.timeEnd - this.item.segment.timeBegin) * 1000);
+            }, (this.item.timeEnd - this.item.timeBegin) * 1000);
         },
     },
 };

@@ -43,13 +43,11 @@ export default {
             sessionStorageKey: "transcriptionSearch",
             value: undefined,
             phraseSearch: true,
-            operator: "AND"
+            operator: "AND",
         };
     },
     mounted() {
-        let savedSearch = JSON.parse(
-            sessionStorage.getItem(this.sessionStorageKey)
-        );
+        let savedSearch = JSON.parse(sessionStorage.getItem(this.sessionStorageKey));
         if (savedSearch) {
             this.value = savedSearch.value;
             this.phraseSearch = savedSearch.phraseSearch;
@@ -59,29 +57,17 @@ export default {
     },
     methods: {
         query() {
-            sessionStorage.setItem(
-                this.sessionStorageKey,
-                JSON.stringify({
-                    value: this.value,
-                    phraseSearch: this.phraseSearch,
-                    operator: this.operator
-                })
-            );
             this.$emit("search", {
-                nested: true,
-                path: "segment",
-                field: "text",
                 value: this.value,
-                type: "text",
+                phraseSearch: this.phraseSearch,
                 operator: this.operator,
-                phraseSearch: this.phraseSearch
             });
         },
         clear() {
             this.value = undefined;
             this.query();
-        }
-    }
+        },
+    },
 };
 </script>
 

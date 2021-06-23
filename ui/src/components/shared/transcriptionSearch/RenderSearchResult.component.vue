@@ -2,13 +2,13 @@
     <div class="flex flex-col">
         <div class="flex flex-row my-2">
             <div class="mx-2">
-                <render-play-segment-control :item="item" />
+                <render-play-segment-control :item="item._source" />
             </div>
-            <div class="leading-loose text-base">{{ item.segment.text }}</div>
+            <div class="leading-loose text-base">{{ item._source.text }}</div>
         </div>
         <div class="flex-grow">
-            <router-link :to="{ path: constructIdentifier({ segment: item.segment }) }">
-                <div class="text-xs">{{ constructIdentifier({ segment: item.segment }) }}</div>
+            <router-link :to="{ path: constructIdentifier({ segment: item._source }) }">
+                <div class="text-xs">{{ constructIdentifier({ segment: item._source }) }}</div>
             </router-link>
         </div>
     </div>

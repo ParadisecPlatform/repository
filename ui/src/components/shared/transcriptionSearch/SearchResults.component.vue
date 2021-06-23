@@ -7,9 +7,9 @@
             @current-change="update"
             v-if="results.total"
         ></el-pagination>
-        <ol class="pl-12">
+        <ol class="ml-12">
             <li
-                :value="page * size + idx + 1"
+                :value="(page - 1) * size + idx + 1"
                 class="list-decimal text-xs"
                 v-for="(result, idx) of results.documents"
                 :key="result._id"

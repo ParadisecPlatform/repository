@@ -15,7 +15,8 @@
 import MatcherComponent from "./Matcher.component.vue";
 import SearchResultsComponent from ".//SearchResults.component.vue";
 import { SearchService } from "components/shared/search.service";
-import { isUndefined, isNull, compact } from "lodash";
+import { isUndefined, isNull } from "lodash";
+import { boolQuery, matchQuery, matchPhraseQuery, execute } from "components/shared/search-builder";
 
 export default {
     components: {
@@ -25,48 +26,68 @@ export default {
     data() {
         return {
             page: 0,
-            query: {
-                size: 10,
-                query: {
-                    bool: {
-                        must: [
-                            {
-                                match: {
-                                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "segment",
-                                },
-                            },
-                        ],
-                        should: [],
-                        mustNot: [],
-                    },
-                },
-            },
             results: {},
             must: [],
-            mustNot: [],
         };
     },
     beforeMount() {
         this.page = this.$route.query?.page ? parseInt(this.$route.query.page) - 1 : 0;
-        console.log("this.page at mount", this.page);
         this.ss = new SearchService({ store: this.$store });
         this.search({});
     },
     methods: {
         updateQuery(data) {
-            this.query.query.bool.must = this.query.query.bool.must.slice(0, 1);
-            if (data.value) this.query.query.bool.must.push(this.ss.queryBuilder(data));
+            if (data.value) {
+                if (data.phraseSearch) {
+                    this.must = [
+                        matchPhraseQuery({
+                            field: "text",
+                            value: data.value,
+                        }),
+                    ];
+                } else {
+                    this.must = [
+                        matchQuery({
+                            field: "text",
+                            value: data.value,
+                            operator: data.operator,
+                        }),
+                    ];
+                }
+            } else {
+                this.must = [];
+            }
             this.search({});
         },
 
         async search({ page, size = 10 }) {
-            console.log("set page", page);
             this.page = isUndefined(page) || isNull(page) ? this.page : page;
-            const query = { ...this.query, from: this.page * size, size: size };
-            this.results = { ...(await this.ss.execute({ query })) };
+            let query = this.defaultQuery();
+            query.query.bool.must = [...query.query.bool.must, ...this.must];
+            query = { ...query, from: this.page * size, size: size };
+            this.results = await execute({
+                service: this.$store.state.configuration.service.search,
+                query,
+                index: this.$store.state.configuration.domain,
+            });
             if (this.$route.query?.page != this.page + 1) {
                 this.$router.replace({ query: { page: this.page + 1 } });
             }
+        },
+
+        defaultQuery() {
+            let query = {
+                size: 10,
+                query: {},
+            };
+            query.query = { ...boolQuery() };
+            query.query.bool.must.push(
+                matchQuery({
+                    field: `${this.$store.state.configuration.indexerMetadataNamespace}:type`,
+                    value: "segment",
+                })
+            );
+            return query;
         },
     },
 };
