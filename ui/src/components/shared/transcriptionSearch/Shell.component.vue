@@ -39,8 +39,13 @@ export default {
         updateQuery(data) {
             let query;
             if (data.value) {
-                query = { ...this.$route.query, q: data.value };
+                query = {
+                    ...this.$route.query,
+                    q: data.value,
+                };
                 if (data.phraseSearch) {
+                    delete query.phrase;
+                    delete query.operator;
                     this.must = [
                         matchPhraseQuery({
                             field: "text",
@@ -48,6 +53,11 @@ export default {
                         }),
                     ];
                 } else {
+                    query = {
+                        ...query,
+                        phrase: false,
+                        operator: data.operator,
+                    };
                     this.must = [
                         matchQuery({
                             field: "text",
@@ -60,9 +70,11 @@ export default {
                 this.must = [];
                 query = { ...this.$route.query };
                 delete query.q;
+                delete query.phrase;
+                delete query.operator;
             }
             this.updateRoute({ query });
-            this.search({});
+            this.search({ page: 0 });
         },
 
         async search({ page, size = 10 }) {

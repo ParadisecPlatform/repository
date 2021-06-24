@@ -41,12 +41,23 @@ export default {
     data() {
         return {
             value: this.$route.query?.q ? this.$route.query.q : undefined,
-            phraseSearch: true,
-            operator: "AND",
+            phraseSearch: this.$route.query?.phrase ? this.$route.query.phrase : true,
+            operator: this.$route.query?.operator ? this.$route.query.operator : "AND",
         };
     },
     mounted() {
         this.query();
+    },
+    watch: {
+        "$route.query.value": function() {
+            this.value = this.$route.query?.q ? this.$route.query.q : undefined;
+        },
+        "$route.query.phraseSearch": function() {
+            this.phraseSearch = this.$route.query?.phrase ? this.$route.query.phrase : true;
+        },
+        "$route.query.operator": function() {
+            this.operator = this.$route.query?.operator ? this.$route.query.operator : "AND";
+        },
     },
     methods: {
         query() {

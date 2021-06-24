@@ -53,12 +53,20 @@ export default {
         };
     },
     mounted() {
-        this.page = this.$route.query?.page ? parseInt(this.$route.query.page) : 1;
+        this.setPage();
+    },
+    watch: {
+        "$route.page": function() {
+            this.setPage();
+        },
     },
     methods: {
         update(page) {
             this.page = page;
             this.$emit("update-search", { page: this.page - 1 });
+        },
+        setPage() {
+            this.page = this.$route.query?.page ? parseInt(this.$route.query.page) : 1;
         },
     },
 };
