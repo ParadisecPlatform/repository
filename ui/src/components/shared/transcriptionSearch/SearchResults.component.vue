@@ -48,25 +48,18 @@ export default {
     },
     data() {
         return {
-            page: 1,
+            page: parseInt(this.$route.query?.page) || 1,
             size: 10,
         };
     },
-    mounted() {
-        this.setPage();
-    },
     watch: {
-        "$route.page": function() {
-            this.setPage();
+        "$route.query.page": function() {
+            this.page = parseInt(this.$route.query.page) || 1;
         },
     },
     methods: {
         update(page) {
-            this.page = page;
-            this.$emit("update-search", { page: this.page - 1 });
-        },
-        setPage() {
-            this.page = this.$route.query?.page ? parseInt(this.$route.query.page) : 1;
+            this.$emit("paginate", { page });
         },
     },
 };

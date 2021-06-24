@@ -11,7 +11,7 @@
             <div>
                 <el-switch
                     class="style-component"
-                    v-model="phraseSearch"
+                    v-model="phrase"
                     active-color="#dd6b20"
                     active-text="phrase search"
                     inactive-text="keyword search"
@@ -22,7 +22,7 @@
             <div>
                 <el-switch
                     class="style-component"
-                    v-show="!phraseSearch"
+                    v-show="!phrase"
                     v-model="operator"
                     active-color="#dd6b20"
                     active-text="AND"
@@ -41,35 +41,45 @@ export default {
     data() {
         return {
             value: this.$route.query?.q ? this.$route.query.q : undefined,
-            phraseSearch: this.$route.query?.phrase ? this.$route.query.phrase : true,
+            phrase: this.$route.query?.phrase ? this.$route.query.phrase : true,
             operator: this.$route.query?.operator ? this.$route.query.operator : "AND",
         };
     },
-    mounted() {
-        this.query();
-    },
     watch: {
-        "$route.query.value": function() {
-            this.value = this.$route.query?.q ? this.$route.query.q : undefined;
-        },
-        "$route.query.phraseSearch": function() {
-            this.phraseSearch = this.$route.query?.phrase ? this.$route.query.phrase : true;
-        },
-        "$route.query.operator": function() {
-            this.operator = this.$route.query?.operator ? this.$route.query.operator : "AND";
+        "$route.query": {
+            deep: true,
+            handler: function() {
+                this.value = this.$route.query?.q ? this.$route.query.q : undefined;
+                this.phrase = this.$route.query?.phrase === "false" ? false : true;
+                this.operator = this.$route.query?.operator ? this.$route.query.operator : "AND";
+            },
         },
     },
     methods: {
         query() {
-            this.$emit("search", {
-                value: this.value,
-                phraseSearch: this.phraseSearch,
-                operator: this.operator,
-            });
+            let page = this.$route.q !== this.value ? 1 : this.$route.query.page;
+            if (this.phrase) {
+                this.$emit("update", {
+                    page,
+                    query: this.value,
+                    phrase: true,
+                });
+            } else {
+                this.$emit("update", {
+                    page,
+                    query: this.value,
+                    phrase: false,
+                    operator: this.operator,
+                });
+            }
         },
         clear() {
             this.value = undefined;
-            this.query();
+            this.$emit("update", {
+                page: 1,
+                query: this.value,
+                phrase: true,
+            });
         },
     },
 };
