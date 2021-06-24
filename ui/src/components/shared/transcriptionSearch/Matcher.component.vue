@@ -40,20 +40,13 @@
 export default {
     data() {
         return {
-            sessionStorageKey: "transcriptionSearch",
-            value: undefined,
+            value: this.$route.query?.q ? this.$route.query.q : undefined,
             phraseSearch: true,
             operator: "AND",
         };
     },
     mounted() {
-        let savedSearch = JSON.parse(sessionStorage.getItem(this.sessionStorageKey));
-        if (savedSearch) {
-            this.value = savedSearch.value;
-            this.phraseSearch = savedSearch.phraseSearch;
-            this.operator = savedSearch.operator;
-            this.query();
-        }
+        this.query();
     },
     methods: {
         query() {

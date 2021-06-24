@@ -37,7 +37,9 @@ export default {
     },
     methods: {
         updateQuery(data) {
+            let query;
             if (data.value) {
+                query = { ...this.$route.query, q: data.value };
                 if (data.phraseSearch) {
                     this.must = [
                         matchPhraseQuery({
@@ -56,7 +58,10 @@ export default {
                 }
             } else {
                 this.must = [];
+                query = { ...this.$route.query };
+                delete query.q;
             }
+            this.updateRoute({ query });
             this.search({});
         },
 
@@ -70,9 +75,11 @@ export default {
                 query,
                 index: this.$store.state.configuration.domain,
             });
-            if (this.$route.query?.page != this.page + 1) {
-                this.$router.replace({ query: { page: this.page + 1 } });
-            }
+            query = {
+                ...this.$route.query,
+                page: this.page + 1,
+            };
+            this.updateRoute({ query });
         },
 
         defaultQuery() {
@@ -88,6 +95,10 @@ export default {
                 })
             );
             return query;
+        },
+
+        updateRoute({ query }) {
+            this.$router.replace({ query }).catch((e) => {});
         },
     },
 };
