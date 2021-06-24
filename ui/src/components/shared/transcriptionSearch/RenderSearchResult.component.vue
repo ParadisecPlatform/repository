@@ -39,7 +39,7 @@ export default {
             if (domain) {
                 identifier = identifier.replace(`/${domain}/`, "/view/");
             }
-            identifier = `${identifier}&transcription=${segment.file}&begin=${
+            identifier = `${identifier}?transcription=${segment.file}&begin=${
                 segment.timeBegin
             }&end=${segment.timeEnd}#${segment.file.split(".").shift()}`;
             return identifier;
