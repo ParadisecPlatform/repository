@@ -1,54 +1,82 @@
 <template>
-    <div class="flex flex-row justify-around my-4 text-center">
-        <div class="flex flex-col">
-            <div class="text-sm">Collections</div>
-            <div class="text-3xl text-orange-500">{{ format(stats.collection) }}</div>
-        </div>
-        <div class="flex flex-col">
-            <div class="text-sm">Items</div>
-            <div class="text-3xl text-orange-500">{{ format(stats.item) }}</div>
-        </div>
-        <div class="flex flex-col">
-            <div class="text-sm">Contributors</div>
-            <div class="text-3xl text-orange-500">{{ format(stats.contributors)}}</div>
-        </div>
-        <div class="flex flex-col">
-            <div class="text-sm">Universities</div>
-            <div class="text-3xl text-orange-500">{{ format(stats.publishers) }}</div>
+    <div class="flex flex-col">
+        <div class="flex flex-row justify-around my-4 text-center">
+            <div class="flex flex-col">
+                <div class="text-sm">Collections</div>
+                <div class="text-3xl text-orange-500">{{ format(stats.collection) }}</div>
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm">Items</div>
+                <div class="text-3xl text-orange-500">{{ format(stats.item) }}</div>
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm">Contributors</div>
+                <div class="text-3xl text-orange-500">{{ format(stats.contributors) }}</div>
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm">Universities</div>
+                <div class="text-3xl text-orange-500">{{ format(stats.publishers) }}</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { SearchService } from "components/shared/search.service";
-import VueApexCharts from "vue-apexcharts";
 import numeral from "numeral";
-
+import { simpleAggregation, execute } from "components/shared/search-builder";
 export default {
-    components: {
-        apexChart: VueApexCharts
-    },
     data() {
         return {
-            chartWidth: 200,
             show: false,
-            stats: {}
+            stats: {
+                collections: undefined,
+                items: undefined,
+                contributors: undefined,
+                publishers: undefined,
+            },
+            aggs: [
+                { path: "@type", field: "keyword" },
+                { path: "publisher", field: "name.keyword", size: 10 },
+                { path: "contributor", field: "name.keyword", size: 10 },
+            ],
         };
     },
     async mounted() {
-        try {
-            const search = new SearchService({ store: this.$store });
-            this.stats = await search.getStats();
-            this.show = true;
-        } catch (error) {
-            // do nothing
-        }
+        this.getStats();
     },
     methods: {
         format(number) {
             return numeral(number).format("0,0");
-        }
-    }
+        },
+        async getStats() {
+            let aggregations = this.aggs.map((agg) => {
+                return simpleAggregation({
+                    path: agg.path,
+                    field: agg.field,
+                    size: agg.size,
+                });
+            });
+            aggregations = {
+                size: 0,
+                aggs: aggregations.reduce((acc, agg) => ({ ...acc, ...agg })),
+            };
+            // console.log(JSON.stringify(aggregations, null, 2));
+            let result = await execute({
+                service: this.$store.state.configuration.service.search,
+                index: this.$store.state.configuration.domain,
+                query: aggregations,
+            });
+            // console.log(JSON.stringify(result.aggregations, null, 2));
+            this.stats.collection = result.aggregations["@type"].buckets.filter(
+                (b) => b.key === "RepositoryCollection"
+            )[0].doc_count;
+            this.stats.item = result.aggregations["@type"].buckets.filter(
+                (b) => b.key === "RepositoryObject"
+            )[0].doc_count;
+            this.stats.contributors = result.aggregations.contributor_count.value;
+            this.stats.publishers = result.aggregations.publisher_count.value;
+        },
+    },
 };
 </script>
 
