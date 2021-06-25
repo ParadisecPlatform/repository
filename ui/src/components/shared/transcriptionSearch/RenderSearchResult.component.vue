@@ -6,20 +6,24 @@
             </div>
             <div class="leading-loose text-base">{{ item._source.text }}</div>
         </div>
-        <div class="flex-grow">
+        <div class="flex-grow flex flex-row">
             <router-link :to="{ path: constructIdentifier({ segment: item._source }) }">
                 <div class="text-xs">{{ constructIdentifier({ segment: item._source }) }}</div>
             </router-link>
+            <div class="flex-grow"></div>
+            <copy-to-clipboard-component :data="location" type="copy" />
         </div>
     </div>
 </template>
 
 <script>
 import RenderPlaySegmentControl from "./RenderPlaySegmentControl.component.vue";
+import CopyToClipboardComponent from "components/shared/CopyToClipboard.component.vue";
 
 export default {
     components: {
         RenderPlaySegmentControl,
+        CopyToClipboardComponent,
     },
     props: {
         item: {
@@ -31,6 +35,11 @@ export default {
         return {
             descriptionMaxLength: 200,
         };
+    },
+    computed: {
+        location() {
+            return window.location;
+        },
     },
     methods: {
         constructIdentifier({ segment }) {

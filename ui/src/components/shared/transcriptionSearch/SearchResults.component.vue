@@ -16,7 +16,7 @@
             >
                 <render-search-result-component
                     :item="result"
-                    class="my-4 p-2 border-solid border-b-2 border-gray-400"
+                    class="my-2 p-1 border-solid border-b border-gray-400"
                 />
             </li>
         </ol>
