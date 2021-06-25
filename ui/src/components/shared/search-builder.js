@@ -637,42 +637,6 @@ export class SearchService {
         } else {
             return assembleSimpleAggregation({ field, size });
         }
-
-        function assembleSimpleAggregation({ field, size }) {
-            return {
-                size: 0,
-                aggs: {
-                    [field]: {
-                        terms: { field, size },
-                    },
-                    count: { cardinality: { field } },
-                },
-            };
-        }
-
-        function assembleNestedAggregation({ path, field, size }) {
-            return {
-                size: 0,
-                aggs: {
-                    [path]: {
-                        nested: {
-                            path,
-                        },
-                        aggs: {
-                            values: {
-                                terms: { field: `${path}.${field}`, size },
-                            },
-                            count: {
-                                cardinality: {
-                                    field: `${path}.${field}`,
-                                    // precision_threshold: 30000
-                                },
-                            },
-                        },
-                    },
-                },
-            };
-        }
     }
 
     getItemMetadata({ item }) {
@@ -826,3 +790,46 @@ export function matchPhraseQuery({ path, field, value }) {
         };
     }
 }
+
+export function simpleAggregation({ path, field, size = 10 }) {
+    return {
+        [path]: {
+            terms: { field: `${path}.${field}`, size },
+        },
+        [`${path}_count`]: { cardinality: { field: `${path}.${field}` } },
+    };
+}
+
+export function nestedAggregation({ path, field, size = 10 }) {
+    console.log("setup nested aggregation");
+    return {
+        size: 0,
+        aggs: {
+            [path]: {
+                nested: {
+                    path,
+                },
+                aggs: {
+                    values: {
+                        terms: { field: `${path}.${field}`, size },
+                    },
+                    count: {
+                        cardinality: {
+                            field: `${path}.${field}`,
+                            // precision_threshold: 30000
+                        },
+                    },
+                },
+            },
+        },
+    };
+}
+
+// let agg = {
+//     size: 0,
+//     query: matchQuery({ path: "@type", field: "keyword", value: "Person" }),
+//     aggs: simpleAggregation({
+//         path: "name",
+//         field: "keyword",
+//     }),
+// };
