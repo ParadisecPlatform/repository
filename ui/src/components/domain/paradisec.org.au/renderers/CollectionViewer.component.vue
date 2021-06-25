@@ -119,7 +119,6 @@ export default {
             const crate = new ROCrate(this.data.rocrate);
             crate.index();
             let collection = crate.getRootDataset();
-            console.log(JSON.stringify(collection, null, 2));
             collection = populate(crate, collection, [
                 "contentLocation",
                 "contributor",
@@ -142,6 +141,7 @@ export default {
                     crate.getItem(location["@id"])
                 );
                 contributor.displayName = contributorDisplayName(contributor);
+                return contributor;
             });
             collection.contentLocation = collection.contentLocation.map((l) => {
                 if (l.geo) l.geo = crate.getItem(l.geo["@id"]);
