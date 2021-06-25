@@ -14,23 +14,22 @@
                         @select="handleSelect"
                     >
                         <template slot-scope="{ item }">
-                            <span
+                            <!-- <span
                                 class="style-collection-result"
-                                v-if="item.type === 'collection'"
+                                v-if="item.type.includes('RepositoryCollection')"
                             >
                                 <i class="far fa-clone"></i>
                                 {{ item.name }}
                             </span>
                             <span
                                 class="style-item-result"
-                                v-if="item.type === 'item'"
+                                v-if="item.type.includes('RepositoryObject')"
                             >
                                 <i class="fas fa-chevron-right"></i>
                                 {{ item.name }}
-                            </span>
-                            <span class="text-gray-500"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;{{ item.id }}</span
-                            >
+                            </span> -->
+                            {{ item.name }} ({{ item.type.join(", ") }})
+                            <!-- <span class="text-gray-500">{{ item.resource }}</span> -->
                         </template>
                     </el-autocomplete>
 
@@ -47,7 +46,7 @@
                         <div>
                             <el-switch
                                 class="style-component"
-                                v-model="phraseSearch"
+                                v-model="phrase"
                                 active-color="#dd6b20"
                                 active-text="phrase search"
                                 inactive-text="keyword search"
@@ -58,7 +57,7 @@
                         <div>
                             <el-switch
                                 class="style-component"
-                                v-show="!phraseSearch"
+                                v-show="!phrase"
                                 v-model="operator"
                                 active-color="#dd6b20"
                                 active-text="AND"
@@ -68,11 +67,6 @@
                             >
                             </el-switch>
                         </div>
-                    </div>
-                    <div class="text-xs mt-2 text-black">
-                        Simple wildcard searches are supported. Try adding '*'
-                        to match zero or more characters or '?' to match a
-                        single character.
                     </div>
                 </div>
             </div>
@@ -90,10 +84,10 @@
 
     autofocus: [Boolean] (default: true). Whether or not to autofocus the component on load
 
-    fields: [Array] - the fields to set up and query. Following is an 
+    fields: [Array] - the fields to set up and query. Following is an
         example showing two fields - a simple text field query and a nested
         field.
-    
+
 
         field = [
             {
@@ -115,60 +109,114 @@
         All cases must have a 'label'.
         All cases must have a boolean property 'enabled' which determines whether
             the checkbox is checked.
-        If defining a simple property query then you just need to specify 
+        If defining a simple property query then you just need to specify
             the 'field'
         If defining a nested property query then you also need to specify
             the 'path'.
 */
-import { SearchService } from "./search.service";
+import { matchQuery, matchPhraseQuery, execute } from "./search-builder";
 
 export default {
     props: {
         autofocus: {
             type: Boolean,
-            default: true
+            default: true,
         },
         fields: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
             text: "",
-            phraseSearch: true,
+            phrase: true,
             operator: "AND",
-            fieldDataVerifies: true
+            fieldDataVerifies: true,
         };
     },
     async mounted() {
-        this.ss = new SearchService({ store: this.$store });
-        this.verifyFields();
-        if (this.autofocus) this.$refs.autocomplete.$refs.input.focus();
+        // this.ss = new SearchService({ store: this.$store });
+        // this.verifyFields();
+        // if (this.autofocus) this.$refs.autocomplete.$refs.input.focus();
     },
     methods: {
         verifyFields() {
-            this.fieldDataVerifies = this.ss.verifyFields({
-                fields: this.fields,
-                ensure: [{ type: "text" }]
-            });
+            // this.fieldDataVerifies = this.ss.verifyFields({
+            //     fields: this.fields,
+            //     ensure: [{ type: "text" }]
+            // });
         },
         async querySearch(queryString, cb) {
-            let fields = this.fields.filter(f => f.enabled);
-            fields.forEach(f => (f.value = queryString));
-
             if (queryString.length < 3) return cb([]);
-            const results = await this.ss.textSearch({
-                fields,
-                operator: this.operator,
-                phraseSearch: this.phraseSearch
+
+            let fields = this.fields.filter((f) => f.enabled);
+
+            let query;
+            if (this.phrase) {
+                query = fields.map((f) =>
+                    matchPhraseQuery({ path: f.path, field: f.field, value: queryString })
+                );
+            } else {
+                query = fields.map((f) =>
+                    matchQuery({
+                        path: f.path,
+                        field: f.field,
+                        value: queryString,
+                        operator: this.operator,
+                    })
+                );
+            }
+
+            query = {
+                size: 10,
+                query: {
+                    bool: {
+                        must: {
+                            bool: {
+                                should: [
+                                    matchQuery({
+                                        path: "@type",
+                                        field: "keyword",
+                                        value: "RepositoryObject",
+                                    }),
+                                    matchQuery({
+                                        path: "@type",
+                                        field: "keyword",
+                                        value: "RepositoryCollection",
+                                    }),
+                                ],
+                            },
+                        },
+                        filter: {
+                            bool: {
+                                should: query,
+                            },
+                        },
+                    },
+                },
+            };
+            let results = await execute({
+                service: this.$store.state.configuration.service.search,
+                index: this.$store.state.configuration.domain,
+                query,
             });
-            cb(results.documents);
+            results = results.documents.map((r) => ({
+                name: r._source.name,
+                resource: r._source.resource,
+                description: r._source.description,
+                type: r._source["@type"],
+            }));
+
+            cb(results);
         },
         handleSelect(result) {
-            this.$router.push({ path: result.id });
-        }
-    }
+            let id = this.$store.state.configuration.domain
+                ? result.resource.replace(`/${this.$store.state.configuration.domain}`, "")
+                : result.resource;
+            this.$router.push(`/view${id}`);
+        },
+    },
 };
 </script>
 
@@ -177,6 +225,6 @@ export default {
     @apply text-xs;
 }
 .style-component .el-switch__label.is-active {
-    @apply text-yellow-500;
+    @apply text-yellow-700;
 }
 </style>
