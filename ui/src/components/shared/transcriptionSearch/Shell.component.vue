@@ -103,8 +103,8 @@ export default {
             // console.log("elastic query", JSON.stringify(elasticQuery, null, 2));
             this.results = await execute({
                 service: this.$store.state.configuration.service.search,
-                query: elasticQuery,
                 index: this.$store.state.configuration.domain,
+                query: elasticQuery,
             });
         },
 
