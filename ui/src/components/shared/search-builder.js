@@ -613,22 +613,6 @@ export class SearchService {
 
             return query;
         }
-
-        function assembleWildcardQuery({ path, field, value }) {
-            return path
-                ? {
-                      wildcard: { [`${path}.${field}`]: value },
-                  }
-                : { wildcard: { [field]: value } };
-        }
-
-        function assembleRangeQuery({ field, value }) {
-            return {
-                range: {
-                    [field]: { gte: value[0], lte: value[1] },
-                },
-            };
-        }
     }
 
     aggregationBuilder({ nested, path, field, size }) {
@@ -825,6 +809,31 @@ export function nestedAggregation({ path, field, size = 10 }) {
     };
 }
 
+export function wildcardQuery({ path, field, value }) {
+    if (path) {
+        return {
+            wildcard: { [`${path}.${field}`]: value },
+        };
+    } else {
+        return { wildcard: { [field]: value } };
+    }
+}
+
+export function rangeQuery({ path, field, value }) {
+    if (path) {
+        return {
+            range: {
+                [`${path}.${field}`]: { gte: value[0], lte: value[1] },
+            },
+        };
+    } else {
+        return {
+            range: {
+                [field]: { gte: value[0], lte: value[1] },
+            },
+        };
+    }
+}
 // let agg = {
 //     size: 0,
 //     query: matchQuery({ path: "@type", field: "keyword", value: "Person" }),
