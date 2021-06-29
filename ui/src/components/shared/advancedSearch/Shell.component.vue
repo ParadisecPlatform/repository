@@ -2,11 +2,7 @@
     <div>
         <div v-if="fieldDataVerifies">
             <div class="flex flex-row">
-                <div class="flex flex-col space-y-1 w-1/2">
-                    <!-- <div class="text-xs mt-2 bg-teal-200 text-black p-2 text-center">
-                        wildcard searches are supported. Try adding '*' to match zero or more
-                        characters or '?' to match a single character.
-                    </div> -->
+                <div class="flex flex-col space-y-1 w-1/2 set-max-height overflow-scroll">
                     <matcher-component
                         type="must"
                         label="Must"
@@ -45,7 +41,7 @@
                         <!-- <pre>{{ query }}</pre> -->
                     </div>
                 </div>
-                <div class="pl-16 p-4 px-8 w-1/2">
+                <div class="pl-16 p-4 px-8 w-1/2 set-max-height overflow-scroll">
                     <search-results-component :results="results" @next-page="nextPage" />
                     <!-- <pre>{{ results }}</pre> -->
                 </div>
@@ -172,4 +168,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.set-max-height {
+    height: calc(100vh - 120px);
+}
+</style>
