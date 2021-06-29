@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="pl-16 p-4 px-8 w-1/2">
-                    <search-results-component :results="results" />
+                    <search-results-component :results="results" @next-page="nextPage" />
                     <!-- <pre>{{ results }}</pre> -->
                 </div>
             </div>
@@ -113,11 +113,15 @@ export default {
             //     disableFields: ["enabled"],
             // });
         },
+        nextPage({ page }) {
+            console.log(page);
+            this.search({ page });
+        },
         updateSearch(update) {
             this.clauses[update.type] = update.clauses;
-            this.debouncedSearch();
+            this.debouncedSearch({ page: 0 });
         },
-        async search() {
+        async search({ page }) {
             let query = new Query({});
             let boolQuery = new BoolQuery();
 
@@ -140,7 +144,8 @@ export default {
             }
             query.append(boolQuery);
             this.query = query.toJSON();
-            // console.log(JSON.stringify(query.toJSON(), null, 2));
+            this.query.from = page * 10;
+            // console.log(JSON.stringify(this.query, null, 2));
 
             this.results = await execute({
                 service: this.$store.state.configuration.service.search,

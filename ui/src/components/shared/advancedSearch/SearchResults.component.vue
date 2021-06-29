@@ -53,7 +53,7 @@ export default {
     methods: {
         update(page) {
             this.page = page - 1;
-            this.$emit("update-search", { page: this.page });
+            this.$emit("next-page", { page: this.page });
         },
     },
 };
