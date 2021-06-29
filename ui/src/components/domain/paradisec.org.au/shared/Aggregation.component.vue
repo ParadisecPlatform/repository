@@ -7,7 +7,8 @@
                     <a
                         class="text-sm style-filter-selection"
                         @click.stop.prevent="applyAggregation(agg)"
-                    >{{ agg.key }} ({{ agg.doc_count }})</a>
+                        >{{ agg.key }} ({{ agg.doc_count }})</a
+                    >
                 </li>
             </ol>
         </div>
@@ -16,7 +17,8 @@
             @click.stop.prevent="showMore"
             class="hidden md:block text-xs"
             v-if="displayShowMoreToggle"
-        >show more</a>
+            >show more</a
+        >
 
         <el-drawer
             :title="setDrawerTitle()"
@@ -30,7 +32,8 @@
                         <a
                             class="text-sm style-filter-selection"
                             @click.stop.prevent="applyAggregation(agg)"
-                        >{{ agg.key }} ({{ agg.doc_count }})</a>
+                            >{{ agg.key }} ({{ agg.doc_count }})</a
+                        >
                     </li>
                 </ol>
             </div>
@@ -39,53 +42,43 @@
 </template>
 
 <script>
-import { SearchService } from "components/shared/search.service";
+// import { SearchService } from "components/shared/search.service";
 
 export default {
     props: {
         name: {
             type: String,
-            required: true
+            required: true,
         },
         field: {
             type: String,
             required: true,
-            validator: val =>
-                [
-                    "domain",
-                    "author",
-                    "type",
-                    "publisher",
-                    "contentType",
-                    "hasContent"
-                ].includes(val)
-        }
+            validator: (val) =>
+                ["domain", "author", "type", "publisher", "contentType", "hasContent"].includes(
+                    val
+                ),
+        },
     },
     data() {
         return {
             watchers: {},
             aggregations: [],
             drawerVisible: false,
-            displayShowMoreToggle: false
+            displayShowMoreToggle: false,
         };
     },
     computed: {
         drawerSize: function() {
-            return window.innerWidth <= 1024
-                ? "50%"
-                : `${(400 / window.innerWidth) * 100}%`;
+            return window.innerWidth <= 1024 ? "50%" : `${(400 / window.innerWidth) * 100}%`;
         },
         searchResults: function() {
             return this.$store.state.search.results;
-        }
+        },
     },
     async mounted() {
-        this.search = new SearchService({ store: this.$store });
-        this.loadAggregations({});
-        this.watchers.searchResults = this.$watch(
-            "searchResults",
-            this.loadAggregations
-        );
+        // this.search = new SearchService({ store: this.$store });
+        // this.loadAggregations({});
+        // this.watchers.searchResults = this.$watch("searchResults", this.loadAggregations);
     },
     beforeDestroy() {
         if (this.watchers.searchResults) this.watchers.searchResults();
@@ -96,12 +89,12 @@ export default {
             switch (this.field) {
                 case "domain":
                     aggregations = await this.search.aggregateDomains({
-                        size
+                        size,
                     });
                     break;
                 case "author":
                     aggregations = await this.search.aggregateAuthors({
-                        size
+                        size,
                     });
                     break;
                 case "type":
@@ -109,17 +102,17 @@ export default {
                     break;
                 case "publisher":
                     aggregations = await this.search.aggregatePublishers({
-                        size
+                        size,
                     });
                     break;
                 case "contentType":
                     aggregations = await this.search.aggregateContentTypes({
-                        size
+                        size,
                     });
                     break;
                 case "hasContent":
                     aggregations = await this.search.aggregateHasContent({
-                        size
+                        size,
                     });
                     break;
             }
@@ -132,8 +125,8 @@ export default {
                 filter: {
                     field: this.field,
                     value: value.key,
-                    negate: false
-                }
+                    negate: false,
+                },
             });
         },
         setDrawerTitle() {
@@ -146,8 +139,8 @@ export default {
         handleDrawClose() {
             this.loadAggregations({});
             this.drawerVisible = false;
-        }
-    }
+        },
+    },
 };
 </script>
 

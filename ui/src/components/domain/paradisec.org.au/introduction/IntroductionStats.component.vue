@@ -23,7 +23,13 @@
 
 <script>
 import numeral from "numeral";
-import { simpleAggregation, execute } from "components/shared/search-builder";
+import { Query, BoolQuery } from "@coedl/elastic-query-builder";
+import {
+    termsAggregation,
+    cardinalityAggregation,
+} from "@coedl/elastic-query-builder/aggregations";
+import { execute } from "components/shared/search-builder";
+
 export default {
     data() {
         return {
@@ -50,21 +56,24 @@ export default {
         },
         async getStats() {
             let aggregations = this.aggs.map((agg) => {
-                return simpleAggregation({
-                    path: agg.path,
-                    field: agg.field,
-                    size: agg.size,
-                });
+                return [
+                    termsAggregation({
+                        name: agg.path,
+                        field: `${agg.path}.${agg.field}`,
+                        size: agg.size,
+                    }),
+                    cardinalityAggregation({
+                        name: `${agg.path}_count`,
+                        field: `${agg.path}.${agg.field}`,
+                    }),
+                ];
             });
-            aggregations = {
-                size: 0,
-                aggs: aggregations.reduce((acc, agg) => ({ ...acc, ...agg })),
-            };
-            // console.log(JSON.stringify(aggregations, null, 2));
+            let query = new Query({}).size(0).aggregation(aggregations);
+            // console.log(JSON.stringify(query.toJSON(), null, 2));
             let result = await execute({
                 service: this.$store.state.configuration.service.search,
                 index: this.$store.state.configuration.domain,
-                query: aggregations,
+                query: query.toJSON(),
             });
             // console.log(JSON.stringify(result.aggregations, null, 2));
             this.stats.collection = result.aggregations["@type"].buckets.filter(

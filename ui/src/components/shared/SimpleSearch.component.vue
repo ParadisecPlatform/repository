@@ -114,7 +114,11 @@
         If defining a nested property query then you also need to specify
             the 'path'.
 */
-import { matchQuery, matchPhraseQuery, execute } from "./search-builder";
+// import { matchQuery, matchPhraseQuery, execute } from "./search-builder";
+
+import { Query, BoolQuery } from "@coedl/elastic-query-builder";
+import { matchQuery, matchPhraseQuery } from "@coedl/elastic-query-builder/queries";
+import { execute } from "components/shared/search-builder";
 
 export default {
     props: {
@@ -136,7 +140,6 @@ export default {
         };
     },
     async mounted() {
-        // this.ss = new SearchService({ store: this.$store });
         // this.verifyFields();
         // if (this.autofocus) this.$refs.autocomplete.$refs.input.focus();
     },
@@ -152,15 +155,14 @@ export default {
 
             let fields = this.fields.filter((f) => f.enabled);
 
-            let query;
+            let clauses;
             if (this.phrase) {
-                query = fields.map((f) =>
-                    matchPhraseQuery({ path: f.path, field: f.field, value: queryString })
+                clauses = fields.map((f) =>
+                    matchPhraseQuery({ field: f.field, value: queryString })
                 );
             } else {
-                query = fields.map((f) =>
+                clauses = fields.map((f) =>
                     matchQuery({
-                        path: f.path,
                         field: f.field,
                         value: queryString,
                         operator: this.operator,
@@ -168,38 +170,29 @@ export default {
                 );
             }
 
-            query = {
-                size: 10,
-                query: {
-                    bool: {
-                        must: {
-                            bool: {
-                                should: [
-                                    matchQuery({
-                                        path: "@type",
-                                        field: "keyword",
-                                        value: "RepositoryObject",
-                                    }),
-                                    matchQuery({
-                                        path: "@type",
-                                        field: "keyword",
-                                        value: "RepositoryCollection",
-                                    }),
-                                ],
-                            },
-                        },
-                        filter: {
-                            bool: {
-                                should: query,
-                            },
-                        },
-                    },
-                },
-            };
+            let query = new Query({});
+            query.append(
+                new BoolQuery()
+                    .must(
+                        new BoolQuery().should([
+                            matchQuery({
+                                field: "@type.keyword",
+                                value: "RepositoryObject",
+                            }),
+                            matchQuery({
+                                field: "@type.keyword",
+                                value: "RepositoryCollection",
+                            }),
+                        ])
+                    )
+                    .filter(new BoolQuery().should(clauses))
+            );
+            // console.log(JSON.stringify(query.toJSON(), null, 2));
+
             let results = await execute({
                 service: this.$store.state.configuration.service.search,
                 index: this.$store.state.configuration.domain,
-                query,
+                query: query.toJSON(),
             });
             results = results.documents.map((r) => ({
                 name: r._source.name,

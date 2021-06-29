@@ -25,7 +25,9 @@
             @current-change="update"
             v-if="results.total"
         ></el-pagination>
-        <div v-if="!results.total" class="text-center">There are no results matching those filters.</div>
+        <div v-if="!results.total" class="text-center">
+            There are no results matching those filters.
+        </div>
     </div>
 </template>
 
@@ -34,26 +36,26 @@ import RenderSearchResultComponent from "./RenderSearchResult.component.vue";
 
 export default {
     components: {
-        RenderSearchResultComponent
+        RenderSearchResultComponent,
     },
     props: {
         results: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
             page: 0,
-            size: 10
+            size: 10,
         };
     },
     methods: {
         update(page) {
             this.page = page - 1;
             this.$emit("update-search", { page: this.page });
-        }
-    }
+        },
+    },
 };
 </script>
 

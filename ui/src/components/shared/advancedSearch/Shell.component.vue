@@ -2,34 +2,31 @@
     <div>
         <div v-if="fieldDataVerifies">
             <div class="flex flex-row">
-                <div class="flex flex-col w-1/2">
-                    <div
-                        class="text-xs mt-2 bg-teal-200 text-black p-2 text-center"
-                    >
-                        wildcard searches are supported. Try adding '*' to match
-                        zero or more characters or '?' to match a single
-                        character.
-                    </div>
+                <div class="flex flex-col space-y-1 w-1/2">
+                    <!-- <div class="text-xs mt-2 bg-teal-200 text-black p-2 text-center">
+                        wildcard searches are supported. Try adding '*' to match zero or more
+                        characters or '?' to match a single character.
+                    </div> -->
                     <matcher-component
                         type="must"
                         label="Must"
-                        :fields="fields"
-                        @update="updateQuery"
-                        class="bg-green-300"
+                        :field-definitions="fields"
+                        @update-search="updateSearch"
+                        class="rounded bg-green-300"
                     />
                     <matcher-component
                         type="should"
                         label="Should"
-                        :fields="fields"
-                        @update="updateQuery"
-                        class="bg-orange-300"
+                        :field-definitions="fields"
+                        @update-search="updateSearch"
+                        class="rounded bg-yellow-400"
                     />
                     <matcher-component
                         type="mustNot"
                         label="Must not"
-                        :fields="fields"
-                        @update="updateQuery"
-                        class="bg-red-300"
+                        :field-definitions="fields"
+                        @update-search="updateSearch"
+                        class="rounded bg-red-300"
                     />
                     <div class="flex flex-row mt-1">
                         <div class="flex-grow">
@@ -45,14 +42,12 @@
                         </div>
                     </div>
                     <div class="flex flex-col p-4">
-                        <pre>{{ query.query.bool }}</pre>
+                        <!-- <pre>{{ query }}</pre> -->
                     </div>
                 </div>
                 <div class="pl-16 p-4 px-8 w-1/2">
-                    <search-results-component
-                        :results="results"
-                        @update-search="search"
-                    />
+                    <search-results-component :results="results" />
+                    <!-- <pre>{{ results }}</pre> -->
                 </div>
             </div>
         </div>
@@ -62,10 +57,18 @@
 
 <script>
 import FieldSelectorComponent from "./FieldSelector.component.vue";
-import SearchResultsComponent from "components/shared/SearchResults.component.vue";
+import SearchResultsComponent from "./SearchResults.component.vue";
 import MatcherComponent from "./Matcher.component.vue";
-import { SearchService } from "components/shared/search.service";
-import { uniqBy, compact, debounce } from "lodash";
+import { Query, BoolQuery } from "@coedl/elastic-query-builder";
+import { debounce } from "lodash";
+import {
+    termQuery,
+    matchQuery,
+    matchPhraseQuery,
+    rangeQuery,
+    wildcardQuery,
+} from "@coedl/elastic-query-builder/queries";
+import { execute } from "components/shared/search-builder";
 
 export default {
     components: {
@@ -78,44 +81,82 @@ export default {
             type: Array,
             required: true,
         },
+        must: {
+            type: Array,
+            default: () => [],
+        },
+        should: {
+            type: Array,
+            default: () => [],
+        },
+        mustNot: {
+            type: Array,
+            default: () => [],
+        },
     },
     data() {
         return {
             fieldDataVerifies: true,
-            query: {
-                size: 10,
-                query: {
-                    bool: {
-                        must: [],
-                        should: [],
-                        mustNot: [],
-                    },
-                },
-            },
+            query: {},
+            clauses: {},
             results: {},
-            must: [],
-            mustNot: [],
-            debouncedSearch: debounce(this.search, 300),
+            debouncedSearch: debounce(this.search, 500),
         };
     },
     beforeMount() {
-        this.ss = new SearchService({ store: this.$store });
-        this.verifyFields();
+        // this.verifyFields();
     },
     methods: {
         verifyFields() {
-            this.fieldDataVerifies = this.ss.verifyFields({
-                fields: this.fields,
-                disableFields: ["enabled"],
+            // this.fieldDataVerifies = this.ss.verifyFields({
+            //     fields: this.fields,
+            //     disableFields: ["enabled"],
+            // });
+        },
+        updateSearch(update) {
+            this.clauses[update.type] = update.clauses;
+            this.debouncedSearch();
+        },
+        async search() {
+            let query = new Query({});
+            let boolQuery = new BoolQuery();
+
+            // assemble must clauses
+            if (this.must?.length || this.clauses.must?.length) {
+                boolQuery = boolQuery.must(this.assembleQuery(this.clauses.must));
+                boolQuery = boolQuery.must(this.must);
+            }
+
+            // assemble should clauses
+            if (this.should?.length || this.clauses.should?.length) {
+                boolQuery = boolQuery.should(this.assembleQuery(this.clauses.should));
+                boolQuery = boolQuery.should(this.should);
+            }
+
+            // assemble mustNot clauses
+            if (this.mustNot?.length || this.clauses.mustNot?.length) {
+                boolQuery = boolQuery.mustNot(this.assembleQuery(this.clauses.mustNot));
+                boolQuery = boolQuery.mustNot(this.mustNot);
+            }
+            query.append(boolQuery);
+            this.query = query.toJSON();
+            // console.log(JSON.stringify(query.toJSON(), null, 2));
+
+            this.results = await execute({
+                service: this.$store.state.configuration.service.search,
+                index: this.$store.state.configuration.domain,
+                query: this.query,
             });
         },
-        updateQuery(data) {
-            this.query.query.bool[data.type] = compact(data.filters);
-            this.debouncedSearch({});
-        },
-        async search({ page = 0, size = 10 }) {
-            const query = { ...this.query, from: page * size, size: size };
-            this.results = await this.ss.execute({ query });
+
+        assembleQuery(clauses) {
+            return clauses.map((c) => {
+                switch (c.queryType) {
+                    case "matchQuery":
+                        return matchQuery({ field: c.field, value: c.value });
+                        break;
+                }
+            });
         },
     },
 };

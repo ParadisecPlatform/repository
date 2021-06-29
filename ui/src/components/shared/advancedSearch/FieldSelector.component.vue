@@ -8,48 +8,44 @@
                 class="w-full"
                 size="small"
                 :filterable="true"
+                @change="storeSelection"
             >
                 <el-option
-                    v-for="(field, idx) of fields"
+                    v-for="(field, idx) of fieldDefinitions"
                     :key="idx"
                     :label="field.label"
                     :value="field.field || field.path"
                 ></el-option>
             </el-select>
         </div>
-        <div v-for="(f, idx) of fields" :key="idx" class="flex-grow" v-else>
-            <div
-                class="flex flex-col"
-                v-if="[f.field, f.path].includes(select)"
-            >
-                <div v-if="f.type === 'text'">
-                    <render-text-field-selector-component
-                        :id="id"
-                        :field="f"
-                        @change="emitSelection"
-                    />
-                </div>
-                <div v-if="f.type === 'date'">
-                    <render-date-field-selector-component
-                        :id="id"
-                        :field="f"
-                        @change="emitSelection"
-                    />
-                </div>
-                <div v-if="f.type === 'select'" class="w-full">
-                    <render-aggregation-field-selector-component
-                        :id="id"
-                        :field="f"
-                        @change="emitSelection"
-                    />
-                </div>
-                <div v-if="f.type === 'multi'" class="w-full">
-                    <render-multi-text-field-selector-component
-                        :id="id"
-                        :field="f"
-                        @change="emitSelection"
-                    />
-                </div>
+        <div v-for="(f, idx) of fieldDefinitions" :key="idx" class="flex-grow" v-else>
+            <div class="flex flex-col" v-if="[f.field, f.path].includes(select)">
+                <render-text-field-selector-component
+                    v-if="f.fieldType === 'text'"
+                    :id="id"
+                    :field="f"
+                    @change="emitSelection"
+                />
+                <render-date-field-selector-component
+                    v-if="f.fieldType === 'date'"
+                    :id="id"
+                    :field="f"
+                    @change="emitSelection"
+                />
+                <render-aggregation-field-selector-component
+                    v-if="f.fieldTtype === 'select'"
+                    class="w-full"
+                    :id="id"
+                    :field="f"
+                    @change="emitSelection"
+                />
+                <!-- <render-multi-text-field-selector-component
+                    v-if="f.fieldType === 'multi'"
+                    class="w-full"
+                    :id="id"
+                    :field="f"
+                    @change="emitSelection"
+                /> -->
                 <div class="text-xs w-full pr-2">{{ f.label }}</div>
             </div>
         </div>
@@ -74,7 +70,7 @@ export default {
             type: Number,
             required: true,
         },
-        fields: {
+        fieldDefinitions: {
             type: Array,
             required: true,
         },
@@ -82,21 +78,16 @@ export default {
     data() {
         return {
             select: undefined,
+            selection: {},
         };
     },
-    beforeMount() {
-        const savedSearch = JSON.parse(sessionStorage.getItem(this.id));
-        if (savedSearch) {
-            this.select = savedSearch.select;
-        }
-    },
     methods: {
+        storeSelection(selection) {
+            this.selection = this.fieldDefinitions.filter((f) => f.field === selection)[0];
+        },
         emitSelection(field) {
-            const savedSearch = JSON.parse(sessionStorage.getItem(this.id));
-            savedSearch.select = this.select;
-            sessionStorage.setItem(this.id, JSON.stringify(savedSearch));
-            field = { ...field, id: this.id };
-            this.$emit("selected-field", field);
+            field = { ...field, ...this.selection, id: this.id };
+            this.$emit("update-search", field);
         },
     },
 };

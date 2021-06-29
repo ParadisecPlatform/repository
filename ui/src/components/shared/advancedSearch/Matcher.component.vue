@@ -3,13 +3,13 @@
         <!-- must match -->
         <div class="w-30 pr-2 border-r border-black">{{ label }} match</div>
         <div class="flex flex-col flex-grow p-1">
-            <div v-for="(entry, idx) of clause" :key="entry.id">
+            <div v-for="entry of clauses" :key="entry.id">
                 <div class="flex flex-col">
                     <div class="flex flew-row flex-grow">
                         <div class="flex-grow">
                             <field-selector-component
-                                @selected-field="addFieldData"
-                                :fields="fields"
+                                @update-search="updateSearch"
+                                :field-definitions="fieldDefinitions"
                                 :id="entry.id"
                             />
                         </div>
@@ -23,9 +23,9 @@
                             </el-button>
                         </div>
                     </div>
-                    <div class="text-center">
+                    <!-- <div class="text-center">
                         <span v-if="idx !== clause.length - 1">and</span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="border-t border-black p-1 mt-2">
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { SearchService } from "components/shared/search.service";
+// import { SearchService } from "components/shared/search.service";
 import FieldSelectorComponent from "./FieldSelector.component.vue";
 import { uniqBy, compact } from "lodash";
 
@@ -56,74 +56,30 @@ export default {
             type: String,
             required: true,
         },
-        fields: {
+        fieldDefinitions: {
             type: Array,
             required: true,
         },
     },
     data() {
         return {
-            clause: [],
-            sessionStorageKey: `advancedSearch-${this.type}`,
-            metaQuery: {
-                match: {
-                    [`${this.$store.state.configuration.indexerMetadataNamespace}:type`]: "document",
-                },
-            },
+            clauses: [],
         };
     },
-    beforeMount() {
-        this.ss = new SearchService({ store: this.$store });
-        let savedSearch = sessionStorage.getItem(this.sessionStorageKey);
-        if (savedSearch) {
-            this.clause = JSON.parse(savedSearch);
-        }
-    },
     mounted() {
-        this.emitData();
+        this.updateSearch();
     },
     methods: {
         addClause() {
-            const newClause = { id: Math.random() };
-            this.clause.push(newClause);
-            sessionStorage.setItem(newClause.id, JSON.stringify(newClause));
-            sessionStorage.setItem(
-                this.sessionStorageKey,
-                JSON.stringify(this.clause)
-            );
+            this.clauses.push({ id: Math.random() });
         },
         removeClause({ id }) {
-            this.clause = this.clause.filter((e) => e.id !== id);
-            sessionStorage.removeItem(id);
-            sessionStorage.setItem(
-                this.sessionStorageKey,
-                JSON.stringify(this.clause)
-            );
-            this.emitData();
+            this.clauses = this.clauses.filter((e) => e.id !== id);
+            this.$emit("update-search", { type: this.type, clauses: this.clauses });
         },
-        addFieldData(data) {
-            this.clause = this.clause.map((e) => {
-                if (e.id === data.id)
-                    return {
-                        ...e,
-                        ...data,
-                    };
-                return e;
-            });
-            this.emitData();
-        },
-        emitData() {
-            let filters = this.clause.map((e) => {
-                try {
-                    return this.ss.queryBuilder(e);
-                } catch (error) {
-                    console.log(error);
-                    // ignore errors - usually arises from missing data
-                }
-            });
-            filters = compact(filters);
-            if (this.type === "must") filters.push(this.metaQuery);
-            this.$emit("update", { type: this.type, filters });
+        updateSearch(clause) {
+            this.clauses = this.clauses.map((e) => (e.id === clause.id ? clause : e));
+            this.$emit("update-search", { type: this.type, clauses: this.clauses });
         },
     },
 };

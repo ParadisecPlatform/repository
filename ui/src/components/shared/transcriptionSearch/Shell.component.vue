@@ -10,9 +10,9 @@
 <script>
 import MatcherComponent from "./Matcher.component.vue";
 import SearchResultsComponent from ".//SearchResults.component.vue";
-import { SearchService } from "components/shared/search.service";
-import { isUndefined, isNull } from "lodash";
-import { boolQuery, matchQuery, matchPhraseQuery, execute } from "components/shared/search-builder";
+import { Query, BoolQuery } from "@coedl/elastic-query-builder";
+import { matchQuery, matchPhraseQuery } from "@coedl/elastic-query-builder/queries";
+import { execute } from "components/shared/search-builder";
 
 export default {
     components: {
@@ -28,8 +28,6 @@ export default {
         };
     },
     mounted() {
-        this.ss = new SearchService({ store: this.$store });
-
         // set the page if none defined
         if (!this.$route.query?.page) {
             this.$router.replace({ query: { page: 1 } });
@@ -57,8 +55,6 @@ export default {
             this.update(data);
         },
         update(data) {
-            // console.log("update search results");
-            // console.log("data", JSON.stringify(data, null, 2));
             let query;
             if (data.query && data.phrase) {
                 query = {
@@ -91,36 +87,30 @@ export default {
                 };
                 this.must = [];
             }
-            // console.log("query", JSON.stringify(query, null, 2));
             this.$router.replace({ query }).catch((e) => {});
-            this.search({ query });
+            this.search({ q: query });
         },
-
-        async search({ query }) {
-            let elasticQuery = this.defaultQuery();
-            elasticQuery.query.bool.must = [...elasticQuery.query.bool.must, ...this.must];
-            elasticQuery = { ...elasticQuery, from: (query.page - 1) * this.size, size: this.size };
-            // console.log("elastic query", JSON.stringify(elasticQuery, null, 2));
+        async search({ q }) {
+            let boolQuery = this.defaultQuery();
+            boolQuery = boolQuery.must(this.must);
+            let query = new Query({}).append(boolQuery);
+            query.from = (q.page - 1) * this.size;
+            query.size = this.size;
+            // console.log("elastic query", JSON.stringify(query, null, 2));
             this.results = await execute({
                 service: this.$store.state.configuration.service.search,
                 index: this.$store.state.configuration.domain,
-                query: elasticQuery,
+                query: query.toJSON(),
             });
         },
 
         defaultQuery() {
-            let query = {
-                size: 10,
-                query: {},
-            };
-            query.query = { ...boolQuery() };
-            query.query.bool.must.push(
-                matchQuery({
+            return new BoolQuery().must(
+                matchPhraseQuery({
                     field: `${this.$store.state.configuration.indexerMetadataNamespace}:type`,
                     value: "segment",
                 })
             );
-            return query;
         },
     },
 };

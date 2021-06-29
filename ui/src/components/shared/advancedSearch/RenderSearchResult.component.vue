@@ -1,11 +1,11 @@
 <template>
     <div class="flex flex-col">
-        <div class="text-xl">
-            <span v-if="itemContent.type === 'collection'">
+        <div class="text-lg">
+            <span v-if="itemContent.type.includes('RepositoryCollection')">
                 <i class="fas fa-layer-group"></i>
                 Collection
             </span>
-            <span v-if="itemContent.type === 'item'">
+            <span v-if="itemContent.type.includes('RepositoryObject')">
                 <i class="far fa-folder-open"></i>
                 Item
             </span>
@@ -28,31 +28,29 @@ export default {
     props: {
         item: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
-            descriptionMaxLength: 200
+            descriptionMaxLength: 200,
         };
     },
     computed: {
         itemContent: function() {
             let item = { ...this.item };
             return {
-                identifier: item.id,
-                type: item.type,
-                name: item.name,
+                identifier: item._source.resource,
+                type: item._source["@type"],
+                name: item._source.name,
                 description: {
-                    text: item.description.slice(0, this.descriptionMaxLength),
+                    text: item._source.description.slice(0, this.descriptionMaxLength),
                     truncated:
-                        item.description.length > this.descriptionMaxLength
-                            ? true
-                            : false
+                        item._source.description.length > this.descriptionMaxLength ? true : false,
                 },
-                domain: item.domain
+                domain: item.domain,
             };
-        }
+        },
     },
     mounted() {},
     methods: {
@@ -60,11 +58,11 @@ export default {
             const domain = this.$store.state.configuration.domain;
             if (!identifier) return;
             if (domain) {
-                identifier = identifier.replace(`/${domain}/`, "");
+                identifier = identifier.replace(`/${domain}`, "/view");
             }
             return `${identifier}`;
-        }
-    }
+        },
+    },
 };
 </script>
 

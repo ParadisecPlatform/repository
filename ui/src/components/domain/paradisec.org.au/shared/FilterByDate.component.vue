@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { SearchService } from "components/shared/search.service";
+// import { SearchService } from "components/shared/search.service";
 import { parseISO, isBefore, isAfter, subDays, subMonths } from "date-fns";
 export default {
     data() {
@@ -38,55 +38,40 @@ export default {
                     {
                         text: "Past Week",
                         onClick(picker) {
-                            picker.$emit("pick", [
-                                subDays(new Date(), 7),
-                                new Date()
-                            ]);
-                        }
+                            picker.$emit("pick", [subDays(new Date(), 7), new Date()]);
+                        },
                     },
                     {
                         text: "Past Month",
                         onClick(picker) {
-                            picker.$emit("pick", [
-                                subMonths(new Date(), 1),
-                                new Date()
-                            ]);
-                        }
+                            picker.$emit("pick", [subMonths(new Date(), 1), new Date()]);
+                        },
                     },
                     {
                         text: "Past Quarter",
                         onClick(picker) {
-                            picker.$emit("pick", [
-                                subMonths(new Date(), 3),
-                                new Date()
-                            ]);
-                        }
+                            picker.$emit("pick", [subMonths(new Date(), 3), new Date()]);
+                        },
                     },
                     {
                         text: "Past Year",
                         onClick(picker) {
-                            picker.$emit("pick", [
-                                subMonths(new Date(), 12),
-                                new Date()
-                            ]);
-                        }
-                    }
-                ]
-            }
+                            picker.$emit("pick", [subMonths(new Date(), 12), new Date()]);
+                        },
+                    },
+                ],
+            },
         };
     },
     computed: {
         searchResults: function() {
             return this.$store.state.search.results;
-        }
+        },
     },
     async mounted() {
-        this.search = new SearchService({ store: this.$store });
-        this.loadDates({});
-        this.watchers.searchResults = this.$watch(
-            "searchResults",
-            this.loadDates
-        );
+        // this.search = new SearchService({ store: this.$store });
+        // this.loadDates({});
+        // this.watchers.searchResults = this.$watch("searchResults", this.loadDates);
     },
     beforeDestroy() {
         if (this.watchers.searchResults) this.watchers.searchResults();
@@ -94,7 +79,7 @@ export default {
     methods: {
         async loadDates() {
             this.dateBounds = await this.search.getDateRange({
-                field: this.field
+                field: this.field,
             });
             this.selectedDateRange = [this.dateBounds.min, this.dateBounds.max];
         },
@@ -102,7 +87,7 @@ export default {
             if (!date) {
                 this.selectedDateRange = [
                     parseISO(this.dateBounds.min),
-                    parseISO(this.dateBounds.max)
+                    parseISO(this.dateBounds.max),
                 ];
             } else {
                 if (isBefore(date[0], parseISO(this.dateBounds.min))) {
@@ -116,13 +101,13 @@ export default {
                         field: this.field,
                         dateRange: {
                             min: this.selectedDateRange[0].toISOString(),
-                            max: this.selectedDateRange[1].toISOString()
-                        }
-                    }
+                            max: this.selectedDateRange[1].toISOString(),
+                        },
+                    },
                 });
             }
-        }
-    }
+        },
+    },
 };
 </script>
 

@@ -37,27 +37,27 @@
 </template>
 
 <script>
-import { SearchService } from "components/shared/search.service";
+// import { SearchService } from "components/shared/search.service";
 import { format, parseISO } from "date-fns";
 import SearchFilterTextComponent from "./SearchFilterText.component.vue";
 
 export default {
     components: {
-        SearchFilterTextComponent
+        SearchFilterTextComponent,
     },
     data() {
         return {};
     },
     computed: {
         mustFilters: function() {
-            return this.$store.state.search.filters.filter(f => !f.negate);
+            return this.$store.state.search.filters.filter((f) => !f.negate);
         },
         mustNotFilters: function() {
-            return this.$store.state.search.filters.filter(f => f.negate);
-        }
+            return this.$store.state.search.filters.filter((f) => f.negate);
+        },
     },
     async mounted() {
-        this.search = new SearchService({ store: this.$store });
+        // this.search = new SearchService({ store: this.$store });
     },
     methods: {
         removeFilter(filter) {
@@ -68,8 +68,8 @@ export default {
         },
         clearAllFilters() {
             this.search.clearAllFilters();
-        }
-    }
+        },
+    },
 };
 </script>
 

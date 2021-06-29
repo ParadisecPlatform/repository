@@ -7,14 +7,14 @@
                 :id="id"
                 :field="field"
                 @change="emitSelection"
-                v-if="field.type === 'text'"
+                v-if="field.fieldType === 'text'"
             />
             <render-aggregation-field-selector-component
                 class="flex-grow"
                 :id="id"
                 :field="field"
                 @change="emitSelection"
-                v-if="field.type === 'select'"
+                v-if="field.fieldType === 'select'"
             />
         </div>
     </div>
@@ -27,22 +27,22 @@ import RenderAggregationFieldSelectorComponent from "./RenderAggregationFieldSel
 export default {
     components: {
         RenderTextFieldSelectorComponent,
-        RenderAggregationFieldSelectorComponent
+        RenderAggregationFieldSelectorComponent,
     },
     props: {
         id: {
             type: Number,
-            required: true
+            required: true,
         },
         field: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     data() {
         return {
             fields: [],
-            state: {}
+            state: {},
         };
     },
     beforeMount() {
@@ -51,15 +51,15 @@ export default {
     },
     methods: {
         emitSelection(field) {
-            this.state.fields = this.state.fields.map(f => {
+            this.state.fields = this.state.fields.map((f) => {
                 if (f.label === field.label) {
                     f = { ...field };
                 }
                 return f;
             });
             this.$emit("change", { ...this.state });
-        }
-    }
+        },
+    },
 };
 </script>
 

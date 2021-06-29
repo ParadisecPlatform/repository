@@ -13,10 +13,11 @@
                             @click.stop.prevent="
                                 applyAggregation({
                                     role: agg.role,
-                                    person: person.key
+                                    person: person.key,
                                 })
                             "
-                        >{{ person.key }} ({{ person.doc_count }})</a>
+                            >{{ person.key }} ({{ person.doc_count }})</a
+                        >
                     </div>
                 </li>
             </ol>
@@ -25,7 +26,8 @@
             @click.stop.prevent="showMore"
             class="hidden md:block text-xs"
             v-if="displayShowMoreToggle"
-        >show more</a>
+            >show more</a
+        >
 
         <el-drawer
             title="Filter By Contributor"
@@ -45,10 +47,11 @@
                                 @click.stop.prevent="
                                     applyAggregation({
                                         role: agg.role,
-                                        person: person.key
+                                        person: person.key,
                                     })
                                 "
-                            >{{ person.key }} ({{ person.doc_count }})</a>
+                                >{{ person.key }} ({{ person.doc_count }})</a
+                            >
                         </div>
                     </li>
                 </ol>
@@ -58,7 +61,7 @@
 </template>
 
 <script>
-import { SearchService } from "components/shared/search.service";
+// import { SearchService } from "components/shared/search.service";
 
 export default {
     data() {
@@ -66,26 +69,24 @@ export default {
             watchers: {},
             aggregations: [],
             drawerVisible: false,
-            displayShowMoreToggle: false
+            displayShowMoreToggle: false,
         };
     },
     computed: {
         drawerSize: function() {
-            return window.innerWidth <= 1024
-                ? "50%"
-                : `${(400 / window.innerWidth) * 100}%`;
+            return window.innerWidth <= 1024 ? "50%" : `${(400 / window.innerWidth) * 100}%`;
         },
         searchResults: function() {
             return this.$store.state.search.results;
-        }
+        },
     },
     async mounted() {
-        this.search = new SearchService({ store: this.$store });
-        this.loadAggregations({});
-        this.watchers.searchResults = this.$watch(
-            "searchResults",
-            this.loadAggregations
-        );
+        //     this.search = new SearchService({ store: this.$store });
+        //     this.loadAggregations({});
+        //     this.watchers.searchResults = this.$watch(
+        //         "searchResults",
+        //         this.loadAggregations
+        //     );
     },
     beforeDestroy() {
         if (this.watchers.searchResults) this.watchers.searchResults();
@@ -93,7 +94,7 @@ export default {
     methods: {
         async loadAggregations({ size = 5 }) {
             let aggregations = await this.search.aggregateContributors({
-                size
+                size,
             });
             this.aggregations = [...aggregations];
             this.displayShowMoreToggle = !(aggregations.length < 5);
@@ -105,8 +106,8 @@ export default {
                     field: "contributor",
                     role,
                     value: person,
-                    negate: false
-                }
+                    negate: false,
+                },
             });
         },
         setDrawerTitle() {
@@ -119,8 +120,8 @@ export default {
         handleDrawClose() {
             this.loadAggregations({});
             this.drawerVisible = false;
-        }
-    }
+        },
+    },
 };
 </script>
 

@@ -14,7 +14,6 @@
 import { mixin } from "./FieldMixins";
 
 export default {
-    mixins: [mixin],
     data() {
         return { value: undefined };
     },
@@ -23,15 +22,13 @@ export default {
     },
     methods: {
         emitSelection() {
-            this.saveState();
             this.$emit("change", {
                 ...this.field,
-                value: this.value
+                value: this.value,
             });
-        }
-    }
+        },
+    },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
