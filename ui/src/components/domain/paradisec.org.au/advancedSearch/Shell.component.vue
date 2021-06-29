@@ -25,10 +25,11 @@ export default {
             ],
             fields: [
                 {
-                    label: "Name",
+                    label: "Title",
                     field: "name",
                     queryType: "matchQuery",
                     fieldType: "text",
+                    aggregationField: "name.keyword",
                 },
                 {
                     label: "Description",
@@ -42,108 +43,74 @@ export default {
                     queryType: "matchQuery",
                     fieldType: "text",
                 },
-                // {
-                //     label: "Type",
-                //     field: "additionalType",
-                //     type: "select",
-                // },
+                {
+                    label: "Date Created",
+                    field: "dateCreated",
+                    queryType: "rangeQuery",
+                    fieldType: "date",
+                },
+                {
+                    label: "Date Modified",
+                    field: "dateModified",
+                    queryType: "rangeQuery",
+                    fieldType: "date",
+                },
+                {
+                    label: "University",
+                    field: "publisher.name",
+                    queryType: "matchQuery",
+                    fieldType: "text",
+                },
                 // {
                 //     label: "Private",
-                //     field: "private.keyword",
-                //     type: "select",
+                //     field: "private",
+                //     queryType: "matchQuery",
+                //     fieldType: "text",
+                //     aggregationField: "private",
                 // },
-                // {
-                //     label: "Contributor",
-                //     path: "contributor",
-                //     type: "multi",
-                //     nested: true,
-                //     fields: [
-                //         {
-                //             nested: true,
-                //             label: "name",
-                //             path: "contributor",
-                //             field: "name",
-                //             type: "text",
-                //         },
-                //         {
-                //             nested: true,
-                //             label: "role",
-                //             path: "contributor",
-                //             field: "role.raw",
-                //             type: "select",
-                //         },
-                //     ],
-                // },
-                // {
-                //     nested: true,
-                //     label: "License",
-                //     path: "license",
-                //     type: "multi",
-                //     fields: [
-                //         {
-                //             nested: true,
-                //             label: "name",
-                //             path: "license",
-                //             field: "name.raw",
-                //             type: "select",
-                //         },
-                //     ],
-                // },
-                // {
-                //     label: "Date Created",
-                //     field: "dateCreated",
-                //     type: "date",
-                // },
-                // {
-                //     label: "Date Modified",
-                //     field: "dateModified",
-                //     type: "date",
-                // },
-                // {
-                //     label: "Comments",
-                //     field: "comments",
-                //     type: "text",
-                // },
-                // {
-                //     label: "Ingest Notes",
-                //     field: "ingestNotes",
-                //     type: "text",
-                // },
-                // {
-                //     label: "Language As Given",
-                //     field: "languageAsGiven",
-                //     type: "text",
-                // },
-                // {
-                //     label: "Originated On",
-                //     field: "originatedOn",
-                //     type: "date",
-                // },
-                // {
-                //     label: "Originated On Narrative",
-                //     field: "originatedOnNarrative",
-                //     type: "text",
-                // },
-                // {
-                //     label: "Orthographic Notes",
-                //     field: "orthographicNotes",
-                //     type: "text",
-                // },
-                // {
-                //     label: "University",
-                //     path: "publisher",
-                //     type: "multi",
-                //     nested: true,
-                //     fields: [
-                //         {
-                //             nested: true,
-                //             label: "name",
-                //             path: "publisher",
-                //             field: "name.raw",
-                //             type: "select",
-                //         },
-                //     ],
-                // },
+                {
+                    label: "License",
+                    field: "license.name",
+                    queryType: "matchQuery",
+                    fieldType: "text",
+                },
+                {
+                    label: "Comments",
+                    field: "comments",
+                    queryType: "matchQuery",
+                    fieldType: "text",
+                },
+                {
+                    label: "Ingest Notes",
+                    field: "ingestNotes",
+                    queryType: "matchQuery",
+                    fieldType: "text",
+                },
+                {
+                    label: "Language As Given",
+                    field: "languageAsGiven",
+                    queryType: "matchQuery",
+                    fieldType: "text",
+                },
+                {
+                    label: "Originated On",
+                    field: "originatedOn",
+                    queryType: "rangeQuery",
+                    fieldType: "date",
+                },
+                {
+                    label: "Originated On Narrative",
+                    field: "originatedOnNarrative",
+                    queryType: "matchQuery",
+                    fieldType: "text",
+                },
+                {
+                    label: "Orthographic Notes",
+                    field: "orthographicNotes",
+                    queryType: "matchQuery",
+                    fieldType: "text",
+                },
+
                 // {
                 //     label: "Data Format",
                 //     path: "hasPart",

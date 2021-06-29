@@ -151,10 +151,15 @@ export default {
 
         assembleQuery(clauses) {
             return clauses.map((c) => {
+                // console.log(JSON.stringify(c, null, 2));
                 switch (c.queryType) {
                     case "matchQuery":
                         return matchQuery({ field: c.field, value: c.value });
                         break;
+                    case "rangeQuery": {
+                        return rangeQuery({ field: c.field, value: c.value });
+                        break;
+                    }
                 }
             });
         },

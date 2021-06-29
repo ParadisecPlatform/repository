@@ -14,6 +14,7 @@
 import { mixin } from "./FieldMixins";
 
 export default {
+    mixins: [mixin],
     data() {
         return { value: undefined };
     },

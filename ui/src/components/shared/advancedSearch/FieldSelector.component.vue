@@ -20,7 +20,7 @@
         </div>
         <div v-for="(f, idx) of fieldDefinitions" :key="idx" class="flex-grow" v-else>
             <div class="flex flex-col" v-if="[f.field, f.path].includes(select)">
-                <render-text-field-selector-component
+                <render-text-lookup-field-selector-component
                     v-if="f.fieldType === 'text'"
                     :id="id"
                     :field="f"
@@ -32,13 +32,13 @@
                     :field="f"
                     @change="emitSelection"
                 />
-                <render-aggregation-field-selector-component
+                <!-- <render-aggregation-field-selector-component
                     v-if="f.fieldTtype === 'select'"
                     class="w-full"
                     :id="id"
                     :field="f"
                     @change="emitSelection"
-                />
+                /> -->
                 <!-- <render-multi-text-field-selector-component
                     v-if="f.fieldType === 'multi'"
                     class="w-full"
@@ -53,17 +53,19 @@
 </template>
 
 <script>
-import RenderTextFieldSelectorComponent from "./RenderTextFieldSelector.component.vue";
+// import RenderTextFieldSelectorComponent from "./RenderTextFieldSelector.component.vue";
+import RenderTextLookupFieldSelectorComponent from "./RenderTextLookupFieldSelector.component.vue";
 import RenderDateFieldSelectorComponent from "./RenderDateFieldSelector.component.vue";
-import RenderAggregationFieldSelectorComponent from "./RenderAggregationFieldSelector.component.vue";
-import RenderMultiTextFieldSelectorComponent from "./RenderMultiTextFieldSelector.component.vue";
+// import RenderAggregationFieldSelectorComponent from "./RenderAggregationFieldSelector.component.vue";
+// import RenderMultiTextFieldSelectorComponent from "./RenderMultiTextFieldSelector.component.vue";
 
 export default {
     components: {
-        RenderTextFieldSelectorComponent,
+        // RenderTextFieldSelectorComponent,
+        RenderTextLookupFieldSelectorComponent,
         RenderDateFieldSelectorComponent,
-        RenderAggregationFieldSelectorComponent,
-        RenderMultiTextFieldSelectorComponent,
+        // RenderAggregationFieldSelectorComponent,
+        // RenderMultiTextFieldSelectorComponent,
     },
     props: {
         id: {

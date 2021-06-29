@@ -24,15 +24,13 @@ export default {
     mounted() {},
     methods: {
         emitSelection() {
-            this.saveState();
             this.$emit("change", {
                 ...this.field,
-                value: this.value
+                value: this.value,
             });
-        }
-    }
+        },
+    },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

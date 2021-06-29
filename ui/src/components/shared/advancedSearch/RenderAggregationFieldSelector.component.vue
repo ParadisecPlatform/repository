@@ -31,30 +31,32 @@ export default {
             value: undefined,
             aggregationSize: 100,
             aggregations: [],
-            toBoolean
+            toBoolean,
         };
     },
     mounted() {
+        console.log("here");
+        console.log(JSON.stringify(this.field, null, 2));
         this.loadAggregations();
     },
     methods: {
         async loadAggregations(selection) {
-            const data = {
-                ...this.field,
-                size: this.aggregationSize
-            };
-            let aggregations = await this.ss.aggregateOverField(data);
-            this.aggregations = aggregations[this.field.field];
+            // const data = {
+            //     ...this.field,
+            //     size: this.aggregationSize
+            // };
+            // let aggregations = await this.ss.aggregateOverField(data);
+            // this.aggregations = aggregations[this.field.field];
         },
         emitSelection() {
-            this.saveState();
+            // this.saveState();
             this.$emit("change", {
                 ...this.field,
                 value: this.value,
-                type: "text"
+                type: "text",
             });
-        }
-    }
+        },
+    },
 };
 </script>
 
