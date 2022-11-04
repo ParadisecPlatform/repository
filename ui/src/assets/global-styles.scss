@@ -1,6 +1,3 @@
-body {
-    background-color: $background-color;
-}
 
 a:link,
 a:visited {
@@ -10,9 +7,4 @@ a:visited {
 a:hover,
 a:active {
     @apply underline;
-}
-
-.el-card {
-    border: unset;
-    border-radius: 0;
 }

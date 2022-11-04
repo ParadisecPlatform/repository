@@ -1,18 +1,15 @@
 <template>
-    <div>
-        <router-view></router-view>
+    <div class="flex flex-col">
+        <navbar-component class="bg-sky-100" />
+        <router-view class="mt-2" />
     </div>
 </template>
 
-<script>
-import { DataLoader } from "src/services/data-loader.service";
+<script setup>
+import NavbarComponent from "./Navbar.component.vue";
+import { useRoute, useRouter } from "vue-router";
 
-export default {
-    components: {},
-    data() {
-        return {
-            watchers: {}
-        };
-    }
-};
+const $route = useRoute();
+const $router = useRouter();
+if ($route.path === "/") $router.replace("/dashboard");
 </script>

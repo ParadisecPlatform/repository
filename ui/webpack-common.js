@@ -3,57 +3,39 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const { VueLoaderPlugin } = require("vue-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const ImageminPlugin = require("imagemin-webpack-plugin").default;
 
 module.exports = {
     target: "web",
-    entry: ["./src/vendor.js", "./src/index.js"],
+    entry: ["./src/main.js"],
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "[contenthash].js",
-        publicPath: "/",
+        publicPath: "http://localhost:9001/",
     },
     plugins: [
-        new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns: ["*.js", "*.css", "*.txt"],
-        }),
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: "OCFL Repository Viewer",
-            template: "./src/index.html",
+            title: "Modern PARADISEC",
+            template: "./public/index.html",
         }),
         new VueLoaderPlugin(),
         new MiniCssExtractPlugin({ filename: "[contenthash].css" }),
-        new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: "./src/configuration.json",
-                    to: "configuration.json",
-                },
-                {
-                    from: "./jsonldcontext.jsonld",
-                    to: "jsonldcontext.jsonld",
-                },
-                {
-                    from: "src/assets/images",
-                    to: "assets/images",
-                },
-            ],
-        }),
-        new ImageminPlugin({
-            test: /\.(jpe?g|png|gif|svg)$/i,
-            pngquant: {
-                quality: "95-100",
-            },
-        }),
     ],
     module: {
         rules: [
             {
                 test: /\.vue$/,
                 loader: "vue-loader",
+            },
+            {
+                test: /\.mjs$/,
+                resolve: {
+                    fullySpecified: false,
+                },
+                include: /node_modules/,
+                type: "javascript/auto",
             },
             {
                 test: /\.js$/,
@@ -74,7 +56,7 @@ module.exports = {
                 ],
             },
             {
-                test: /\.scss$/,
+                test: /\.s[ac]ss$/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
@@ -83,20 +65,17 @@ module.exports = {
                         },
                     },
                     "css-loader",
+                    "sass-loader",
                     "postcss-loader",
                 ],
             },
             {
-                test: /\.(woff|woff2|ttf|eot|svg|png|jp(e*)g|gif|mp4)?$/,
-                loader: "file-loader",
-                options: {
-                    name: "assets/[contenthash].[ext]",
-                    esModule: false,
-                },
+                test: /\.(svg|png|jp(e*)g|gif|mp4)?$/,
+                type: "asset/resource",
             },
             {
-                test: /\.worker\.js$/,
-                use: { loader: "worker-loader" },
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                type: "asset/resource",
             },
         ],
     },

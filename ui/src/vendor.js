@@ -1,7 +1,6 @@
 "use strict";
 
 import "assets/tailwind.css";
-import "iv-viewer/dist/iv-viewer.css";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
 delete Icon.Default.prototype._getIconUrl;
@@ -11,7 +10,6 @@ Icon.Default.mergeOptions({
     shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
-import ImageViewer from "iv-viewer";
 import "element-ui/lib/index.js";
 import fontawesome from "@fortawesome/fontawesome-free/js/all";
 import { config } from "@fortawesome/fontawesome-svg-core";

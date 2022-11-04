@@ -1,142 +1,127 @@
 <template>
-    <div>
-        <div v-if="error">The item is currently unavailable.</div>
-        <div v-if="componentFile" class="flex flex-col">
-            <data-display-component :data="ocflObject" />
-            <div class="flex flex-row text-sm">
-                <version-selection-component
-                    :selected-version="ocflObject.version"
-                    :versions="[...ocflObject.versions].reverse()"
-                    v-on:load-version="update"
+    <div class="px-2">
+        <el-tabs
+            type="border-card"
+            tab-position="top"
+            v-model="data.activeTab"
+            @tab-click="handleTabChange"
+        >
+            <el-tab-pane label="Metadata" name="metadata">
+                <div v-if="data.activeTab === 'metadata'" v-loading="data.loading">
+                    <describo-crate-builder
+                        v-if="!data.error && !data.loading"
+                        :crate="data.crate"
+                        :profile="data.profile"
+                        :readonly="true"
+                        @ready="ready"
+                    />
+                    <div v-if="data.error" class="bg-red-200 text-center p-2 font-light">
+                        The metadata for that item is not able to be loaded.
+                    </div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="Content" name="content" v-if="data.type === 'item'">
+                <render-content-component
+                    :crate="data.crate"
+                    v-if="data.activeTab === 'content' && !data.loading"
                 />
-                <div class="flex-grow"></div>
-            </div>
-            <div class="border-b border-black pb-2"></div>
-            <component v-bind:is="componentFile" :data="ocflObject"></component>
-        </div>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 
-<script>
-import { DataLoader } from "src/services/data-loader.service";
-import { flattenDeep } from "lodash";
-const dataLoader = new DataLoader();
+<script setup>
+import RenderContentComponent from "./RenderContent.component.vue";
+import { useRoute, useRouter } from "vue-router";
+import { inject, onMounted, onBeforeMount, reactive, nextTick } from "vue";
+const $route = useRoute();
+const $router = useRouter();
+const $http = inject("$http");
 
-import VersionSelectionComponent from "./VersionSelection.component.vue";
-import DataDisplayComponent from "../shared/DataDisplay.component.vue";
-
-export default {
-    components: {
-        VersionSelectionComponent,
-        DataDisplayComponent,
-    },
-    data() {
-        return {
-            itemIdentifier: null,
-            ocflObject: {},
-            viewComponent: undefined,
-            error: false,
-            errorMsg: undefined,
-        };
-    },
-    async mounted() {
-        this.loadViewer({});
-    },
-    watch: {
-        "$route.params": function(n, o) {
-            if (n.pathMatch !== o.pathMatch) this.loadViewer({});
+let data = reactive({
+    activeTab: "metadata",
+    loading: false,
+    error: false,
+    type: undefined,
+    crate: {},
+    profile: {
+        layouts: {
+            Dataset: [
+                {
+                    name: "About",
+                    description: "Key information about this item",
+                    inputs: ["identifier", "description", "contentLanguage", "subjectLanguage"],
+                },
+                {
+                    name: "Files",
+                    description: "Files forming part of this item",
+                    inputs: ["hasPart"],
+                },
+            ],
         },
     },
-    computed: {
-        componentFile: function() {
-            if (!this.viewComponent) return;
-            return () => import(`src/components/domain/${this.viewComponent}`);
-        },
-        configuration: function() {
-            return this.$store.state.configuration;
-        },
-    },
-    methods: {
-        async loadViewer({ version }) {
-            this.viewComponent = undefined;
+    // profile: {},
+});
 
-            let identifier = this.$route.path;
-            if (identifier.substring(identifier.length, identifier.length - 1) === "/") {
-                identifier = identifier.substring(0, identifier.length - 1);
-            }
-            identifier = identifier.split(/\/view/)[1];
+onBeforeMount(() => {
+    const { contentType } = $route.params;
+    if (contentType) data.activeTab = "content";
+    updateRoute({ tab: data.activeTab });
+});
+onMounted(() => {
+    init();
+});
+async function init() {
+    let response;
 
-            // determine what to load based on the URL path
-            if (this.configuration.domain) {
-                identifier = `/${this.configuration.domain}${identifier}`;
-            }
+    data.loading = true;
+    data.error = false;
+    const { collectionId, itemId } = $route.params;
+    if (collectionId && !itemId) {
+        response = await $http.get({ route: `/collections/${collectionId}/metadata` });
+        data.type = "collection";
+    } else if (collectionId && itemId) {
+        response = await $http.get({
+            route: `/collections/${collectionId}/items/${itemId}/metadata`,
+        });
+        data.type = "item";
+    } else if (itemId && !collectionId) {
+        response = await $http.get({ route: `/items/${itemId}/metadata` });
+        data.type = "item";
+    }
+    if (response.status === 200) {
+        let { crate } = await response.json();
+        data.crate = { ...crate };
+        data.loading = false;
+    } else {
+        data.loading = false;
+        data.error = true;
+    }
+}
 
-            // try to load the object directly from OCFL
-            //  not yet implemented: call to API if config says there is one
-            try {
-                let params;
-                if (version || this.$route.query.ocfl_version) {
-                    params = {
-                        identifier,
-                        version: version || this.$route.query.ocfl_version,
-                        configuration: this.$store.state.configuration,
-                    };
-                } else {
-                    params = {
-                        identifier,
-                        configuration: this.$store.state.configuration,
-                    };
-                }
-                this.ocflObject = await dataLoader.load({ ...params });
-            } catch (error) {
-                console.log(error);
-                this.error = true;
-                this.errorMsg = error;
-                return;
-            }
+async function handleTabChange(tab) {
+    data.loading = true;
+    updateRoute({ tab: tab.props.name });
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    data.loading = false;
+}
 
-            console.debug(`Loading: ${identifier}: ${this.ocflObject.version}`);
-            //  set the version in the URL if not already defined
-            if (
-                !this.$route.query.ocfl_version ||
-                this.$route.query.ocfl_version !== this.ocflObject.version
-            )
-                this.$router.replace({
-                    path: this.$route.path,
-                    hash: this.$route.hash,
-                    query: {
-                        ...this.$route.query,
-                        ocfl_version: this.ocflObject.version,
-                    },
-                });
+function updateRoute({ tab }) {
+    const { collectionId, itemId } = $route.params;
+    let path;
+    if (tab === "metadata") {
+        if (collectionId && !itemId) {
+            path = `/collections/${collectionId}`;
+        } else if (collectionId && itemId) {
+            path = `/collections/${collectionId}/items/${itemId}`;
+        } else if (itemId && !collectionId) {
+            path = `/items/${itemId}`;
+        }
+        $router.push({ path });
+    }
+}
 
-            // determine which renderer to load by
-            //   - iterate over the renderers in the configuration using the last (most specific) that matches
-            let viewComponent;
-            const renderers = this.configuration.renderers;
-            const { domain, type } = this.ocflObject;
-
-            if (domain && renderers[domain]) {
-                try {
-                    let renderer = type.map((t) => renderers[domain].filter((r) => r.type === t));
-                    renderer = flattenDeep(renderer).pop();
-                    viewComponent = renderer.component;
-                    console.debug(`Loading ${viewComponent} to render the data`);
-                } catch (error) {
-                    console.error(
-                        `Something went wrong trying to find a renderer for ${domain} ${type}`
-                    );
-                }
-            } else {
-                viewComponent = "./GenericViewer.component.vue";
-            }
-            this.viewComponent = viewComponent;
-        },
-        update(v) {
-            this.loadViewer({ version: v.version });
-        },
-    },
-};
+function ready() {
+    data.loading = false;
+}
 </script>
-
-<style lang="scss" scope></style>

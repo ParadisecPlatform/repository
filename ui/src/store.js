@@ -1,13 +1,38 @@
 "use strict";
 
-import Vue from "vue";
-import Vuex from "vuex";
-Vue.use(Vuex);
-import { DataLoader } from "src/services/data-loader.service";
+import { createStore } from "vuex";
+import { cloneDeep } from "lodash";
 
-const configuration = {
-    strict: process.env.NODE_ENV !== "production",
-    state: {
+const mutations = {
+    saveConfiguration(state, configuration) {
+        state.configuration = { ...configuration };
+    },
+    updateFiltersAndQuery(state, payload) {
+        state.search.filters = [...payload.filters];
+        state.search.query = { ...payload.query };
+    },
+    updateQueryResults(state, payload) {
+        state.search.results = { ...payload };
+    },
+};
+
+const actions = {};
+const getters = {
+    getConfiguration(state) {
+        return cloneDeep(state.configuration);
+    },
+};
+
+export const store = new createStore({
+    state: resetState(),
+    mutations,
+    getters,
+    actions,
+    modules: {},
+});
+
+function resetState() {
+    return {
         configuration: {},
         status: {
             api: undefined,
@@ -19,45 +44,5 @@ const configuration = {
             query: {},
             results: [],
         },
-    },
-    mutations: {
-        saveApplicationConfiguration(state, configuration) {
-            state.configuration = { ...configuration };
-        },
-        saveStatus(state, status) {
-            state.status = { ...status };
-        },
-        updateFiltersAndQuery(state, payload) {
-            state.search.filters = [...payload.filters];
-            state.search.query = { ...payload.query };
-        },
-        updateQueryResults(state, payload) {
-            state.search.results = { ...payload };
-        },
-    },
-    actions: {
-        async initialise({ commit }) {
-            const dataLoader = new DataLoader();
-            const configuration = await dataLoader.getConfiguration();
-            commit("saveApplicationConfiguration", configuration);
-            let status = {
-                api: undefined,
-                search: undefined,
-                ocfl: undefined,
-            };
-            if (configuration.service.api) {
-                status.api = await dataLoader.verifyApiServiceAvailable({
-                    service: configuration.service.api,
-                });
-            } else {
-                status.ocfl = await dataLoader.verifyRepositoryMounted();
-                status.search = await dataLoader.verifySearchServiceAvailable({
-                    service: configuration.service.search,
-                });
-            }
-            commit("saveStatus", status);
-        },
-    },
-    getters: {},
-};
-export const store = new Vuex.Store(configuration);
+    };
+}

@@ -1,12 +1,65 @@
 {
-    "service": {
-        "search": "/search",
-        "api": null
+    "domain": "{{your domain}}",
+    "links": "default",
+    "deployment": "default",
+    "ui": {
+        "introduction": {
+            "name": "{{project name }}",
+            "projectUrl": "{{project url}}",
+            "logo": "{{ url to project logo }}",
+            "welcome": "{{ welcome message on dashboad }}",
+            "about": ["{{ about text }}", "{{ about text }}"]
+        },
+        "conditionsOfAccess": [
+            {
+                "text": "Some sentence outlining a condition"
+            },
+            {
+                "text": "Another condition"
+            },
+            {
+                "section": "Purpose",
+                "text": "A condition framed by a section identifier"
+            }
+        ],
+        "service": {
+            "search": "/search",
+            "api": null
+        },
+        "mediaplayer": {
+            "enable": {
+                "images": true,
+                "audio": true,
+                "video": true,
+                "documents": false,
+                "xmlFiles": false
+            }
+        },
+        "imageFormats": ["image/jpg", "image/jpeg"],
+        "audioFormats": ["audio/mpeg"],
+        "videoFormats": ["video/quicktime", "video/mp4"],
+        "documentFileExtensions": [
+            "txt",
+            "rtf",
+            "pdf",
+            "doc",
+            "docx",
+            "xls",
+            "xlsx",
+            "ppt",
+            "pptx"
+        ],
+        "transcriptionFileExtensions": ["eaf", "trs", "ixt", "flextext"],
+        "indexerMetadataNamespace": "indexer:meta"
     },
-    "imageFormats": ["image/jpg", "image/jpeg"],
-    "audioFormats": ["audio/mpeg"],
-    "videoFormats": ["video/quicktime", "video/mp4"],
-    "documentFileExtensions": ["txt", "rtf", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx"],
-    "transcriptionFileExtensions": ["eaf", "trs", "ixt", "flextext"],
-    "indexerMetadataNamespace": "ocfl-indexer:meta"
+    "api": {
+        "s3": {
+            "bucket": "{{your bucket}}",
+            "forcePathStyle": true,
+            "endpoint": "https://{{your minio endpoint}}",
+            "accessKeyId": "{{key}}",
+            "secretAccessKey": "{{secret}}",
+            "region": "us-east-1"
+        }
+    }
 }

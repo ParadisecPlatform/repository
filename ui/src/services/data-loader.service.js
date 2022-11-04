@@ -5,7 +5,7 @@ import shajs from "sha.js";
 import { flattenDeep, orderBy, groupBy } from "lodash";
 
 // import { Parser } from "@coedl/transcription-parsers";
-import Worker from "src/components/workers/transcript-parser.worker.js";
+// import Worker from "src/components/workers/transcript-parser.worker.js";
 
 export class DataLoader {
     constructor() {
@@ -129,9 +129,7 @@ export class DataLoader {
     }
 
     hash(identifier) {
-        return shajs("sha512")
-            .update(identifier)
-            .digest("hex");
+        return shajs("sha512").update(identifier).digest("hex");
     }
 
     getObjectVersions({ inventory }) {

@@ -21,7 +21,7 @@
 <script>
 import ConditionsOfAccessComponent from "./ConditionsOfAccess.component.vue";
 import MediaPlayerComponent from "components/shared/media-player/Shell.component.vue";
-import { ROCrate } from "ro-crate";
+// import { ROCrate } from "ro-crate";
 import { intervalToDuration, parseISO } from "date-fns";
 export default {
     components: {
@@ -75,14 +75,14 @@ export default {
             this.showConditionsOfAccess = true;
         },
         getIdentifier() {
-            const crate = new ROCrate(this.data.rocrate);
-            crate.index();
-            let identifier = crate.resolve([crate.getRootDataset()], [{ property: "identifier" }]);
-            let collectionIdentifier = identifier.filter(
-                (i) => i.name === "collectionIdentifier"
-            )[0].value;
-            let itemIdentifier = identifier.filter((i) => i.name === "itemIdentifier")[0].value;
-            return `${collectionIdentifier}/${itemIdentifier}`;
+            // const crate = new ROCrate(this.data.rocrate);
+            // crate.index();
+            // let identifier = crate.resolve([crate.getRootDataset()], [{ property: "identifier" }]);
+            // let collectionIdentifier = identifier.filter(
+            //     (i) => i.name === "collectionIdentifier"
+            // )[0].value;
+            // let itemIdentifier = identifier.filter((i) => i.name === "itemIdentifier")[0].value;
+            // return `${collectionIdentifier}/${itemIdentifier}`;
         },
     },
 };

@@ -1,59 +1,41 @@
-"use strict";
-
 const path = require("path");
-const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
+const CopyPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-
-const targetPath = `${__dirname}/dist`;
 
 module.exports = {
-    entry: "./index.js",
     target: "node",
     mode: "production",
-    devtool: "source-map",
+    entry: "./index.js",
     output: {
-        path: targetPath,
-        filename: "index.js"
+        path: path.resolve(__dirname, "dist"),
+        filename: "server.bundle.js",
     },
-    plugins: [
-        new CleanWebpackPlugin({
-            verbose: false,
-            cleanOnceBeforeBuildPatterns: ["**/*", "!node_modules"]
-        }),
-        new webpack.DefinePlugin({ "global.GENTLY": false }),
-        new CopyWebpackPlugin(
-            [
-                { from: "package.json", to: targetPath },
-                { from: "package-lock.json", to: targetPath },
-                {
-                    from: "src/common/mailer/templates/",
-                    to: `${targetPath}/templates`,
-                    toType: "dir"
-                }
-            ],
-            {}
-        )
-    ],
+    optimization: {
+        nodeEnv: false,
+    },
     externals: [nodeExternals()],
+    plugins: [
+        new CleanWebpackPlugin(),
+        new CopyPlugin({
+            patterns: [
+                { from: "package.json", to: "package.json" },
+                { from: "package-lock.json", to: "package-lock.json" },
+            ],
+        }),
+    ],
     module: {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /(node_modules)/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-env"]
-                    }
-                }
-            }
-        ]
+                loader: "babel-loader",
+                exclude: /node_modules/,
+            },
+        ],
     },
     resolve: {
         alias: {
-            src: path.resolve(__dirname, "src")
-        }
-    }
+            src: path.resolve(__dirname, "src"),
+        },
+    },
 };

@@ -99,7 +99,7 @@ import RenderItemInformationComponent from "./RenderItemInformation.component.vu
 import LicenseComponent from "./License.component.vue";
 import RenderSetComponent from "../../../shared/RenderSet.component.vue";
 import CiteAsComponent from "./CiteAs.component.vue";
-import { ROCrate } from "ro-crate";
+// import { ROCrate } from "ro-crate";
 import { flattenDeep } from "lodash";
 import { populate, contributorDisplayName } from "./lib";
 
@@ -129,46 +129,44 @@ export default {
     },
     methods: {
         loadItem() {
-            const crate = new ROCrate(this.data.rocrate);
-            crate.index();
-            let item = crate.getRootDataset();
-            item = populate(crate, item, [
-                "contentLocation",
-                "contributor",
-                "identifier",
-                "license",
-                "publisher",
-                "countries",
-                "contentLanguages",
-                "subjectLanguages",
-            ]);
-            item.collectionIdentifier = item.identifier.filter(
-                (i) => i.name === "collectionIdentifier"
-            )[0].value;
-            item.itemIdentifier = `${item.collectionIdentifier}/${
-                item.identifier.filter((i) => i.name === "itemIdentifier")[0].value
-            }`;
-            item.contributor = item.contributor.map((contributor) => {
-                contributor.role = flattenDeep([contributor.role]);
-                contributor.role = contributor.role.map((role) => crate.getItem(role["@id"]));
-
-                contributor.homeLocation = flattenDeep([contributor.homeLocation]);
-                contributor.homeLocation = contributor.homeLocation.map((location) =>
-                    crate.getItem(location["@id"])
-                );
-                contributor.displayName = contributorDisplayName(contributor);
-                return contributor;
-            });
-            item.contentLocation = item.contentLocation.map((l) => {
-                if (l.geo) l.geo = crate.getItem(l.geo["@id"]);
-                return l;
-            });
-            item.hasPart = flattenDeep([item.hasPart]);
-            item.doi = item.identifier.filter((i) => i.name === "doi")[0].value;
-
-            // console.log(JSON.stringify(item, null, 2));
-            this.item = item;
-            this.setActiveTab();
+            // const crate = new ROCrate(this.data.rocrate);
+            // crate.index();
+            // let item = crate.getRootDataset();
+            // item = populate(crate, item, [
+            //     "contentLocation",
+            //     "contributor",
+            //     "identifier",
+            //     "license",
+            //     "publisher",
+            //     "countries",
+            //     "contentLanguages",
+            //     "subjectLanguages",
+            // ]);
+            // item.collectionIdentifier = item.identifier.filter(
+            //     (i) => i.name === "collectionIdentifier"
+            // )[0].value;
+            // item.itemIdentifier = `${item.collectionIdentifier}/${
+            //     item.identifier.filter((i) => i.name === "itemIdentifier")[0].value
+            // }`;
+            // item.contributor = item.contributor.map((contributor) => {
+            //     contributor.role = flattenDeep([contributor.role]);
+            //     contributor.role = contributor.role.map((role) => crate.getItem(role["@id"]));
+            //     contributor.homeLocation = flattenDeep([contributor.homeLocation]);
+            //     contributor.homeLocation = contributor.homeLocation.map((location) =>
+            //         crate.getItem(location["@id"])
+            //     );
+            //     contributor.displayName = contributorDisplayName(contributor);
+            //     return contributor;
+            // });
+            // item.contentLocation = item.contentLocation.map((l) => {
+            //     if (l.geo) l.geo = crate.getItem(l.geo["@id"]);
+            //     return l;
+            // });
+            // item.hasPart = flattenDeep([item.hasPart]);
+            // item.doi = item.identifier.filter((i) => i.name === "doi")[0].value;
+            // // console.log(JSON.stringify(item, null, 2));
+            // this.item = item;
+            // this.setActiveTab();
         },
         collectionLink(collectionIdentifier) {
             return this.$store.state.configuration.domain

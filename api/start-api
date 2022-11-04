@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "Sleeping for 10 seconds to let services start"
-sleep 10
-npm run develop

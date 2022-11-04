@@ -1,14 +1,5 @@
 module.exports = {
-    presets: [
-        [
-            "@babel/preset-env",
-            {
-                targets: {
-                    node: "current"
-                }
-            }
-        ]
-    ],
+    presets: [["@babel/preset-env"]],
     plugins: [
         [
             "prismjs",
@@ -16,9 +7,10 @@ module.exports = {
                 languages: ["xml", "javascript", "css", "markup"],
                 plugins: ["line-numbers"],
                 theme: "okaidia",
-                css: true
-            }
+                css: true,
+            },
         ],
-        "@babel/plugin-syntax-dynamic-import"
-    ]
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-optional-chaining",
+    ],
 };

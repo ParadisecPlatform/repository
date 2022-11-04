@@ -87,7 +87,7 @@ import RenderCollectionInformationComponent from "./RenderCollectionInformation.
 import LicenseComponent from "./License.component.vue";
 import RenderSetComponent from "../../../shared/RenderSet.component.vue";
 import CiteAsComponent from "./CiteAs.component.vue";
-import { ROCrate } from "ro-crate";
+// import { ROCrate } from "ro-crate";
 import { flattenDeep } from "lodash";
 import { populate, contributorDisplayName } from "./lib";
 
@@ -116,42 +116,40 @@ export default {
     },
     methods: {
         loadCollection() {
-            const crate = new ROCrate(this.data.rocrate);
-            crate.index();
-            let collection = crate.getRootDataset();
-            collection = populate(crate, collection, [
-                "contentLocation",
-                "contributor",
-                "identifier",
-                "license",
-                "publisher",
-                "countries",
-                "fieldsOfResearch",
-                "subjectLanguages",
-            ]);
-            collection.collectionIdentifier = collection.identifier.filter(
-                (i) => i.name === "collectionIdentifier"
-            )[0].value;
-            collection.contributor = collection.contributor.map((contributor) => {
-                contributor.role = flattenDeep([contributor.role]);
-                contributor.role = contributor.role.map((role) => crate.getItem(role["@id"]));
-
-                contributor.homeLocation = flattenDeep([contributor.homeLocation]);
-                contributor.homeLocation = contributor.homeLocation.map((location) =>
-                    crate.getItem(location["@id"])
-                );
-                contributor.displayName = contributorDisplayName(contributor);
-                return contributor;
-            });
-            collection.contentLocation = collection.contentLocation.map((l) => {
-                if (l.geo) l.geo = crate.getItem(l.geo["@id"]);
-                return l;
-            });
-            collection.hasMember = flattenDeep([collection.hasMember]);
-            collection.doi = collection.identifier.filter((i) => i.name === "doi")[0].value;
-
-            // console.log(JSON.stringify(collection, null, 2));
-            this.collection = collection;
+            // const crate = new ROCrate(this.data.rocrate);
+            // crate.index();
+            // let collection = crate.getRootDataset();
+            // collection = populate(crate, collection, [
+            //     "contentLocation",
+            //     "contributor",
+            //     "identifier",
+            //     "license",
+            //     "publisher",
+            //     "countries",
+            //     "fieldsOfResearch",
+            //     "subjectLanguages",
+            // ]);
+            // collection.collectionIdentifier = collection.identifier.filter(
+            //     (i) => i.name === "collectionIdentifier"
+            // )[0].value;
+            // collection.contributor = collection.contributor.map((contributor) => {
+            //     contributor.role = flattenDeep([contributor.role]);
+            //     contributor.role = contributor.role.map((role) => crate.getItem(role["@id"]));
+            //     contributor.homeLocation = flattenDeep([contributor.homeLocation]);
+            //     contributor.homeLocation = contributor.homeLocation.map((location) =>
+            //         crate.getItem(location["@id"])
+            //     );
+            //     contributor.displayName = contributorDisplayName(contributor);
+            //     return contributor;
+            // });
+            // collection.contentLocation = collection.contentLocation.map((l) => {
+            //     if (l.geo) l.geo = crate.getItem(l.geo["@id"]);
+            //     return l;
+            // });
+            // collection.hasMember = flattenDeep([collection.hasMember]);
+            // collection.doi = collection.identifier.filter((i) => i.name === "doi")[0].value;
+            // // console.log(JSON.stringify(collection, null, 2));
+            // this.collection = collection;
         },
         itemLabel(item) {
             let link = this.$store.state.configuration.domain
