@@ -2,11 +2,13 @@
 
 ## Documentation
 
-The document folder at `${ROOT}/documentation` contains detailed documentation on developing and deploying this code.
+The document folder at `${ROOT}/documentation` contains detailed documentation on developing and
+deploying this code.
 
 ## User Interface
 
-The User Interface (UI) code found in the folder `${ROOT}/ui`. The core technologies used to build the UI include:
+The User Interface (UI) code is found in the folder `${ROOT}/ui`. The core technologies used to
+build the UI include:
 
 -   VueJS: https://vuejs.org/v2/guide/
     -   the UI framework
@@ -19,18 +21,17 @@ The User Interface (UI) code found in the folder `${ROOT}/ui`. The core technolo
 -   TailwindCSS: https://tailwindcss.com/docs/installation
     -   responsive CSS utilities - nice addition to the UI controls provided by ElementUI
 
-`Webpack` is used to build the application and `webpack-development-server` provides the auto-reload capability in development.
+`Webpack` is used to build the application and `webpack-development-server` provides the auto-reload
+capability in development.
 
-## OCFL Tools
+## API
 
-In order to index content for use with this application you will also need the OCFL tools @ [git@github.com:CoEDL/ocfl-tools.git](git@github.com:CoEDL/ocfl-tools.git). Check them out and read the instructions there on what's available and how to use them.
+The api code is found in the folder `${ROOT}/api`.
 
 ## Elasticsearch configuration
 
-The folder `${ROOT}/elastic` contains the configuration required to set up an elastic search instance for development. You probably `shouldn't` change anything in this folder but you will need to refer to the content when deploying an instance of this application in production.
+The folder `${ROOT}/elastic` contains the configuration required to set up an elastic search
+instance for development. You probably `shouldn't` change anything in this folder but you will need
+to refer to the content when deploying an instance of this application in production.
 
 Detailed information on the configuration files is found in the [README](../elastic/README.md) file.
-
-## Nginx configuration
-
-As with the elastic search folder/configuration, the `${ROOT}/nginx` contains the configuration required to spin up a vaguely sensible UI container to run the demonstrator @ http://45.113.232.73. There are three files in there as follows:
