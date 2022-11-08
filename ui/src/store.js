@@ -14,12 +14,18 @@ const mutations = {
     updateQueryResults(state, payload) {
         state.search.results = { ...payload };
     },
+    setUserData(state, payload) {
+        state.user = { ...payload };
+    },
 };
 
 const actions = {};
 const getters = {
     getConfiguration(state) {
         return cloneDeep(state.configuration);
+    },
+    getUser(state) {
+        return cloneDeep(state.user);
     },
 };
 
@@ -33,6 +39,7 @@ export const store = new createStore({
 
 function resetState() {
     return {
+        user: {},
         configuration: {},
         status: {
             api: undefined,

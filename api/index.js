@@ -1,6 +1,6 @@
 import restify from "restify";
 const server = restify.createServer();
-// const models = require("./src/models");
+import models from "./src/models/index.js";
 import { loadConfiguration, getLogger } from "./src/common/index.js";
 import { setupRoutes } from "./src/routes/index.js";
 const log = getLogger();
@@ -13,7 +13,7 @@ const log = getLogger();
         log.error("configuration.json not found - stopping now");
         process.exit();
     }
-    // await models.sequelize.sync();
+    await models.sequelize.sync();
 
     if (process.env?.LOG_LEVEL === "debug") {
         server.use((req, res, next) => {

@@ -56,7 +56,6 @@ export default class HTTPService {
             method: "GET",
             headers,
         });
-        this.checkAuthorised({ status: response.status });
         return response;
     }
 
@@ -72,7 +71,6 @@ export default class HTTPService {
             headers,
             body: JSON.stringify(body),
         });
-        this.checkAuthorised({ status: response.status });
         return response;
     }
 
@@ -88,7 +86,6 @@ export default class HTTPService {
             headers: this.getHeaders(),
             body: JSON.stringify(body),
         });
-        this.checkAuthorised({ status: response.status });
         return response;
     }
 
@@ -103,13 +100,6 @@ export default class HTTPService {
             method: "delete",
             headers: this.getHeaders(),
         });
-        this.checkAuthorised({ status: response.status });
         return response;
-    }
-
-    checkAuthorised({ status }) {
-        if (status === 401) {
-            this.router.push(this.loginPath);
-        }
     }
 }

@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import ShellComponent from "components/Shell.component.vue";
 import ViewComponent from "components/view/Shell.component.vue";
 import DashboardComponent from "components/Dashboard.component.vue";
+import CallbackOauthLogin from "components/authentication/OauthCallback.component.vue";
 
 export function router({ configuration }) {
     let routes = [
@@ -61,6 +62,16 @@ export function router({ configuration }) {
                     ],
                 },
             ],
+        },
+        {
+            name: "callback-google-login",
+            path: "/callback-google-login",
+            component: CallbackOauthLogin,
+        },
+        {
+            name: "callback-aaf-login",
+            path: "/callback-aaf-login",
+            component: CallbackOauthLogin,
         },
     ];
 

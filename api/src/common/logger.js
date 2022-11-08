@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from "winston";
 const { combine, timestamp, printf } = format;
-// import models from "../models";
+import models from "../models/index.js";
 const log = getLogger();
 
 export function getLogger() {
@@ -15,17 +15,17 @@ export function getLogger() {
     return logger;
 }
 
-// export async function logEvent({ level, owner, text, data }) {
-//     const levels = ["info", "warn", "error"];
-//     if (!level || !levels.includes(level)) {
-//         throw new Error(`'level' is required and must be one of '${levels}'`);
-//     }
-//     if (!text) {
-//         throw new Error(`'text' is required`);
-//     }
-//     try {
-//         await models.log.create({ level, owner, text, data });
-//     } catch (error) {
-//         log.error(`Couldn't update logs table: ${level}: ${text}`);
-//     }
-// }
+export async function logEvent({ level, owner, text, data }) {
+    const levels = ["info", "warn", "error"];
+    if (!level || !levels.includes(level)) {
+        throw new Error(`'level' is required and must be one of '${levels}'`);
+    }
+    if (!text) {
+        throw new Error(`'text' is required`);
+    }
+    try {
+        await models.log.create({ level, owner, text, data });
+    } catch (error) {
+        log.error(`Couldn't update logs table: ${level}: ${text}`);
+    }
+}

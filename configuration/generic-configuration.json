@@ -53,6 +53,13 @@
         "indexerMetadataNamespace": "indexer:meta"
     },
     "api": {
+        "administrators": ["user@example.com"],
+        "session": {
+            "lifetime": {
+                "hours": 5
+            },
+            "secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
         "s3": {
             "bucket": "{{your bucket}}",
             "forcePathStyle": true,
@@ -60,6 +67,20 @@
             "accessKeyId": "{{key}}",
             "secretAccessKey": "{{secret}}",
             "region": "us-east-1"
+        },
+        "authentication": {
+            "google": {
+                "clientId": "{{ client id }}",
+                "clientSecret": "{{ client secret }}",
+                "redirectUri": "http://{{ your host }}/callback-google-login",
+                "discover": "https://accounts.google.com"
+            },
+            "aaf": {
+                "clientId": "{{ client id }}",
+                "clientSecret": "{{ client secret }}",
+                "redirectUri": "http://{{ your host }}/callback-aaf-login",
+                "discover": "https://central.test.aaf.edu.au"
+            }
         }
     }
 }

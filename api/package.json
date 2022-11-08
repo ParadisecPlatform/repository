@@ -8,16 +8,17 @@
     "scripts": {
         "develop": "npm run develop:server",
         "develop:server": "npm install && ./node_modules/.bin/nodemon ./index.js",
-        "test": "./node_modules/.bin/jest",
-        "test:watch": "./node_modules/.bin/jest --watch",
+        "test": "./node_modules/.bin/jest --runInBand",
+        "test:watch": "./node_modules/.bin/jest --watch --runInBand",
         "build:production": "./node_modules/.bin/webpack --config webpack.production.js"
     },
     "devDependencies": {
         "@babel/cli": "^7.19.3",
-        "@babel/core": "^7.19.6",
-        "@babel/node": "^7.20.0",
+        "@babel/core": "^7.20.2",
+        "@babel/node": "^7.20.2",
         "@babel/plugin-proposal-optional-chaining": "^7.18.9",
-        "@babel/preset-env": "^7.19.4",
+        "@babel/plugin-transform-modules-commonjs": "^7.19.6",
+        "@babel/preset-env": "^7.20.2",
         "babel-loader": "^9.1.0",
         "chance": "^1.1.9",
         "clean-jsdoc-theme": "^4.1.8",

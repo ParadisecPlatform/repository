@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row p-4 text-lg font-light text-sky-600">
+    <div class="flex flex-row p-4 text-lg font-light text-gray-800">
         <router-link to="/dashboard" query="" class="px-5">
             <i class="fas fa-home"></i>
             <span class="hidden md:inline">&nbsp;Home</span>
@@ -17,7 +17,52 @@
             <i class="fas fa-info-circle"></i>
             <span class="hidden md:inline">&nbsp;About</span>
         </router-link> -->
+        <el-dropdown trigger="click" v-if="!isLoggedIn">
+            <div class="text-lg"><i class="fa-solid fa-person"></i>&nbsp; Login</div>
+            <template #dropdown>
+                <login-component />
+            </template>
+        </el-dropdown>
+        <div v-if="isLoggedIn" @click="logout" class="cursor-pointer">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </div>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import LoginComponent from "./Login.component.vue";
+import { inject, onMounted, reactive, computed } from "vue";
+import { isEmpty } from "lodash";
+import { tokenSessionKey, removeLocalStorage } from "@/storage.js";
+import { useStore } from "vuex";
+const $store = useStore();
+const $http = inject("$http");
+
+const data = reactive({
+    user: {
+        isLoggedIn: !isEmpty($store.state.user) ? true : false,
+        data: $store.state.user,
+    },
+});
+let isLoggedIn = computed(() => {
+    return !isEmpty($store.state.user) ? true : false;
+});
+onMounted(() => {
+    checkLoginStatus();
+});
+
+async function checkLoginStatus() {
+    let response = await $http.get({ route: "/authenticated" });
+    if (response.status === 200) {
+        let { user } = await response.json();
+        $store.commit("setUserData", user);
+    }
+}
+
+async function logout() {
+    await $http.get({ route: "/logout" });
+    removeLocalStorage({ key: tokenSessionKey });
+    $store.commit("setUserData", {});
+}
+</script>

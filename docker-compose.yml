@@ -21,7 +21,7 @@ services:
             PGDATA: /postgresql/data
 
     api:
-        image: node:14-buster
+        image: node:16-bullseye
         hostname: api
         tty: true
         environment:
@@ -104,4 +104,4 @@ services:
                 "daemon off;"
             ]
         ports:
-            - 9001:9001
+            - 9000:9000

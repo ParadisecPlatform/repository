@@ -1,7 +1,8 @@
 # Setting up for development
 
 -   `Docker containers and docker-compose` are used to run the development environment.
--   You will need an OCFL filesystem @ `$PWD/ocfl-repository` which will be mounted in to the UI container and available at `/repository`. An OCFL repository is not included with this code.
+-   You will need an OCFL filesystem @ `$PWD/ocfl-repository` which will be mounted in to the UI
+    container and available at `/repository`. An OCFL repository is not included with this code.
 
 ## Starting the development environment
 
@@ -9,7 +10,7 @@
 > docker-compose up
 ```
 
-Browse to `http://localhost:9001` to see the UI
+Browse to `http://localhost:9000` to see the UI
 
 ## Stopping the development environment
 
@@ -19,7 +20,8 @@ Browse to `http://localhost:9001` to see the UI
 
 ## UI Docker container dies after a while
 
-You will find that after a while, the docker container running the webpack-development-server for the UI dies. In the console you'll see something like:
+You will find that after a while, the docker container running the webpack-development-server for
+the UI dies. In the console you'll see something like:
 
 ```
 ui_1      | Aborted
