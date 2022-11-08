@@ -9,7 +9,6 @@ export function setupRoutes({ server }) {
     server.get("/collections/:collectionId/metadata", getCollectionMetadataHandler);
 }
 
-// TODO: this code does NOT have tests
 async function getCollectionMetadataHandler(req, res, next) {
     let configuration = await loadConfiguration();
     let store = new Store({

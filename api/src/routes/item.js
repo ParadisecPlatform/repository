@@ -26,7 +26,6 @@ export function setupRoutes({ server }) {
     server.get("/collections/:collectionId/items/:itemId/file/:filename", getItemFileHandler);
 }
 
-// TODO: this code does NOT have tests
 async function getItemMetadataHandler(req, res, next) {
     let configuration = await loadConfiguration();
 
@@ -46,7 +45,6 @@ async function getItemMetadataHandler(req, res, next) {
     next();
 }
 
-// TODO: this code does NOT have tests
 async function getItemFilePresignedUrl(req, res, next) {
     let configuration = await loadConfiguration();
 
@@ -66,7 +64,6 @@ async function getItemFilePresignedUrl(req, res, next) {
     next();
 }
 
-// TODO: this code does NOT have tests
 async function getItemFileHandler(req, res, next) {
     let configuration = await loadConfiguration();
 
@@ -92,7 +89,6 @@ async function getItemFileHandler(req, res, next) {
     next();
 }
 
-// TODO: this code does NOT have tests
 async function getItemTranscriptionHandler(req, res, next) {
     let configuration = await loadConfiguration();
 
@@ -123,7 +119,6 @@ async function getItemTranscriptionHandler(req, res, next) {
     next();
 }
 
-// TODO: this code does NOT have tests
 function getItemIdentifier({ configuration, params }) {
     if (configuration.links === "paradisec" && params.collectionId && params.itemId) {
         return `${params.collectionId}_${params.itemId}`;

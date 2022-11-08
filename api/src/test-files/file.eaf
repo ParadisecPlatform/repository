@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ANNOTATION_DOCUMENT AUTHOR="unspecified" DATE="2020-03-03T12:55:59+01:00" FORMAT="3.0" VERSION="3.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.mpi.nl/tools/elan/EAFv3.0.xsd">
+    <HEADER MEDIA_FILE="" TIME_UNITS="milliseconds">
+        <MEDIA_DESCRIPTOR EXTRACTED_FROM="" MEDIA_URL="" MIME_TYPE="audio/x-wav" RELATIVE_MEDIA_URL=""/>
+        <MEDIA_DESCRIPTOR MEDIA_URL="" MIME_TYPE="video/mp4" RELATIVE_MEDIA_URL=""/>
+        <PROPERTY NAME="URN">urn:nl-mpi-tools-elan-eaf:9c38af13-50ad-42b2-bfbb-8b4345a2d5f6</PROPERTY>
+        <PROPERTY NAME="lastUsedAnnotationId">75</PROPERTY>
+    </HEADER>
+    <TIME_ORDER>
+        <TIME_SLOT TIME_SLOT_ID="ts1" TIME_VALUE="0"/>
+        <TIME_SLOT TIME_SLOT_ID="ts2" TIME_VALUE="13480"/>
+    </TIME_ORDER>
+    <TIER DEFAULT_LOCALE="us" LINGUISTIC_TYPE_REF="default" TIER_ID="Tier-0">
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a1" TIME_SLOT_REF1="ts1" TIME_SLOT_REF2="ts2">
+                <ANNOTATION_VALUE>Told by someone on video (needs to be aligned with this version)</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <LINGUISTIC_TYPE GRAPHIC_REFERENCES="false" LINGUISTIC_TYPE_ID="default" TIME_ALIGNABLE="true"/>
+    <LOCALE COUNTRY_CODE="EN" LANGUAGE_CODE="us"/>
+    <CONSTRAINT DESCRIPTION="Time subdivision of parent annotation's time interval, no time gaps allowed within this interval" STEREOTYPE="Time_Subdivision"/>
+    <CONSTRAINT DESCRIPTION="Symbolic subdivision of a parent annotation. Annotations refering to the same parent are ordered" STEREOTYPE="Symbolic_Subdivision"/>
+    <CONSTRAINT DESCRIPTION="1-1 association with a parent annotation" STEREOTYPE="Symbolic_Association"/>
+    <CONSTRAINT DESCRIPTION="Time alignable annotations within the parent annotation's time interval, gaps are allowed" STEREOTYPE="Included_In"/>
+</ANNOTATION_DOCUMENT>
