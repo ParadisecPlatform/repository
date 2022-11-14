@@ -67,7 +67,7 @@ import AudioPlayerComponent from "./audioplayer/Shell.component.vue";
 import VideoPlayerComponent from "./videoplayer/Shell.component.vue";
 import DocumentViewerComponent from "./documentviewer/Shell.component.vue";
 import XmlViewerComponent from "./xmlviewer/Shell.component.vue";
-import { getFilesByName, getFilesByEncoding } from "./lib";
+import { categoriseItemContent } from "./lib";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 const $store = useStore();
@@ -95,32 +95,16 @@ onMounted(() => {
 });
 const configuration = $store.getters.getConfiguration.ui;
 function init() {
-    data.enable.images =
-        getFilesByEncoding({
-            crate: props.crate,
-            formats: $store.getters.getConfiguration.ui.imageFormats,
-        }).length > 0 && configuration.mediaplayer.enable.images;
-    data.enable.audio =
-        getFilesByEncoding({
-            crate: props.crate,
-            formats: $store.getters.getConfiguration.ui.audioFormats,
-        }).length > 0 && configuration.mediaplayer.enable.audio;
-    data.enable.video =
-        getFilesByEncoding({
-            crate: props.crate,
-            formats: $store.getters.getConfiguration.ui.videoFormats,
-        }).length > 0 && configuration.mediaplayer.enable.video;
-    data.enable.documents =
-        getFilesByName({
-            crate: props.crate,
-            formats: $store.getters.getConfiguration.ui.documentFileExtensions,
-        }).length > 0 && configuration.mediaplayer.enable.documents;
-    data.enable.xml =
-        getFilesByEncoding({
-            crate: props.crate,
-            formats: ["application/xml"],
-        }).length > 0 && configuration.mediaplayer.enable.xmlFiles;
-    setActiveTab();
+    data.enable = categoriseItemContent({
+        crate: props.crate,
+        formats: {
+            images: $store.getters.getConfiguration.ui.imageFormats,
+            audio: $store.getters.getConfiguration.ui.audioFormats,
+            video: $store.getters.getConfiguration.ui.videoFormats,
+            documents: $store.getters.getConfiguration.ui.documentFileExtensions,
+            xml: ["application/xml"],
+        },
+    });
 }
 function setActiveTab() {
     data.activeTab = $route.params.contentType;

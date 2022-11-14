@@ -20,6 +20,36 @@ export function getFilesByName({ formats, crate }) {
         .map((file) => crate.getEntity({ id: file["@id"] }));
     return parts;
 }
+export function categoriseItemContent({ crate, formats }) {
+    let enable = {
+        images: [],
+        audio: [],
+        video: [],
+        documents: [],
+        xml: [],
+    };
+    crate = new CrateManager({ crate });
+    let rootDataset = crate.getRootDataset();
+    for (let part of rootDataset.hasPart) {
+        let entity = crate.getEntity({ id: part["@id"] });
+        if (formats.images.includes(entity.encodingFormat)) {
+            enable.images.push(part);
+        }
+        if (formats.audio.includes(entity.encodingFormat)) {
+            enable.audio.push(part);
+        }
+        if (formats.video.includes(entity.encodingFormat)) {
+            enable.video.push(part);
+        }
+        if (formats.documents.includes(entity["@id"].split(".").pop())) {
+            enable.documents.push(part);
+        }
+        if (formats.xml.includes(part)) {
+            enable.xml.push(part);
+        }
+    }
+    return enable;
+}
 
 export async function getPresignedUrl({ $http, $route, filename }) {
     await new Promise((resolve) => setTimeout(resolve, 200));
