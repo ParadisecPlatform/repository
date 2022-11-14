@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import { mixin } from "../../media-player/transcription-viewers/RenderTranscriptionMixins";
-import RenderChildComponent from "../../media-player/transcription-viewers/RenderTranscriptionEAFChild.component.vue";
+import { mixin } from "./RenderTranscriptionMixins";
+import RenderChildComponent from "./RenderTranscriptionEAFChild.component.vue";
 
 export default {
     mixins: [mixin],

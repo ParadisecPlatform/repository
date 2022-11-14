@@ -14,13 +14,13 @@
             >
         </div>
 
-        <media-player-component :crate="this.crate" v-if="!data.showConditionsOfAccess" />
+        <content-viewer-component :crate="this.crate" v-if="!data.showConditionsOfAccess" />
     </div>
 </template>
 
 <script setup>
 import ConditionsOfAccessComponent from "./ConditionsOfAccess.component.vue";
-import MediaPlayerComponent from "@/components/modules/media-player/Shell.component.vue";
+import ContentViewerComponent from "@/components/modules/content-viewer/Shell.component.vue";
 // import { ROCrate } from "ro-crate";
 import { reactive, onMounted } from "vue";
 import { useRoute } from "vue-router";
