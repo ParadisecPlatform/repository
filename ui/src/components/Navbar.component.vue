@@ -18,14 +18,16 @@
             <span class="hidden md:inline">&nbsp;About</span>
         </router-link> -->
         <el-dropdown trigger="click" v-if="!isLoggedIn">
-            <div class="text-lg"><i class="fa-solid fa-person"></i>&nbsp; Login</div>
+            <div class="text-lg">Login</div>
             <template #dropdown>
                 <login-component />
             </template>
         </el-dropdown>
-        <div v-if="isLoggedIn" @click="logout" class="cursor-pointer">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Logout
+        <div class="flex flex-row text-lg" v-if="isLoggedIn">
+            <div>{{ data.user.givenName }} {{ data.user.familyName }} &nbsp;</div>
+            <div @click="logout" class="cursor-pointer">
+                <i class="fa-solid fa-right-from-bracket fa-fw"></i>
+            </div>
         </div>
     </div>
 </template>
@@ -41,8 +43,8 @@ const $http = inject("$http");
 
 const data = reactive({
     user: {
+        ...$store.state.user,
         isLoggedIn: !isEmpty($store.state.user) ? true : false,
-        data: $store.state.user,
     },
 });
 let isLoggedIn = computed(() => {

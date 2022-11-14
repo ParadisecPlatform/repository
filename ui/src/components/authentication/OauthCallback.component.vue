@@ -33,7 +33,6 @@ async function login() {
     } else {
         let { token } = await response.json();
         let user = JSON.parse(atob(token.split(".")[1]));
-        console.log(JSON.stringify(user, null, 2));
         $store.commit("setUserData", user);
 
         putLocalStorage({ key: tokenSessionKey, data: { token } });
