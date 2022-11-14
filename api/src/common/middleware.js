@@ -1,16 +1,6 @@
-import restifyErrors from "restify-errors";
-const { UnauthorizedError, ForbiddenError } = restifyErrors;
 import { getLogger, loadConfiguration, verifyToken } from "./index.js";
 // import { lookupItemByIdentifier } from "../lib/item";
 const log = getLogger();
-
-export function route(handler) {
-    return [demandAuthenticatedUser, handler];
-}
-
-export function routeAdmin(handler) {
-    return [demandAuthenticatedUser, demandAdministrator, handler];
-}
 
 export async function demandAuthenticatedUser(req, res) {
     if (!req.headers.authorization) {
@@ -35,16 +25,16 @@ export async function demandAdministrator(req, res, next) {
 }
 
 export async function requireIdentifierAccess(req, res) {
-    if (!req.body.identifier && !req.params.identifier) {
-        return res.status(403).send({ error: `No identifier defined in body or request params` });
-    }
-    const identifier = req.body.identifier ? req.body.identifier : req.params.identifier;
-    let item = await lookupItemByIdentifier({
-        userId: req.session.user.id,
-        identifier: identifier,
-    });
-    if (!item) {
-        return res.status(403).send({ error: `You don't have access to that item` });
-    }
-    req.session.item = item;
+    // if (!req.body.identifier && !req.params.identifier) {
+    //     return res.status(403).send({ error: `No identifier defined in body or request params` });
+    // }
+    // const identifier = req.body.identifier ? req.body.identifier : req.params.identifier;
+    // let item = await lookupItemByIdentifier({
+    //     userId: req.session.user.id,
+    //     identifier: identifier,
+    // });
+    // if (!item) {
+    //     return res.status(403).send({ error: `You don't have access to that item` });
+    // }
+    // req.session.item = item;
 }
