@@ -1,6 +1,9 @@
-import restifyErrorsPkg from "restify-errors";
-const { BadRequestError, UnauthorizedError, ServiceUnavailableError } = restifyErrorsPkg;
-import { loadConfiguration, getLogger, route, routeAdmin } from "../common/index.js";
+import {
+    loadConfiguration,
+    getLogger,
+    demandAdministrator,
+    demandAuthenticatedUser,
+} from "../common/index.js";
 import { jwtVerify, createRemoteJWKSet } from "jose";
 import { Issuer, generators } from "openid-client";
 import { createUser } from "../lib/user.js";
@@ -8,41 +11,52 @@ import { createSession } from "../lib/session.js";
 import models from "../models/index.js";
 const log = getLogger();
 
-export function setupRoutes({ server }) {
-    server.get("/auth/:provider/login", getLoginUrlRouteHandler);
-    server.post("/auth/:provider/code", getOauthTokenRouteHandler);
-    server.get(
+export function setupRoutes(fastify, options, done) {
+    fastify.get("/auth/:provider/login", getLoginUrlRouteHandler);
+    fastify.post("/auth/:provider/code", getOauthTokenRouteHandler);
+    fastify.get(
         "/authenticated",
-        route(async (req, res, next) => {
-            res.send({ user: req.session.user });
-            next();
-        })
-    );
-    server.get(
-        "/admin",
-        routeAdmin(async (req, res, next) => {
-            res.send({ user: req.session.user });
-            next();
-        })
-    );
-    server.get("/logout", async (req, res, next) => {
-        let token = req.headers.authorization?.split("Bearer ")[1];
-        if (token) {
-            let session = await models.session.findOne({ where: { token } });
-            if (session) await session.destroy();
+        {
+            preValidation: [demandAuthenticatedUser],
+        },
+        async (req, res) => {
+            return { user: req.session.user };
         }
-        next(new UnauthorizedError());
-    });
+    );
+    fastify.get(
+        "/admin",
+        {
+            preValidation: [demandAuthenticatedUser, demandAdministrator],
+        },
+        async (req, res) => {
+            return {};
+        }
+    );
+    fastify.get(
+        "/logout",
+        {
+            preValidation: [demandAuthenticatedUser],
+        },
+        async (req, res) => {
+            let token = req.headers.authorization?.split("Bearer ")[1];
+            if (token) {
+                let session = await models.session.findOne({ where: { token } });
+                if (session) await session.destroy();
+            }
+            res.unauthorized();
+        }
+    );
+    done();
 }
 
-async function getLoginUrlRouteHandler(req, res, next) {
+async function getLoginUrlRouteHandler(req, res) {
     const provider = req.params.provider;
 
     let configuration = await loadConfiguration();
     try {
         configuration = configuration.api.authentication[provider];
     } catch (error) {
-        return next(new ServiceUnavailableError());
+        return res.internalServerError();
     }
     let issuer = await Issuer.discover(configuration.discover);
     const client = new issuer.Client({
@@ -60,14 +74,13 @@ async function getLoginUrlRouteHandler(req, res, next) {
         code_challenge_method,
         state: provider,
     });
-    res.send({ url, code_verifier });
-    next();
+    return { url, code_verifier };
 }
 
 async function getOauthTokenRouteHandler(req, res, next) {
     const provider = req.params.provider;
     if (!req.body.code) {
-        return next(new BadRequestError(`Code not provided`));
+        return res.dadRequest(`Code not provided`);
     }
 
     let configuration = await loadConfiguration();
@@ -84,14 +97,13 @@ async function getOauthTokenRouteHandler(req, res, next) {
 
     if (user?.locked) {
         log.info(`The account for '${user.email}' is locked. Denying user login.`);
-        return next(new UnauthorizedError());
+        return res.unauthorized();
     }
 
     log.debug(`Creating session for ${user.email}`);
     let session = await createSession({ user });
 
-    res.send({ token: session.token });
-    next();
+    return { token: session.token };
 }
 
 async function getOauthToken({ provider, code, code_verifier, configuration }) {

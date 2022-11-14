@@ -12,9 +12,9 @@ export function routeAdmin(handler) {
     return [demandAuthenticatedUser, demandAdministrator, handler];
 }
 
-export async function demandAuthenticatedUser(req, res, next) {
+export async function demandAuthenticatedUser(req, res) {
     if (!req.headers.authorization) {
-        return next(new UnauthorizedError());
+        return res.status(401).send();
     }
     const configuration = await loadConfiguration();
     try {
@@ -22,25 +22,21 @@ export async function demandAuthenticatedUser(req, res, next) {
             token: req.headers.authorization.split("Bearer ")[1],
             configuration,
         });
-        req.session = {
-            user,
-        };
+        req.session.user = user;
     } catch (error) {
-        return next(new UnauthorizedError());
+        return res.status(401).send();
     }
-    next();
 }
 
 export async function demandAdministrator(req, res, next) {
-    if (!req.session.user.administrator) {
-        return next(new ForbiddenError());
+    if (!req.session?.user?.administrator) {
+        return res.status(403).send();
     }
-    next();
 }
 
-export async function requireIdentifierAccess(req, res, next) {
+export async function requireIdentifierAccess(req, res) {
     if (!req.body.identifier && !req.params.identifier) {
-        return next(new ForbiddenError(`No identifier defined in body or params`));
+        return res.status(403).send({ error: `No identifier defined in body or request params` });
     }
     const identifier = req.body.identifier ? req.body.identifier : req.params.identifier;
     let item = await lookupItemByIdentifier({
@@ -48,7 +44,7 @@ export async function requireIdentifierAccess(req, res, next) {
         identifier: identifier,
     });
     if (!item) {
-        return next(new ForbiddenError(`You don't have access to that item`));
+        return res.status(403).send({ error: `You don't have access to that item` });
     }
-    next();
+    req.session.item = item;
 }

@@ -1,32 +1,32 @@
 "use strict";
 
-import restifyErrors from "restify-errors";
-const { NotFoundError, UnauthorizedError, ForbiddenError } = restifyErrors;
-import { loadConfiguration, route, routeAdmin } from "../common/index.js";
+import { loadConfiguration } from "../common/index.js";
 import { Store } from "@coedl/nocfl-js";
 import { Parser } from "@coedl/transcription-parsers";
 
-export function setupRoutes({ server }) {
+export function setupRoutes(fastify, options, done) {
     // default item route paths
-    server.get("/items/:itemId/metadata", getItemMetadataHandler);
-    server.get("/items/:itemId/pre-signed-url/:filename", getItemFilePresignedUrl);
-    server.get("/items/:itemId/transcription/:filename", getItemTranscriptionHandler);
-    server.get("/items/:itemId/file/:filename", getItemFileHandler);
+    fastify.get("/items/:itemId/metadata", getItemMetadataHandler);
+    fastify.get("/items/:itemId/pre-signed-url/:filename", getItemFilePresignedUrl);
+    fastify.get("/items/:itemId/transcription/:filename", getItemTranscriptionHandler);
+    fastify.get("/items/:itemId/file/:filename", getItemFileHandler);
 
     // paradisec item route paths
-    server.get("/collections/:collectionId/items/:itemId/metadata", getItemMetadataHandler);
-    server.get(
+    fastify.get("/collections/:collectionId/items/:itemId/metadata", getItemMetadataHandler);
+    fastify.get(
         "/collections/:collectionId/items/:itemId/pre-signed-url/:filename",
         getItemFilePresignedUrl
     );
-    server.get(
+    fastify.get(
         "/collections/:collectionId/items/:itemId/transcription/:filename",
         getItemTranscriptionHandler
     );
-    server.get("/collections/:collectionId/items/:itemId/file/:filename", getItemFileHandler);
+    fastify.get("/collections/:collectionId/items/:itemId/file/:filename", getItemFileHandler);
+
+    done();
 }
 
-async function getItemMetadataHandler(req, res, next) {
+async function getItemMetadataHandler(req, res) {
     let configuration = await loadConfiguration();
 
     const identifier = getItemIdentifier({ configuration, params: req.params });
@@ -38,14 +38,13 @@ async function getItemMetadataHandler(req, res, next) {
     });
     const exists = await store.itemExists();
     if (!exists) {
-        return next(new NotFoundError());
+        return res.notFound();
     }
     let crate = await store.getJSON({ target: "ro-crate-metadata.json" });
-    res.send({ crate });
-    next();
+    return { crate };
 }
 
-async function getItemFilePresignedUrl(req, res, next) {
+async function getItemFilePresignedUrl(req, res) {
     let configuration = await loadConfiguration();
 
     const identifier = getItemIdentifier({ configuration, params: req.params });
@@ -57,14 +56,13 @@ async function getItemFilePresignedUrl(req, res, next) {
     });
     const exists = await store.itemExists();
     if (!exists) {
-        return next(new NotFoundError());
+        return res.notFound();
     }
     let url = await store.getPresignedUrl({ target: req.params.filename });
-    res.send({ url });
-    next();
+    return { url };
 }
 
-async function getItemFileHandler(req, res, next) {
+async function getItemFileHandler(req, res) {
     let configuration = await loadConfiguration();
 
     const identifier = getItemIdentifier({ configuration, params: req.params });
@@ -76,20 +74,19 @@ async function getItemFileHandler(req, res, next) {
     });
     let exists = await store.itemExists();
     if (!exists) {
-        return next(new NotFoundError());
+        return res.notFound();
     }
     exists = await store.pathExists({ path: req.params.filename });
     if (!exists) {
-        return next(new NotFoundError());
+        return res.notFound();
     }
 
     let content = await store.get({ target: req.params.filename });
 
-    res.send({ content });
-    next();
+    return { content };
 }
 
-async function getItemTranscriptionHandler(req, res, next) {
+async function getItemTranscriptionHandler(req, res) {
     let configuration = await loadConfiguration();
 
     const identifier = getItemIdentifier({ configuration, params: req.params });
@@ -101,11 +98,11 @@ async function getItemTranscriptionHandler(req, res, next) {
     });
     let exists = await store.itemExists();
     if (!exists) {
-        return next(new NotFoundError());
+        return res.notFound();
     }
     exists = await store.pathExists({ path: req.params.filename });
     if (!exists) {
-        return next(new NotFoundError());
+        return res.status(404).send();
     }
     let xmlString = await store.get({ target: req.params.filename });
 
@@ -115,8 +112,7 @@ async function getItemTranscriptionHandler(req, res, next) {
     });
     let transcription = await parser.parse();
 
-    res.send({ transcription });
-    next();
+    return { transcription };
 }
 
 function getItemIdentifier({ configuration, params }) {

@@ -1,32 +1,43 @@
 "use strict";
 
-import restifyErrors from "restify-errors";
-const { NotFoundError, UnauthorizedError, ForbiddenError } = restifyErrors;
-import { loadConfiguration, route, routeAdmin } from "../common/index.js";
-import { setupRoutes as setupAuthRoutes } from "./auth.js";
-import { setupRoutes as setupItemRoutes } from "./item.js";
-import { setupRoutes as setupCollectionRoutes } from "./collection.js";
+import { loadConfiguration } from "../common/index.js";
 
-export function setupRoutes({ server }) {
-    server.get("/", (req, res, next) => {
-        res.send({});
-        next();
+// const getConfigurationOptions = {
+//     schema: {
+//         response: {
+//             200: {
+//                 type: "object",
+//                 properties: {
+//                     domain: { type: "string" },
+//                     links: { type: "string" },
+//                     deployment: { type: "string" },
+//                     ui: {
+//                         type: "object",
+//                         properties: {
+//                             introduction: { type: "object" },
+//                         },
+//                     },
+//                     authentication: { type: "array" },
+//                 },
+//             },
+//         },
+//     },
+// };
+export async function setupRoutes(fastify, options, done) {
+    fastify.get("/", async (req, res) => {
+        return {};
     });
-    server.get("/configuration", getConfigurationHandler);
-    setupAuthRoutes({ server });
-    setupItemRoutes({ server });
-    setupCollectionRoutes({ server });
+    fastify.get("/configuration", getConfigurationHandler);
+    done();
 }
 
-// TODO: this code does NOT have tests
-async function getConfigurationHandler(req, res, next) {
+async function getConfigurationHandler(req, res) {
     let configuration = await loadConfiguration();
-    res.send({
+    return {
         domain: configuration.domain,
         links: configuration.links.toLowerCase() || "default",
         deployment: configuration.deployment.toLowerCase() || "default",
         ui: configuration.ui,
         authentication: Object.keys(configuration.api.authentication),
-    });
-    next();
+    };
 }
