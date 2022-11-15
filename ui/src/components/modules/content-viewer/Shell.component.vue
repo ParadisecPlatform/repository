@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-tabs tab-position="left" v-model="data.activeTab">
-            <el-tab-pane label="Images" name="images" v-if="data.enable.images">
+        <el-tabs tab-position="top" v-model="data.activeTab">
+            <el-tab-pane label="Images" name="images" v-if="data.enable.images.length">
                 <template #label>
                     <div class="text-lg py-2"><i class="fas fa-images"></i> Images</div>
                 </template>
@@ -12,7 +12,7 @@
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="Audio" name="audio" v-if="data.enable.audio">
+            <el-tab-pane label="Audio" name="audio" v-if="data.enable.audio.length">
                 <template #label>
                     <div class="text-lg py-2"><i class="fas fa-volume-up"></i> Audio</div>
                 </template>
@@ -23,7 +23,7 @@
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="Video" name="video" v-if="data.enable.video">
+            <el-tab-pane label="Video" name="video" v-if="data.enable.video.length">
                 <template #label>
                     <div class="text-lg py-2"><i class="fas fa-video"></i> Videos</div>
                 </template>
@@ -34,7 +34,7 @@
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="Documents" name="documents" v-if="data.enable.documents">
+            <el-tab-pane label="Documents" name="documents" v-if="data.enable.documents.length">
                 <template #label>
                     <div class="text-lg py-2"><i class="fas fa-file"></i> Documents</div>
                 </template>
@@ -45,7 +45,7 @@
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="XML Files" name="xml" v-if="data.enable.xml">
+            <el-tab-pane label="XML Files" name="xml" v-if="data.enable.xml.length">
                 <template #label>
                     <div class="text-lg py-2"><i class="fas fa-code"></i> XML Files</div>
                 </template>
@@ -62,7 +62,7 @@
 
 <script setup>
 import { reactive, onMounted } from "vue";
-import ImageViewerComponent from "./imageviewer/Shell.component.vue";
+import ImageViewerComponent from "./imageviewer/GridView.component.vue";
 import AudioPlayerComponent from "./audioplayer/Shell.component.vue";
 import VideoPlayerComponent from "./videoplayer/Shell.component.vue";
 import DocumentViewerComponent from "./documentviewer/Shell.component.vue";
