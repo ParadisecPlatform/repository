@@ -54,9 +54,10 @@ describe("it should be able to work with items", () => {
             let response = await fetch(
                 `${host}/items/${identifier}/pre-signed-url/ro-crate-metadata.json`
             );
-            let { url } = await response.json();
+            let { urls } = await response.json();
             const re = new RegExp(`${configuration.api.s3.endpoint}.*\/ro-crate-metadata.json.*`);
-            expect(url).toMatch(re);
+            expect(urls.length).toEqual(1);
+            expect(urls[0]).toMatch(re);
         } catch (error) {
             console.log(error);
         } finally {
