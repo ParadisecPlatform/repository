@@ -60,6 +60,10 @@
             },
             "secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         },
+        "profiles": {
+            "Dataset, RepositoryObject": "/srv/profiles/item-profile.json",
+            "Dataset, RepositoryCollection": "/srv/profiles/collection-profile.json"
+        },
         "s3": {
             "bucket": "{{your bucket}}",
             "forcePathStyle": true,
