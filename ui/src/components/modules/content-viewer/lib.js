@@ -1,6 +1,6 @@
 import { CrateManager } from "@/crate-manager.js";
 import { computed } from "vue";
-import { orderBy } from "lodash";
+import { orderBy, groupBy } from "lodash";
 
 export function basename(file) {
     return file.split(".")[0];
@@ -24,6 +24,28 @@ export function getFilesByName({ formats, crate }) {
         })
         .map((file) => crate.getEntity({ id: file["@id"] }));
     return orderBy(parts, "@id");
+}
+
+export function getImageFiles({ crate, formats }) {
+    let images = getFilesByEncoding({ crate, formats });
+    images = orderBy(images, (image) => basename(image["@id"]));
+    let thumbnails = images.filter(
+        (image) => image["@id"].match(/thumbnail/) || image["@id"].match(/thumb/)
+    );
+    images = images.filter(
+        (image) => !image["@id"].match(/thumbnail/) && !image["@id"].match(/thumb/)
+    );
+
+    let imagesGroupedById = groupBy(images, (image) => basename(image["@id"]));
+    let total = Object.keys(imagesGroupedById).length;
+
+    return {
+        images,
+        thumbnails,
+        imagesGroupedById,
+        imageNames: Object.keys(imagesGroupedById),
+        total,
+    };
 }
 
 export function categoriseItemContent({ crate, formats }) {
