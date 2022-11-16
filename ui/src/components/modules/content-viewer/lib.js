@@ -72,7 +72,7 @@ export function categoriseItemContent({ crate, formats }) {
         if (formats.documents.includes(entity["@id"].split(".").pop())) {
             enable.documents.push(part);
         }
-        if (formats.xml.includes(part)) {
+        if (formats.xml.includes(entity.encodingFormat)) {
             enable.xml.push(part);
         }
     }
