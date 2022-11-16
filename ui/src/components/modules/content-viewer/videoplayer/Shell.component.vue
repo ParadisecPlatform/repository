@@ -89,7 +89,7 @@ async function init() {
     data.total = Object.keys(data.videoFiles).length;
     await load();
 
-    if ($route.query.transcription && $route.query.contentType === "video") {
+    if ($route.query.transcription && $route.params.contentType === "video") {
         data.selectedTranscription = $route.query.transcription;
     } else {
         updateRoute({

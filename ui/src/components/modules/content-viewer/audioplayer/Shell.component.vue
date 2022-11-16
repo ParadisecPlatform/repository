@@ -89,7 +89,7 @@ async function init() {
     data.total = Object.keys(data.audioFiles).length;
     await load();
 
-    if ($route.query.transcription && $route.query.contentType === "audio") {
+    if ($route.query.transcription && $route.params.contentType === "audio") {
         data.selectedTranscription = $route.query.transcription;
     } else {
         updateRoute({

@@ -22,7 +22,7 @@ import RenderTranscriptionEafComponent from "./RenderTranscriptionEAF.component.
 import RenderTranscriptionIxtComponent from "./RenderTranscriptionIXT.component.vue";
 import RenderTranscriptionTrsComponent from "./RenderTranscriptionTRS.component.vue";
 import RenderTranscriptionFlextextComponent from "./RenderTranscriptionFlextext.component.vue";
-import { reactive, shallowRef, onMounted, onBeforeUnmount, watch, inject, computed } from "vue";
+import { reactive, shallowRef, onMounted, onBeforeUnmount, watch, inject } from "vue";
 import { useRoute } from "vue-router";
 import { isEmpty } from "lodash";
 import { scrollTo } from "vue-scrollto";

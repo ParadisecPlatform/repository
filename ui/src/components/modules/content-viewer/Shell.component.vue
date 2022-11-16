@@ -81,7 +81,7 @@ const props = defineProps({
     },
 });
 const data = reactive({
-    activeTab: "images",
+    activeTab: "",
     enable: {
         images: false,
         audio: false,
@@ -105,6 +105,7 @@ function init() {
             xml: ["application/xml"],
         },
     });
+    setActiveTab();
 }
 function setActiveTab() {
     data.activeTab = $route.params.contentType;
