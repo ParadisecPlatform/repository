@@ -1,8 +1,5 @@
 "use strict";
 
-import { DataLoader } from "src/services/data-loader.service";
-// const dataLoader = new DataLoader();
-
 import RenderTranscriptionsComponent from "./transcription-viewers/RenderTranscriptions.component.vue";
 import RenderTranscriptionSelectorComponent from "./transcription-viewers/RenderTranscriptionSelector.component.vue";
 
