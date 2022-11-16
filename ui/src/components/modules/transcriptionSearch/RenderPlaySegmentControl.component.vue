@@ -7,7 +7,8 @@
                 size="small"
                 class="w-10"
                 :class="{
-                    'transition duration-500 ease-in-out blinking bg-orange-500 border-orange-500': disablePlay,
+                    'transition duration-500 ease-in-out blinking bg-orange-500 border-orange-500':
+                        disablePlay,
                 }"
             >
                 <i class="fas fa-play"></i>
@@ -29,8 +30,8 @@
 </template>
 
 <script>
-import { DataLoader, determineDataTypes } from "src/services/data-loader.service";
-const dataLoader = new DataLoader();
+// import { DataLoader, determineDataTypes } from "src/services/data-loader.service";
+// const dataLoader = new DataLoader();
 import { compact, cloneDeep } from "lodash";
 
 export default {
