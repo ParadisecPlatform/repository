@@ -145,7 +145,7 @@ export let panelHeight = computed(() => {
     return `${window.innerHeight - subtract}px`;
 });
 
-function getPath({ collectionId, itemId }) {
+export function getPath({ collectionId, itemId }) {
     if (collectionId && itemId) {
         return `/collections/${collectionId}/items/${itemId}`;
     } else if (itemId && !collectionId) {
