@@ -8,7 +8,7 @@
             >
                 <template #label>
                     <div
-                        class="text-lg text-gray-600 hover:text-orange-600"
+                        class="text-lg text-gray-600 hover:text-orange-600 my-2"
                         :class="{ 'text-blue-600': data.activeTab === 'images' }"
                     >
                         <i class="fas fa-images"></i> Images
@@ -27,7 +27,7 @@
             >
                 <template #label>
                     <div
-                        class="text-lg text-gray-600 hover:text-orange-600"
+                        class="text-lg text-gray-600 hover:text-orange-600 my-2"
                         :class="{ 'text-blue-600': data.activeTab === 'audio' }"
                     >
                         <i class="fas fa-volume-up"></i> Audio
@@ -46,7 +46,7 @@
             >
                 <template #label>
                     <div
-                        class="text-lg text-gray-600 hover:text-orange-600"
+                        class="text-lg text-gray-600 hover:text-orange-600 my-2"
                         :class="{ 'text-blue-600': data.activeTab === 'video' }"
                     >
                         <i class="fas fa-video"></i> Videos
@@ -65,7 +65,7 @@
             >
                 <template #label>
                     <div
-                        class="text-lg text-gray-600 hover:text-orange-600"
+                        class="text-lg text-gray-600 hover:text-orange-600 my-2"
                         :class="{ 'text-blue-600': data.activeTab === 'documents' }"
                     >
                         <i class="fas fa-file"></i> Documents
@@ -84,7 +84,7 @@
             >
                 <template #label>
                     <div
-                        class="text-lg text-gray-600 hover:text-orange-600"
+                        class="text-lg text-gray-600 hover:text-orange-600 my-2"
                         :class="{ 'text-blue-600': data.activeTab === 'xml' }"
                     >
                         <i class="fas fa-code"></i> XML Files
