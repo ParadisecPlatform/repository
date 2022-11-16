@@ -54,7 +54,7 @@
 import ImageViewerComponent from "./ImageViewer.component.vue";
 import CopyToClipboardComponent from "@/components/modules/CopyToClipboard.component.vue";
 import TeiViewerComponent from "./TeiViewer.component.vue";
-import { getFilesByEncoding, getPresignedUrlBatch, loadTei, basename } from "../lib";
+import { getFilesByEncoding, getPresignedUrlBatch, getImageFiles, loadTei, basename } from "../lib";
 import { reactive, onMounted, inject, watch, computed } from "vue";
 import { isEmpty } from "lodash";
 import { groupBy } from "lodash";
@@ -102,23 +102,31 @@ onMounted(() => {
     load();
 });
 async function load() {
-    let images = getFilesByEncoding({
+    const { images, thumbnails, imagesGroupedById, imageNames, total } = getImageFiles({
         crate: props.crate,
         formats: $store.getters.getConfiguration.ui.imageFormats,
     });
-    data.imagesGroupedByName = groupBy(images, (image) => basename(image["@id"]));
+    data.total = total;
+    data.imagesGroupedById = imagesGroupedById;
 
-    images = images.filter((image) => image["@id"].match(/thumbnail/));
-    data.total = images.length;
-
-    images = images.slice((data.current - 1) * data.n, (data.current - 1) * data.n + data.n);
+    let displaySet;
+    if (thumbnails.length) {
+        displaySet = thumbnails.slice(
+            (data.current - 1) * data.n,
+            (data.current - 1) * data.n + data.n
+        );
+    } else {
+        displaySet = imageNames
+            .slice((data.current - 1) * data.n, (data.current - 1) * data.n + data.n)
+            .map((name) => imagesGroupedById[name][0]);
+    }
     let urls = await getPresignedUrlBatch({
         $http,
         $route,
-        images: images.map((image) => image["@id"]),
+        images: displaySet.map((image) => image["@id"]),
     });
-    images = images.map((image, i) => ({ ...image, url: urls[i] }));
-    data.images = [...images];
+    displaySet = displaySet.map((image, i) => ({ ...image, url: urls[i] }));
+    data.images = [...displaySet];
     if ($route.query.file) {
         let images = data.imagesGroupedByName[basename($route.query.file)];
         let image = images.filter((image) => image["@id"] === $route.query.file);
@@ -137,8 +145,8 @@ async function update(number) {
 }
 async function loadImage(image) {
     data.loadTeiViewer = false;
-    let images = data.imagesGroupedByName[basename(image["@id"])].filter(
-        (image) => !image["@id"].match(/thumbnail/)
+    let images = data.imagesGroupedById[basename(image["@id"])].filter(
+        (image) => !image["@id"].match(/thumbnail/) && !image["@id"].match(/thumb/)
     );
 
     let { document } = await loadTei({ $http, $route, filename: basename(image["@id"]) });
