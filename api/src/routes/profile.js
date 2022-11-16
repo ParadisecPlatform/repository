@@ -11,8 +11,6 @@ export function setupRoutes(fastify, options, done) {
 
 async function getProfile(req, res) {
     let configuration = await loadConfiguration();
-    console.log(configuration.api.profiles);
-    console.log(req.params.class);
     if (configuration.api.profiles[req.params.class]) {
         let profile = await readJSON(configuration.api.profiles[req.params.class]);
         return { profile };
