@@ -1,56 +1,96 @@
 <template>
     <div>
         <el-tabs tab-position="top" v-model="data.activeTab">
-            <el-tab-pane label="Images" name="images" v-if="data.enable.images.length">
+            <el-tab-pane
+                label="Images"
+                name="images"
+                v-if="data.enable.images.length && data.configuration.enable.images"
+            >
                 <template #label>
-                    <div class="text-lg py-2"><i class="fas fa-images"></i> Images</div>
+                    <div
+                        class="text-lg text-gray-600 hover:text-orange-600"
+                        :class="{ 'text-blue-600': data.activeTab === 'images' }"
+                    >
+                        <i class="fas fa-images"></i> Images
+                    </div>
                 </template>
                 <image-viewer-component
-                    class="my-1"
                     v-if="data.activeTab === 'images'"
                     :crate="this.crate"
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="Audio" name="audio" v-if="data.enable.audio.length">
+            <el-tab-pane
+                label="Audio"
+                name="audio"
+                v-if="data.enable.audio.length && data.configuration.enable.audio"
+            >
                 <template #label>
-                    <div class="text-lg py-2"><i class="fas fa-volume-up"></i> Audio</div>
+                    <div
+                        class="text-lg text-gray-600 hover:text-orange-600"
+                        :class="{ 'text-blue-600': data.activeTab === 'audio' }"
+                    >
+                        <i class="fas fa-volume-up"></i> Audio
+                    </div>
                 </template>
                 <audio-player-component
-                    class="my-1"
                     v-if="data.activeTab === 'audio'"
                     :crate="props.crate"
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="Video" name="video" v-if="data.enable.video.length">
+            <el-tab-pane
+                label="Video"
+                name="video"
+                v-if="data.enable.video.length && data.configuration.enable.video"
+            >
                 <template #label>
-                    <div class="text-lg py-2"><i class="fas fa-video"></i> Videos</div>
+                    <div
+                        class="text-lg text-gray-600 hover:text-orange-600"
+                        :class="{ 'text-blue-600': data.activeTab === 'video' }"
+                    >
+                        <i class="fas fa-video"></i> Videos
+                    </div>
                 </template>
                 <video-player-component
-                    class="my-1"
                     v-if="data.activeTab === 'video'"
                     :crate="props.crate"
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="Documents" name="documents" v-if="data.enable.documents.length">
+            <el-tab-pane
+                label="Documents"
+                name="documents"
+                v-if="data.enable.documents.length && data.configuration.enable.documents"
+            >
                 <template #label>
-                    <div class="text-lg py-2"><i class="fas fa-file"></i> Documents</div>
+                    <div
+                        class="text-lg text-gray-600 hover:text-orange-600"
+                        :class="{ 'text-blue-600': data.activeTab === 'documents' }"
+                    >
+                        <i class="fas fa-file"></i> Documents
+                    </div>
                 </template>
                 <document-viewer-component
-                    class="my-1"
                     v-if="data.activeTab === 'documents'"
                     :crate="props.crate"
                     @update-route="updateRoute"
                 />
             </el-tab-pane>
-            <el-tab-pane label="XML Files" name="xml" v-if="data.enable.xml.length">
+            <el-tab-pane
+                label="XML Files"
+                name="xml"
+                v-if="data.enable.xml.length && data.configuration.enable.xml"
+            >
                 <template #label>
-                    <div class="text-lg py-2"><i class="fas fa-code"></i> XML Files</div>
+                    <div
+                        class="text-lg text-gray-600 hover:text-orange-600"
+                        :class="{ 'text-blue-600': data.activeTab === 'xml' }"
+                    >
+                        <i class="fas fa-code"></i> XML Files
+                    </div>
                 </template>
                 <xml-viewer-component
-                    class="my-1"
                     v-if="data.activeTab === 'xml'"
                     :crate="props.crate"
                     @update-route="updateRoute"
@@ -89,6 +129,7 @@ const data = reactive({
         documents: false,
         xml: false,
     },
+    configuration: $store.getters.getConfiguration.ui.mediaplayer,
 });
 onMounted(() => {
     init();
