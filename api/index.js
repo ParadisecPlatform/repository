@@ -4,6 +4,7 @@ import { setupRoutes as setupBaseRoutes } from "./src/routes/index.js";
 import { setupRoutes as setupAuthRoutes } from "./src/routes/auth.js";
 import { setupRoutes as setupItemRoutes } from "./src/routes/item.js";
 import { setupRoutes as setupCollectionRoutes } from "./src/routes/collection.js";
+import { setupRoutes as setupProfileRoutes } from "./src/routes/profile.js";
 
 import Fastify from "fastify";
 import fastifyCompress from "@fastify/compress";
@@ -34,32 +35,6 @@ async function main() {
     }
     await models.sequelize.sync();
 
-    if (process.env?.LOG_LEVEL === "debug") {
-        // server.use((req, res, next) => {
-        //     log.debug(`${req.route.method}: ${req.route.path}`);
-        //     return next();
-        // });
-    }
-    // server.use(restify.plugins.dateParser());
-    // server.use(restify.plugins.queryParser());
-    // server.use(restify.plugins.jsonp());
-    // server.use(restify.plugins.gzipResponse());
-    // server.use(
-    //     restify.plugins.bodyParser({
-    //         maxBodySize: 0,
-    //         mapParams: true,
-    //         mapFiles: false,
-    //         overrideParams: false,
-    //         multiples: true,
-    //         hash: "sha1",
-    //         rejectUnknown: true,
-    //         requestBodyOnGet: false,
-    //         reviver: undefined,
-    //         maxFieldsSize: 2 * 1024 * 1024,
-    //     })
-    // );
-    // setupRoutes({ server });
-    // setupRoutes({ server: fastify });
     if (process.env.NODE_ENV === "development") {
         fastify.register(cors, { origin: "*" });
     }
@@ -73,6 +48,7 @@ async function main() {
     fastify.register(setupAuthRoutes);
     fastify.register(setupItemRoutes);
     fastify.register(setupCollectionRoutes);
+    fastify.register(setupProfileRoutes);
 
     fastify.listen({ port: 8080, host: "0.0.0.0" }, function (err, address) {
         if (err) {
