@@ -14,7 +14,7 @@
             <div
                 v-for="image of data.images"
                 :key="image['@id']"
-                class="flex flex-col cursor-pointer border border-gray-400 p-1"
+                class="flex flex-col cursor-pointer border border-gray-400 p-1 w-64"
                 @click="loadImage(image)"
             >
                 <div>
